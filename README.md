@@ -1,4 +1,4 @@
-<name>
+SomeName
 ======
 
 
@@ -20,3 +20,13 @@ TODO
 
 Installation
 ============
+1. Install OpenMediaVault.
+2. Execute the following commands:
+```bash
+apt update && apt upgrade
+apt install docker.io docker-compose git net-tools
+git clone https://github.com/yscialom/nas.git && cd nas
+ifconfig # to get your local IP
+./start
+```
+3. With a web browser, go to `http://<ip>:32400/web`.
