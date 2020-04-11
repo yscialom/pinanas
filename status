@@ -1,0 +1,10 @@
+#!/bin/bash
+
+zero_if_stopped=$(docker-compose ps -q | wc -l)
+if [[ ${zero_if_stopped} == 0 ]] ; then
+    echo "Services stopped"
+    exit 1
+else
+    echo "Services running"
+    exit 0
+fi

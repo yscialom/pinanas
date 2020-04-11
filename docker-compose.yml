@@ -14,6 +14,6 @@ services:
     - "32413:32413/udp"
     - "32414:32414/udp"
     volumes:
-    - ./config:/config
-    - ./transcode:/transcode
-    - ./data:/data
+    - ./plex/config:/config
+    - ./plex/transcode:/transcode
+    - ./plex/data:/data
