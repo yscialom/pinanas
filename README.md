@@ -29,7 +29,7 @@ In a build directory,
 
 ```bash
 make -f /path/to/tools/qemu/Makefile
-./start
+./start # default login: pi:raspberry
 ```
 
 This downloads (and install) qemu, rasbian and all needed files. Once done,
@@ -43,8 +43,8 @@ TODO
 
 Installation
 ============
-1. Install OpenMediaVault.
-2. Execute the following commands:
+1. Install your favorite OS.
+2. Execute the following commands (given that the package manager is apt):
 ```bash
 apt install docker.io docker-compose git net-tools
 git clone https://github.com/yscialom/nas.git
