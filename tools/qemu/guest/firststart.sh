@@ -15,18 +15,25 @@ function rmall () {
     rm -f -- "${file}"
 }
 
+function run-and-delete () {
+    local script=${1}
+    ${script}
+    rm -f -- ${script}
+}
+
 { #start redirect group
     # Forbids (politly) to login
     trap "rm -f -- /run/nologin" EXIT
     touch /run/nologin
 
     # Resize the filesystem to enjoy the full devise size
-    /opt/resizefs.sh
-    rm -f -- /opt/resizefs.sh
+    run-and-delete /opt/resizefs.sh
 
     # Set iptable to use legacy interface
-    /opt/set-iptables-legacy.sh
-    rm -f -- /opt/set-iptables-legacy.sh
+    run-and-delete /opt/set-iptables-legacy.sh
+
+    # Upgrade & install what's required
+    run-and-delete /opt/install-dependencies.sh
 
     # Cleanup
     rmall $0

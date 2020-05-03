@@ -50,7 +50,7 @@ linuxdir=$(dirname $(readlink -f $0))
 #
 ## === ENTRYPOINT ===
 #
-for script in resizefs set-iptables-legacy ; do
+for script in resizefs set-iptables-legacy install-dependencies ; do
     ${linuxdir}/cp2img.sh ${image} ${guestdir}/${script}.sh /opt/.
 done
 
