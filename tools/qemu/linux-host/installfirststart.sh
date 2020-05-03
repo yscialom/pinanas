@@ -50,6 +50,9 @@ linuxdir=$(dirname $(readlink -f $0))
 #
 ## === ENTRYPOINT ===
 #
-${linuxdir}/cp2img.sh ${image} ${guestdir}/resizefs.sh /opt/.
+for script in resizefs set-iptables-legacy ; do
+    ${linuxdir}/cp2img.sh ${image} ${guestdir}/${script}.sh /opt/.
+done
+
 ${linuxdir}/cp2img.sh ${image} ${guestdir}/firststart.sh /etc/init.d/nas-firststart
 ${linuxdir}/ln2img.sh ${image} /etc/init.d/nas-firststart /etc/rc2.d/S99nas-firststart

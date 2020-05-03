@@ -6,6 +6,10 @@ set -e
 /opt/resizefs.sh
 rm -f -- /opt/resizefs.sh
 
+# Set iptable to use legacy interface
+/opt/set-iptables-legacy.sh
+rm -f -- /opt/set-iptables-legacy.sh
+
 # Cleanup
 function rmall () {
     local file="$(readlink -f ${1})"
