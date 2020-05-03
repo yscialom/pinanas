@@ -55,4 +55,4 @@ for script in resizefs set-iptables-legacy ; do
 done
 
 ${linuxdir}/cp2img.sh ${image} ${guestdir}/firststart.sh /etc/init.d/nas-firststart
-${linuxdir}/ln2img.sh ${image} /etc/init.d/nas-firststart /etc/rc2.d/S99nas-firststart
+${linuxdir}/ln2img.sh ${image} /etc/init.d/nas-firststart /etc/rc3.d/S99nas-firststart

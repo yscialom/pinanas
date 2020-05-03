@@ -1,11 +1,12 @@
 IMG_SIZE=32G
 Q=@
 SCRIPTS=start
-ALL=kernel versatile-pb.dtb raspbian.img qemu $(SCRIPTS)
+ALL=kernel versatile-pb.dtb raspbian.img $(SCRIPTS)
 
 mkfile_path := $(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
 
 all: $(ALL)
+	$(Q)./start
 
 kernel versatile-pb.dtb:
 	$(Q)if [ -d qemu-rpi-kernel ] ; then \
