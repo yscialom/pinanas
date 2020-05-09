@@ -28,12 +28,14 @@
 # Virtual size of the generated image
 IMAGE_SIZE=32G
 
+# SomeName OS version
+SNOS_VERSION=$(shell git describe --tags 2>/dev/null || echo "0.0.1")
+
 # Image name
-IMAGE_NAME=raspbian.img
+IMAGE_NAME=somename-os-$(SNOS_VERSION).img
 
 # Release name (extension is used by tar -a to infer compression to use)
-GIT_VERSION=$(shell git describe --tags 2>/dev/null || echo "0.0.1")
-RELEASE_NAME=somename-os-$(GIT_VERSION).gz
+RELEASE_NAME=somename-os-$(SNOS_VERSION).gz
 
 # Quiet make? @: silent, empty: verbose
 Q=@

@@ -1,54 +1,99 @@
 SomeName
-======
+========
 
 
 Description
 ===========
 SomeName is a [NAS](https://en.wikipedia.org/wiki/Network-attached_storage "Network-attached storage")
 and [media center](https://en.wikipedia.org/wiki/Home_theater_PC)
-designed to run on a small computer as a Raspberry PI. Its feature include:
+designed to run on a small computer like a Raspberry PI. Its feature include:
 
 - NAS: share files in your private network
 - NAS: host files outside of your private network
 - MC: (dis)play photos, music, videos from your NAS on any screen
 
 
-Hardware
-========
+Installation
+============
 
-Emulation
+SomeName can be installed in two flavors:
+- SomeName OS: as an operating system working out-of-the-box;
+- SomeName App: as a docker-compose based software suite.
+
+SomeName OS
+-----------
+
+### Hardware
+
+Get your hands on a Raspberry Pi 4, a good 32GB microSD card, an USB
+external hard drive and you're good to go!
+
+
+### Software
+
+SomeName OS is delivered as a compressed raw image. To install it on your NAS device,
+simply byte-copy this image to your device primary disk, e.g. the microSD card of a
+Raspberry Pi.
+
+#### Instruction on Linux
+1. Insert the device primary disk on your linux machine.
+2. Check the device of the device primary disk, for instance by running `dmesg|tail` just after having inserted it.
+3. Download the lastest release of SomeName OS.
+4. Uncompress it running `tar -xaf somename-os-*.gz`
+5. Byte-copy the extracted image with `sudo dd if=somename-os-*.img of=/dev/your_device_from_step_2 bs=512k`
+6. Insert the device primary disk back to your NAS device and boot it.
+
+#### Instruction on Windows
+TODO
+
+SomeName App
+------------
+
+On a linux host with docker and docker-compose installed, copy the [app](/app)
+directory somewhere and run `app/start`.
+
+
+Usage
+=====
+
+Once your NAS device is running SomeName OS, the following services are provided:
+
+- Plex
+- Owncloud (TODO)
+- SteamLink (TODO)
+
+Plex
+----
+TODO
+
+NextCloud
 ---------
+TODO
 
-It is possible to emulate the hardware of a Raspberry Pi with Qemu. Scripts in
-[tools/qemu](/tools/qemu) automate the installation and start of an emulated
-board with an OS.
-
-### Linux
-
-In a build directory,
-
-```bash
-make -f /path/to/tools/qemu/Makefile
-./start # default login: pi:raspberry
-```
-
-This downloads (and install) qemu, rasbian and all needed files. Once done,
-`make -f /path/to/tools/qemu/Makefile clean` removes temporary files and
-`make -f /path/to/tools/qemu/Makefile distclean` deletes all files.
-
-### Windows
-
+SteamLink
+---------
 TODO
 
 
-Installation
-============
-1. Install your favorite OS.
-2. Execute the following commands (given that the package manager is apt):
+Emulation (experimental, see issues)
+====================================
+
+It is possible to emulate the hardware of a Raspberry Pi with Qemu. Scripts in
+[os](/os/linux-host) automate the installation and start of an emulated
+board with an OS. This is also how is built the SomeName OS image.
+
+
+Build
+=====
+The SomeName OS image is built automatically under QEMU simulating a Raspberry Pi 4.
+You'll need a linux machine (x86 or amd64) with root permissions, qemu-img and
+qemu-system-arm installed.
+
+1. Create a build directory and go into it `cd $(mktemp -d)`.
+2. Prepare an alias to call make: `alias make='make -f /path/to/SomeName/os/linux-host/Makefile'`
+3. Build the following targets:
 ```bash
-apt install docker.io docker-compose git net-tools
-git clone https://github.com/yscialom/nas.git
-cd nas
-./start
+make qemulaion   # prepare everything to emulate the OS
+./start          # emulate the OS fir its first start; this can take dozen minutes to hours
+make release     # package somename-os-$version.gz
 ```
-3. With a web browser, go to `http://<ip>:32400/web`.
