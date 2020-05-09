@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#
+## === Actions ===
+#
+
 # upgrade system
 apt-get -qq update
 apt-get -qq upgrade

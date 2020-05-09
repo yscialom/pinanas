@@ -1,16 +1,6 @@
 #!/bin/bash
 
 #
-## === Checks ===
-#
-# This scripts needs superuser permissions.
-if [[ ${EUID} != 0 ]] ; then
-    echo "$0: error: must be run as super user." >&2
-    exit 1
-fi
-
-
-#
 ## === DATA ===
 #
 device=/dev/sda

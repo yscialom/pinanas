@@ -1,5 +1,19 @@
 #!/bin/bash
 
+#
+## === Checks ===
+#
+# This scripts needs superuser permissions.
+if [[ ${EUID} != 0 ]] ; then
+    echo "$0: error: must be run as super user." >&2
+    exit 1
+fi
+
+
+#
+## === Utils ===
+#
+
 function rmall () {
     local file="$(readlink -f ${1})"
     echo "deleting '${file}' and all links pointing to it"
@@ -21,7 +35,14 @@ function run-and-delete () {
     rm -f -- ${script}
 }
 
+
+#
+## === Actions ===
+#
+
 { #start redirect group
+    set -x
+
     # Forbids (politly) to login
     trap "rm -f -- /run/nologin" EXIT
     touch /run/nologin
