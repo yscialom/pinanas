@@ -1,12 +1,80 @@
-IMG_SIZE=32G
+#
+## === USAGE ===
+#
+# Preferably out-of-source (in an empty directory), invoke this makefile with
+#     make -f /path/to/this/file $target
+# with $target being:
+#   - build: to build the raw image (see configuration section bellow for the image name and size);
+#   - qemulation: to download and setup files needed to run the OS with qemu; generates a start script that can be called without argument;
+#   - release: to package a release (see configuration section bellow for the release name);
+#   - clean: to remove temporary build files;
+#   - mostlyclean: to remove all generated files but the packaged release;
+#   - distclean: to remove all generated files (temporary and built).
+#
+# Example workflow:
+#     mkdir build && cd build
+#     alias make='make -f ../os/linux-host/Makefile'
+#     make build       # builds raspbian.img
+#     make qemulaion   # prepare everything to emulate the OS
+#     ./start          # emulate the OS fir its first start; this can take dozen minutes to hours
+#     make release     # package somename-os-$version.gz
+#     make mostlyclean # removes work files
+#
+
+#
+## === CONFIGURATION ===
+#
+
+# Virtual size of the generated image
+IMAGE_SIZE=32G
+
+# Image name
+IMAGE_NAME=raspbian.img
+
+# Release name (extension is used by tar -a to infer compression to use)
+GIT_VERSION=$(shell git describe --tags 2>/dev/null || echo "0.0.1")
+RELEASE_NAME=somename-os-$(GIT_VERSION).gz
+
+# Quiet make? @: silent, empty: verbose
 Q=@
-SCRIPTS=start
-ALL=kernel versatile-pb.dtb raspbian.img $(SCRIPTS)
 
-mkfile_path := $(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
 
-all: $(ALL)
-	$(Q)./start
+#
+## === WORK VARIABLES ===
+#
+LINUX_SCRIPTS_DIR=$(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
+
+.PHONE: debug
+debug:
+	@echo "LINUX_SCRIPTS_DIR: $(LINUX_SCRIPTS_DIR)"
+	@echo "RELEASE_NAME     : $(RELEASE_NAME)"
+	@exit 0
+
+#
+## === BUILD ===
+#
+
+.PHONY: build
+build: $(IMAGE_NAME)
+
+$(IMAGE_NAME):
+	$(Q)echo "GET $@.zip"
+	$(Q)test -f $@.zip || curl --progress-bar -L "https://downloads.raspberrypi.org/raspbian_latest" --output $@.zip
+	$(Q)echo "GET $@"
+	$(Q)unzip -qq -u $@.zip
+	$(Q)echo "root permission needed to mount image in order to alter it"
+	$(Q)sudo $(LINUX_SCRIPTS_DIR)/installfirststart.sh *-raspbian-*.img $(LINUX_SCRIPTS_DIR)/../guest
+	$(Q)mv *-raspbian-*.img $@
+	$(Q)command -v qemu-img || (echo "error: qemu-img required; command not found.">&2 ; exit 1)
+	$(Q)qemu-img resize -f raw $@ $(IMAGE_SIZE)
+
+
+#
+## === QEMULATION ===
+#
+
+.PHONY: qemulation
+qemulation: kernel versatile-pb.dtb start
 
 kernel versatile-pb.dtb:
 	$(Q)if [ -d qemu-rpi-kernel ] ; then \
@@ -22,36 +90,35 @@ kernel versatile-pb.dtb:
 	$(Q)cp qemu-rpi-kernel/kernel-qemu-*-buster kernel
 	$(Q)cp qemu-rpi-kernel/versatile-pb.dtb versatile-pb.dtb
 
-raspbian.img: | qemu
-	$(Q)echo "GET raspbian.zip"
-	$(Q)test -f raspbian.zip || curl --progress-bar -L https://downloads.raspberrypi.org/raspbian_latest --output raspbian.zip
-	$(Q)echo "GET $@"
-	$(Q)unzip -qq -u raspbian.zip
-	$(Q)sudo $(mkfile_path)/installfirststart.sh *-raspbian-*.img $(mkfile_path)/../guest
-	$(Q)qemu-img convert -p -f raw -O qcow2 *-raspbian-*.img $@
-	$(Q)qemu-img resize $@ $(IMG_SIZE)
-
-.PHONY: qemu
-qemu:
-	$(Q)echo "GET qemu"
-	$(Q)sudo apt-get -qq install qemu-system-arm
+start:
+	$(Q)command -v qemu-system-arm || (echo "error: qemu-system-arm required; command not found">&2 ; exit 1)
+	$(Q)ln -s $(LINUX_SCRIPTS_DIR)/start .
 
 
-$(SCRIPTS):
-	$(Q)echo "GET $@"
-	$(Q)ln -s $(mkfile_path)/$@ .
+#
+## === RELEASE ===
+#
+
+.PHONY: release
+release: $(RELEASE_NAME)
+
+$(RELEASE_NAME): $(IMAGE_NAME)
+	$(Q)echo "ARZ  $(RELEASE_NAME)"
+	$(Q)GZIP=-9 tar -caf $(RELEASE_NAME) $(IMAGE_NAME)
 
 
 #
 ## === CLEAN ===
 #
 
-.PHONY: clean
+.PHONY: clean distclean
 clean:
-	$(Q)rm -f  -- raspbian.zip
+	$(Q)rm -f  -- $(IMAGE_NAME).zip
 	$(Q)rm -f  -- *-*.img
 	$(Q)rm -rf -- qemu-rpi-kernel
 
-.PHONY: distclean
-distclean: clean
-	$(Q)rm -f -- $(ALL)
+mostlyclean:clean
+	$(Q)rm -f -- kernel versatile-pb.dtb start $(IMAGE_NAME)
+
+distclean: mostlyclean
+	$(Q)rm -f -- $(RELEASE_NAME)
