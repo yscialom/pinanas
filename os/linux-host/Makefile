@@ -93,7 +93,7 @@ kernel versatile-pb.dtb:
 	$(Q)cp qemu-rpi-kernel/versatile-pb.dtb versatile-pb.dtb
 
 start:
-	$(Q)command -v qemu-system-arm || (echo "error: qemu-system-arm required; command not found">&2 ; exit 1)
+	$(Q)command -v qemu-system-arm >/dev/null || (echo "error: qemu-system-arm required; command not found">&2 ; exit 1)
 	$(Q)ln -s $(LINUX_SCRIPTS_DIR)/start .
 
 

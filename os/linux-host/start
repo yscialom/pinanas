@@ -19,10 +19,11 @@ function tty_alter () {
 
 tty_save && tty_alter
 
+IMAGE_FILE="${1:-somename-os-*.img}"
 qemu-system-arm \
     -kernel kernel \
     -append "console=ttyAMA0 root=/dev/sda2 rootfstype=ext4 rw" \
-    -hda raspbian.img \
+    -hda ${IMAGE_FILE} \
     -cpu arm1176 -m 256 \
     -M versatilepb -dtb versatile-pb.dtb \
     -no-reboot \
