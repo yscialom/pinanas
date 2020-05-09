@@ -93,7 +93,7 @@ qemu-system-arm installed.
 2. Prepare an alias to call make: `alias make='make -f /path/to/SomeName/os/linux-host/Makefile'`
 3. Build the following targets:
 ```bash
-make build       # builds raspbian.img
+make build       # builds somename-os-$version.img
 make qemulaion   # prepare everything to emulate the OS
 ./start          # emulate the OS fir its first start; this can take dozen minutes to hours
 make release     # package somename-os-$version.gz
