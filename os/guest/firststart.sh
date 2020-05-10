@@ -1,8 +1,13 @@
 #!/bin/bash
 
+exec > /var/log/firststart
+exec 2>&1
+set -x
+
 #
 ## === Checks ===
 #
+
 # This scripts needs superuser permissions.
 if [[ ${EUID} != 0 ]] ; then
     echo "$0: error: must be run as super user." >&2
@@ -40,21 +45,17 @@ function run-and-delete () {
 ## === Actions ===
 #
 
-{ #start redirect group
-    set -x
+# Forbids (politly) to login
+trap "rm -f -- /run/nologin" EXIT
+touch /run/nologin
 
-    # Forbids (politly) to login
-    trap "rm -f -- /run/nologin" EXIT
-    touch /run/nologin
+# install scripts
+for script in resizefs setup-raspbian install-dependencies ; do
+    run-and-delete /opt/${script}.sh
+done
 
-    # install scripts
-    for script in resizefs setup-raspbian install-dependencies ; do
-        run-and-delete /opt/${script}.sh
-    done
+# Cleanup
+rmall $0
 
-    # Cleanup
-    rmall $0
-
-    # Reboot
-    reboot
-} > /var/log/firststart # redirect
+# Reboot
+reboot
