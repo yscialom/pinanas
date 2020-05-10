@@ -17,7 +17,7 @@
 #     make build       # builds raspbian.img
 #     make qemulaion   # prepare everything to emulate the OS
 #     ./start          # emulate the OS fir its first start; this can take dozen minutes to hours
-#     make release     # package somename-os-$version.gz
+#     make release     # package pinanas-os-$version.gz
 #     make mostlyclean # removes work files
 #
 
@@ -28,14 +28,14 @@
 # Virtual size of the generated image
 IMAGE_SIZE=32G
 
-# SomeName OS version
+# PiNanas OS version
 SNOS_VERSION=$(shell git describe --tags 2>/dev/null || echo "0.0.1")
 
 # Image name
-IMAGE_NAME=somename-os-$(SNOS_VERSION).img
+IMAGE_NAME=pinanas-os-$(SNOS_VERSION).img
 
 # Release name (extension is used by tar -a to infer compression to use)
-RELEASE_NAME=somename-os-$(SNOS_VERSION).gz
+RELEASE_NAME=pinanas-os-$(SNOS_VERSION).gz
 
 # Quiet make? @: silent, empty: verbose
 Q=@

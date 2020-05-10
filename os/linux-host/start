@@ -19,7 +19,7 @@ function tty_alter () {
 
 tty_save && tty_alter
 
-IMAGE_FILE="${1:-somename-os-*.img}"
+IMAGE_FILE="${1:-pinanas-os-*.img}"
 qemu-system-arm \
     -kernel kernel \
     -append "console=ttyAMA0 root=/dev/sda2 rootfstype=ext4 rw" \
