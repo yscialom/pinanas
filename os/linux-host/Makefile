@@ -29,20 +29,24 @@
 IMAGE_SIZE=32G
 
 # PiNanas OS version
-SNOS_VERSION=$(shell git describe --tags 2>/dev/null || echo "0.0.1")
+PNOS_VERSION=$(shell git describe --tags 2>/dev/null || echo "0.0.1")
 
 # Image name
-IMAGE_NAME=pinanas-os-$(SNOS_VERSION).img
+IMAGE_NAME=pinanas-os-$(PNOS_VERSION).img
 
 # Release name (compression command must be set accordingly
-RELEASE_NAME=pinanas-os-$(SNOS_VERSION).img.gz
+RELEASE_NAME=pinanas-os-$(PNOS_VERSION).img.gz
 RELEASE_COMPRESSION=gzip -9 -c
 
 # Quiet make? @: silent, empty: verbose
 Q=@
 
-#Optional features
-PV=pv
+# Optional features: pv
+ifeq (, $(shell which pv))
+	PV=cat
+else
+	PV=pv
+endif
 
 
 #
