@@ -41,6 +41,12 @@ RELEASE_COMPRESSION=gzip -9 -c
 # Quiet make? @: silent, empty: verbose
 Q=@
 
+
+#
+## === WORK VARIABLES ===
+#
+LINUX_SCRIPTS_DIR=$(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
+
 # Optional features: pv
 ifeq (, $(shell which pv))
 	PV=cat
@@ -48,16 +54,11 @@ else
 	PV=pv
 endif
 
-
-#
-## === WORK VARIABLES ===
-#
-LINUX_SCRIPTS_DIR=$(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
-
 .PHONE: debug
 debug:
 	@echo "LINUX_SCRIPTS_DIR: $(LINUX_SCRIPTS_DIR)"
 	@echo "RELEASE_NAME     : $(RELEASE_NAME)"
+	@echo "PV               : $(PV)"
 	@exit 0
 
 #
