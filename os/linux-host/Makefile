@@ -29,13 +29,14 @@
 IMAGE_SIZE=32G
 
 # PiNanas OS version
-SNOS_VERSION=$(shell git describe --tags 2>/dev/null || echo "0.0.1")
+PNOS_VERSION=$(shell git describe --tags 2>/dev/null || echo "0.0.1")
 
 # Image name
-IMAGE_NAME=pinanas-os-$(SNOS_VERSION).img
+IMAGE_NAME=pinanas-os-$(PNOS_VERSION).img
 
-# Release name (extension is used by tar -a to infer compression to use)
-RELEASE_NAME=pinanas-os-$(SNOS_VERSION).gz
+# Release name (compression command must be set accordingly
+RELEASE_NAME=pinanas-os-$(PNOS_VERSION).img.gz
+RELEASE_COMPRESSION=gzip -9 -c
 
 # Quiet make? @: silent, empty: verbose
 Q=@
@@ -46,10 +47,18 @@ Q=@
 #
 LINUX_SCRIPTS_DIR=$(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
 
+# Optional features: pv
+ifeq (, $(shell which pv))
+	PV=cat
+else
+	PV=pv
+endif
+
 .PHONE: debug
 debug:
 	@echo "LINUX_SCRIPTS_DIR: $(LINUX_SCRIPTS_DIR)"
 	@echo "RELEASE_NAME     : $(RELEASE_NAME)"
+	@echo "PV               : $(PV)"
 	@exit 0
 
 #
@@ -105,8 +114,8 @@ start:
 release: $(RELEASE_NAME)
 
 $(RELEASE_NAME): $(IMAGE_NAME)
-	$(Q)echo "ARZ  $(RELEASE_NAME)"
-	$(Q)GZIP=-9 tar -caf $(RELEASE_NAME) $(IMAGE_NAME)
+	$(Q)echo "ARZ $(RELEASE_NAME)"
+	$(Q)$(PV) $(IMAGE_NAME) | $(RELEASE_COMPRESSION) > $(RELEASE_NAME)
 
 
 #
