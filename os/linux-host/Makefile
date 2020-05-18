@@ -77,7 +77,6 @@ $(IMAGE_NAME):
 	$(Q)sudo $(LINUX_SCRIPTS_DIR)/installfirststart.sh *-raspbian-*.img $(LINUX_SCRIPTS_DIR)/../guest
 	$(Q)mv *-raspbian-*.img $@
 	$(Q)command -v qemu-img || (echo "error: qemu-img required; command not found.">&2 ; exit 1)
-	$(Q)qemu-img resize -f raw $@ $(IMAGE_SIZE)
 
 
 #
@@ -85,7 +84,8 @@ $(IMAGE_NAME):
 #
 
 .PHONY: qemulation
-qemulation: kernel versatile-pb.dtb start
+qemulation: kernel versatile-pb.dtb start $(IMAGE_NAME)
+	$(Q)qemu-img resize -f raw $(IMAGE_NAME) $(IMAGE_SIZE)
 
 kernel versatile-pb.dtb:
 	$(Q)if [ -d qemu-rpi-kernel ] ; then \
