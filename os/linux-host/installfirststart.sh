@@ -50,7 +50,11 @@ linuxdir=$(dirname $(readlink -f $0))
 #
 ## === ENTRYPOINT ===
 #
-for script in resizefs setup-raspbian install-dependencies ; do
+scripts="\
+ setup-raspbian\
+ install-dependencies\
+"
+for script in ${scripts} ; do
     ${linuxdir}/cp2img.sh ${image} ${guestdir}/${script}.sh /opt/.
 done
 
