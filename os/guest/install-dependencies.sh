@@ -7,7 +7,7 @@
 # upgrade system
 apt-get -qq update
 apt-get -qq upgrade
-apt-get -qq install vim
+apt-get -qq install vim docker-compose
 
 # install docker
 update-alternatives --set iptables /usr/sbin/iptables-legacy
