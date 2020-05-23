@@ -1,0 +1,3 @@
+location /plex/ {
+  proxy_pass http://plex-media-server:32400/;
+}
