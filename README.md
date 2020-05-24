@@ -59,20 +59,34 @@ Usage
 Once your NAS device is running PiNanas OS, the following services are provided:
 
 - Plex
-- Owncloud (TODO)
-- SteamLink (TODO)
+- Nextcloud
+- SteamLink
 
 Plex
 ----
-TODO
+Plex is a client-server media system for your movies, TV shows, music, pictures, and internet-based content. It uses a Server to house your media library and player Apps to playback the media.
+The server can acquire content from files, iTunes, iPhoto, Aperture, or the Internet and the music library is automatically organized by ID3 or M4A tags, such as title, artist, album, genre, year, and popularity.
+The basic Plex player app runs on multitudes of platforms and devices: Amazon Fire TV, Android TV, Apple TV, Chromecast, iOS, smart TVs and Blu-ray devices, webOS, Opera TV, PlayStation 3, PlayStation 4, Roku, Sonos, TiVO, Windows Phone, Xbox 360, and Xbox One.
+
+See more informations on https://support.plex.tv/articles/
+
 
 NextCloud
 ---------
-TODO
+Nextcloud is an open-source client-server software suite for creating and using file hosting service like Dropbox, OneDrive or Google Drive.
+Nextcloud files are stored in conventional directory structures, accessible via WebDAV if necessary. User files are encrypted during transit and optionally at rest. Nextcloud can synchronise with local clients running Windows (Windows XP, Vista, 7, 8, and 10), macOS (10.6 or later), or various Linux distributions. It permits user and group administration (via OpenID or LDAP). Content can be shared by defining granular read/write permissions between users and groups.
+
+Nextcloud is modular, it can be extended with plugins to implement extra functionality including:
+-    calendars (CalDAV)
+-    contacts (CardDAV)
+-    streaming media (Ampache)
+-    gallery
+-    document viewer tools from within Nextcloud
+-    connection to Dropbox, Google Drive and Amazon S3
 
 SteamLink
 ---------
-TODO
+SteamLink is a software applications that enable streaming of Steam content from a personal computer or a Steam Machine wirelessly to a mobile device or other monitor. The device acting as the Steam Link enables a game controller connected to it to be used to control the game over the connection to the home computer.
 
 
 Emulation (experimental, see issues)
