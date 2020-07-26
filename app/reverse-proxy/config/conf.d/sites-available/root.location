@@ -1,7 +1,0 @@
-location / {
-  add_header X-debug "$http_referer";
-  if ($http_referer ~ "^https?://[^/]+/plex/") {
-    rewrite ^/(.*) http://$http_host/plex/$1 redirect;
-  }
-}
-

@@ -12,7 +12,7 @@ services:
       - ./reverse-proxy/config:/etc/nginx
       - ./reverse-proxy/certs:/etc/ssl/private
 
-  pms:
+  plex-media-server:
     image: yankelscialom/pms-docker-armv7
     container_name: plex-media-server
     hostname: plex-media-server
