@@ -87,10 +87,10 @@
             access_log off;
           }
     # PHP
-    php_default_version_debian: "7.4"
+    php_default_version_debian: "7.3"
     php_packages:
-      - php7.4-cli
-      - php7.4-fpm
+      - php7.3-cli
+      - php7.3-fpm
     php_enable_webserver: false
     php_enable_php_fpm: true
     php_enable_apc: false
@@ -142,4 +142,5 @@
         nginx_default_vhost_path: '/etc/nginx/conf.d/default.conf',
         nginx_vhost_path: '/etc/nginx/conf.d',
         become: yes }
+    - { role: geerlingguy.php, become: yes }
 #    - steamlink
