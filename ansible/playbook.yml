@@ -143,4 +143,4 @@
         nginx_vhost_path: '/etc/nginx/conf.d',
         become: yes }
     - { role: geerlingguy.php, become: yes }
-#    - steamlink
+    - steamlink
