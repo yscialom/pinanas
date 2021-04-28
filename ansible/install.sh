@@ -5,7 +5,7 @@ cd $(dirname $0)
 host_file=hosts/all.yml
 
 if [[ ! -f ${host_file} ]] ; then
-    echo "===[ setup ssh connection to pinanas host ]==="
+    echo "===[ Setup ssh connection to pinanas host ]==="
     read -p "pinanas hostname or ip: " pinanas_host
 
     echo "  - create ansible host file $(readlink -f ${host_file})"
@@ -15,5 +15,15 @@ if [[ ! -f ${host_file} ]] ; then
     ssh-copy-id pi@${pinanas_host}
 fi
 
-# Run ansible
+# Install ansible roles from Galaxy
+echo
+echo "===[ Get dependencies playbooks ]==="
+ansible-galaxy collection install community.mysql
+for collection in geerlingguy.nginx geerlingguy.php geerlingguy.mysql nierdz.nextcloud ; do
+    ansible-galaxy install ${collection}
+done
+
+# Play ansible roles
+echo
+echo "===[ Install PiNanas ]==="
 ansible-playbook playbook.yml -i hosts/all.yml

@@ -1,5 +1,145 @@
 ---
 - name: PiNanas
   hosts: all
+  vars:
+    # Nextcloud
+    nextcloud_domain: "nextcloud.local"
+    # Nginx
+    nginx_user: www-data
+    nginx_listen_ipv6: false
+    nginx_remove_default_vhost: true
+    nginx_vhosts:
+      - server_name: "{{ nextcloud_domain }}"
+        listen: "*:443 ssl http2 default_server"
+        root: "/var/www/nextcloud.local/current/nextcloud"
+        index: index.php
+        extra_parameters: |
+          add_header Referrer-Policy "no-referrer" always;
+          add_header X-Content-Type-Options "nosniff" always;
+          add_header X-Download-Options "noopen" always;
+          add_header X-Frame-Options "SAMEORIGIN" always;
+          add_header X-Permitted-Cross-Domain-Policies "none" always;
+          add_header X-Robots-Tag "none" always;
+          add_header X-XSS-Protection "1; mode=block" always;
+          add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
+
+          ssl_certificate /etc/nginx/{{ nextcloud_domain }}.pem;
+          ssl_certificate_key /etc/nginx/{{ nextcloud_domain }}-key.pem;
+          ssl_password_file /etc/nginx/{{ nextcloud_domain }}-key.pass;
+
+          location = /.well-known/carddav {
+            return 301 $scheme://$host/remote.php/dav;
+          }
+
+          location = /.well-known/caldav {
+            return 301 $scheme://$host/remote.php/dav;
+          }
+
+          client_max_body_size 512M;
+          fastcgi_buffers 64 4K;
+
+          location / {
+            rewrite ^ /index.php;
+          }
+
+          location ~ ^\/(?:build|tests|config|lib|3rdparty|templates|data)\/ {
+              deny all;
+          }
+          location ~ ^\/(?:\.|autotest|occ|issue|indie|db_|console) {
+              deny all;
+          }
+
+          location ~ ^\/(?:index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|oc[ms]-provider\/.+)\.php(?:$|\/) {
+            fastcgi_split_path_info ^(.+?\.php)(\/.*|)$;
+            set $path_info $fastcgi_path_info;
+            try_files $fastcgi_script_name =404;
+            include fastcgi_params;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            fastcgi_param PATH_INFO $path_info;
+            fastcgi_param HTTPS on;
+            fastcgi_param modHeadersAvailable true;
+            fastcgi_param front_controller_active true;
+            fastcgi_pass 127.0.0.1:9000;
+            fastcgi_intercept_errors on;
+            fastcgi_request_buffering off;
+          }
+
+          location ~ ^\/(?:updater|oc[ms]-provider)(?:$|\/) {
+            try_files $uri/ =404;
+            index index.php;
+          }
+
+          location ~ \.(?:css|js|woff2?|svg|gif|map)$ {
+            try_files $uri /index.php$request_uri;
+            add_header Cache-Control "public, max-age=15778463";
+            add_header Referrer-Policy "no-referrer" always;
+            add_header X-Content-Type-Options "nosniff" always;
+            add_header X-Download-Options "noopen" always;
+            add_header X-Frame-Options "SAMEORIGIN" always;
+            add_header X-Permitted-Cross-Domain-Policies "none" always;
+            add_header X-Robots-Tag "none" always;
+            add_header X-XSS-Protection "1; mode=block" always;
+            access_log off;
+          }
+
+          location ~ \.(?:png|html|ttf|ico|jpg|jpeg|bcmap)$ {
+            try_files $uri /index.php$request_uri;
+            access_log off;
+          }
+    # PHP
+    php_default_version_debian: "7.4"
+    php_packages:
+      - php7.4-cli
+      - php7.4-fpm
+    php_enable_webserver: false
+    php_enable_php_fpm: true
+    php_enable_apc: false
+    php_memory_limit: "512M"
+    php_opcache_enable: "1"
+    php_opcache_enable_cli: "0"
+    php_opcache_interned_strings_buffer: "16"
+    php_opcache_max_accelerated_files: "10000"
+    php_opcache_memory_consumption: "128"
+    php_opcache_revalidate_freq: "2"
+    # MySQL
+    mysql_root_password: notsecurepassword
+    mysql_bind_address: 127.0.0.1
+    mysql_packages:
+      - mariadb-client
+      - mariadb-server
+      - python-mysqldb
+    mysql_databases:
+      - name: nextcloud
+        encoding: utf8mb4
+        collation: utf8mb4_general_ci
+    mysql_users:
+      - name: nextcloud
+        host: "localhost"
+        password: "notsecurepassword"
+        priv: "nextcloud.*:ALL"
+        state: present
+  pre_tasks:
+    - name: Install dependencies
+      become: yes
+      apt:
+        name:
+          - ca-certificates
+          - gpg
+          - gpg-agent
+          - sudo
+        state: present
+    - name: Copy nginx certs
+      become: yes
+      copy:
+        src: "{{ playbook_dir }}/files/nginx/certs/"
+        dest: /etc/nginx/
+        owner: root
+        group: root
+        mode: 0440
+
   roles:
-  - steamlink
+    - { role: geerlingguy.nginx,
+        nginx_default_vhost_path: '/etc/nginx/conf.d/default.conf',
+        nginx_vhost_path: '/etc/nginx/conf.d',
+        become: yes }
+#    - steamlink
