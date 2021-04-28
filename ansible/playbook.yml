@@ -1,0 +1,5 @@
+---
+- name: PiNanas
+  hosts: all
+  roles:
+  - steamlink
