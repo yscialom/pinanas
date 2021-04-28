@@ -1,2 +1,3 @@
 ---
 - include: install-steamlink.yml
+- include: autostart-steamlink.yml
