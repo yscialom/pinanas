@@ -1,0 +1,5 @@
+---
+- name: YSC's Home setup
+  hosts: all
+  roles:
+  - steamlink
