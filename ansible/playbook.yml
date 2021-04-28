@@ -1,5 +1,5 @@
 ---
-- name: YSC's Home setup
+- name: PiNanas
   hosts: all
   roles:
   - steamlink
