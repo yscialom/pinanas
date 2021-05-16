@@ -35,7 +35,9 @@ PiNanas Galaxy
 ### Play book
 
 On a linux host with ansible installed and an [ssh key](https://www.ssh.com/academy/ssh/keygen "ssh-keygen documentation"),
-run [`ansible/install.sh`](ansible/install.sh).
+run:
+- [`ansible/files/certs/generate.sh`](ansible/files/certs/generate.sh)
+- [`ansible/install.sh`](ansible/install.sh)
 
 
 Usage
