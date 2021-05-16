@@ -3,7 +3,13 @@
   hosts: all
   vars:
     # Nextcloud
-    nextcloud_domain: "nextcloud.local"
+    nextcloud_domain: "www.local.scialom.org"
+    nextcloud_admin_user: "admin"
+    nextcloud_admin_password: "notsecurepassword"
+    nextcloud_instanceid: "somerandomshit"
+    nextcloud_passwordsalt: "notsecurepasswordsalt"
+    nextcloud_secret: "notsecuresecret"
+    nextcloud_dbpassword: "notsecurepassword"
     # Nginx
     nginx_user: www-data
     nginx_listen_ipv6: false
@@ -11,7 +17,7 @@
     nginx_vhosts:
       - server_name: "{{ nextcloud_domain }}"
         listen: "*:443 ssl http2 default_server"
-        root: "/var/www/nextcloud.local/current/nextcloud"
+        root: "/var/www/{{ nextcloud_domain }}/current/nextcloud"
         index: index.php
         extra_parameters: |
           add_header Referrer-Policy "no-referrer" always;
@@ -102,7 +108,7 @@
     php_opcache_memory_consumption: "128"
     php_opcache_revalidate_freq: "2"
     # MySQL
-    mysql_root_password: notsecurepassword
+    mysql_root_password: "{{ nextcloud_admin_password }}"
     mysql_bind_address: 127.0.0.1
     mysql_packages:
       - mariadb-client
@@ -115,7 +121,7 @@
     mysql_users:
       - name: nextcloud
         host: "localhost"
-        password: "notsecurepassword"
+        password: "{{ nextcloud_dbpassword }}"
         priv: "nextcloud.*:ALL"
         state: present
   pre_tasks:
@@ -144,4 +150,5 @@
         become: yes }
     - { role: geerlingguy.php, become: yes }
     - { role: geerlingguy.mysql, become: yes }
+    - { role: nierdz.nextcloud, become: yes }
     - steamlink

@@ -1,6 +1,7 @@
 #!/bin/bash
+# TODO: make ansible generate files on nextcloud host itself
 
-domain=nextcloud.local
+domain=www.local.scialom.org
 
 # generate here
 cd $(dirname $0)
