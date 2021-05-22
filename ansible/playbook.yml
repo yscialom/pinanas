@@ -3,13 +3,18 @@
   hosts: all
   vars:
     # Nextcloud
-    nextcloud_domain: "www.local.scialom.org"
+    nextcloud_domain: "cloud.home.scialom.org"
     nextcloud_admin_user: "admin"
     nextcloud_admin_password: "notsecurepassword"
     nextcloud_instanceid: "somerandomshit"
     nextcloud_passwordsalt: "notsecurepasswordsalt"
     nextcloud_secret: "notsecuresecret"
     nextcloud_dbpassword: "notsecurepassword"
+    # Let's Encrypt
+    acme_sh_path: "/tmp/acme.sh"
+    ssl_domain: "{{ nextcloud_domain }}"
+    ssl_key_file: "/etc/nginx/{{ ssl_domain }}-key.pem"
+    ssl_fullchain_file: "/etc/nginx/{{ ssl_domain }}.pem"
     # Nginx
     nginx_user: www-data
     nginx_listen_ipv6: false
@@ -29,9 +34,8 @@
           add_header X-XSS-Protection "1; mode=block" always;
           add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
 
-          ssl_certificate /etc/nginx/{{ nextcloud_domain }}.pem;
-          ssl_certificate_key /etc/nginx/{{ nextcloud_domain }}-key.pem;
-          ssl_password_file /etc/nginx/{{ nextcloud_domain }}-key.pass;
+          ssl_certificate_key {{ ssl_key_file }};
+          ssl_certificate {{ ssl_fullchain_file }};
 
           location = /.well-known/carddav {
             return 301 $scheme://$host/remote.php/dav;
@@ -108,7 +112,7 @@
     php_opcache_memory_consumption: "128"
     php_opcache_revalidate_freq: "2"
     # MySQL
-    mysql_root_password: "{{ nextcloud_admin_password }}"
+    mysql_root_password: "{{ nextcloud_admin_password }}"
     mysql_bind_address: 127.0.0.1
     mysql_packages:
       - mariadb-client
@@ -134,16 +138,9 @@
           - gpg-agent
           - sudo
         state: present
-    - name: Copy nginx certs
-      become: yes
-      copy:
-        src: "{{ playbook_dir }}/files/nginx/certs/"
-        dest: /etc/nginx/
-        owner: root
-        group: root
-        mode: 0440
 
   roles:
+    - lets-encrypt
     - { role: geerlingguy.nginx,
         nginx_default_vhost_path: '/etc/nginx/conf.d/default.conf',
         nginx_vhost_path: '/etc/nginx/conf.d',
