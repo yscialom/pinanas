@@ -1,6 +1,0 @@
----
-- name: ensure steamlink is at the latest version
-  become: yes
-  apt:
-    name: steamlink
-    state: latest

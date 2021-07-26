@@ -18,8 +18,8 @@ fi
 # Install ansible roles from Galaxy
 echo
 echo "===[ Get dependencies playbooks ]==="
-ansible-galaxy collection install community.mysql
-for collection in geerlingguy.nginx geerlingguy.php geerlingguy.mysql nierdz.nextcloud ; do
+collections=""
+for collection in ${collections} ; do
     ansible-galaxy install --upgrade ${collection}
 done
 
