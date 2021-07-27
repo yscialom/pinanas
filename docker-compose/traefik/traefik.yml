@@ -1,0 +1,28 @@
+api:
+  dashboard: true
+  debug: true
+entryPoints:
+  http:
+    address: ":80"
+  https:
+    address: ":443"
+  dns-udp:
+    address: ":53/udp"
+  dns-tcp:
+    address: ":53/tcp"
+serversTransport:
+  insecureSkipVerify: true
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+  file:
+    filename: /config.yml
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: yankel@scialom.org
+      storage: /acme.json
+      dnsChallenge:
+        provider: ovh
+        delayBeforeCHeck: 0

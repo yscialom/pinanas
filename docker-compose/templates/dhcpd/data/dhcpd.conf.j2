@@ -1,0 +1,10 @@
+subnet {{ PINANAS_DHCP_SUBNET }} netmask {{ PINANAS_DHCP_SUBNET }} {
+    option routers                  {{ PINANAS_DHCP_GATEWAY }};
+    option subnet-mask              {{ PINANAS_DHCP_SUBNET }};
+    option domain-name-servers      {{ PINANAS_HOST_IP }},{{ PINANAS_DHCP_UPSTREAM_DNS }};
+    range                           {{ PINANAS_DHCP_START }} {{ PINANAS_DHCP_END }};
+}
+host home {
+    hardware ethernet {{ PINANAS_HOST_HMAC }};
+    fixed-address {{ PINANAS_HOST_IP }};
+}

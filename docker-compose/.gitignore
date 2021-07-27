@@ -1,0 +1,8 @@
+# Private files
+.env
+docker-compose.override.yml
+settings.yml
+
+# Generated files
+docker-compose.yml
+
