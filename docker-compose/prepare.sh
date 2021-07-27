@@ -34,6 +34,11 @@ cat > ${playbook} <<EOH
   gather_facts: yes
   tasks:
   - include_vars: ${ROOT}/settings.yml
+  - name: ensure traefik/acme.json exist
+    file:
+      path: "${ROOT}/traefik/acme.json"
+      state: file
+      mode: 0600
 EOH
 
 # Playbook tasks

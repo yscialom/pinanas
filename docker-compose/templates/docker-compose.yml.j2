@@ -1,25 +1,26 @@
 ---
-version: "2"
+version: "3"
 networks:
   default:
-    name: traefik
 
 services:
   dhcpd:
-    image:{{ 'prehley/rpi-dhcpd' if ('arm' in ansible_architecture) else 'networkboot/docker-dhcpd' }}
+    image: {{ 'prehley/rpi-dhcpd' if ('arm' in ansible_architecture) else 'networkboot/dhcpd:1.1.0' }}
     container_name: dhcpd
     volumes:
       - ./dhcpd/data:/data
       - ./dhcpd/cgroup:/sys/fs/cgroup
     hostname: dhcpd
-    aliases:
-      dhcpd
+    networks:
+      default:
+        aliases:
+        - dhcpd
     environment:
       - TZ={{ PINANAS_TZ }}
     restart: unless-stopped
 
   traefik:
-    image: traefik:v2.0
+    image: traefik:v2.4
     container_name: traefik
     depends_on:
       - dhcpd
@@ -34,9 +35,11 @@ services:
       - ./traefik/config.yml:/config.yml
       - ./traefik/traefik.yml:/traefik.yml
     hostname: traefik
-    aliases:
-      traefik
-      traefik-dashboard
+    networks:
+      default:
+        aliases:
+          - traefik
+          - traefik-dashboard
     environment:
       - TZ={{ PINANAS_TZ }}
 {% for var in PINANAS_DNS_PROVIDER_VARS %}
@@ -47,13 +50,13 @@ services:
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.traefik-secure.entrypoints=https"
-      - "traefik.http.routers.traefik-secure.rule=Host(`traefik-dashboard.${PINANAS_DOMAIN}`)"
+      - "traefik.http.routers.traefik-secure.rule=Host(`traefik-dashboard.{{ PINANAS_DOMAIN }}`)"
       - "traefik.http.routers.traefik-secure.service=api@internal"
       - "traefik.http.routers.traefik-secure.tls=true"
       - "traefik.http.routers.traefik-secure.tls.certresolver=myresolver"
-      - "traefik.http.routers.traefik-secure.tls.domains[0].main=${PINANAS_DOMAIN}"
-      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.${PINANAS_DOMAIN}"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main={{ PINANAS_DOMAIN }}"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.{{ PINANAS_DOMAIN }}"
       - "traefik.http.routers.traefik.entrypoints=http"
       - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
-      - "traefik.http.routers.traefik.rule=Host(`traefik-dashboard.${PINANAS_DOMAIN}`)"
+      - "traefik.http.routers.traefik.rule=Host(`traefik-dashboard.{{ PINANAS_DOMAIN }}`)"
     restart: unless-stopped
