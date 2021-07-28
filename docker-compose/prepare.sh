@@ -17,6 +17,10 @@ if ! command -v ansible-playbook >/dev/null ; then
     exit 1
 fi
 
+if [[ ${1} == "--force" ]] ; then
+    OPT_FORCE=true
+fi
+
 
 #
 ## Apply private configuration
@@ -54,6 +58,7 @@ for j2 in $(find "${ROOT}/templates" -type f -name "*.j2") ; do
     template:
       src:  "${j2}"
       dest: "${destdir}/${filename}"
+      force: $([[ ${OPT_FORCE} == true ]] && echo yes || echo no)
     delegate_to: localhost
 
 EOT
