@@ -3,7 +3,7 @@ http:
     noop:
       entryPoints:
         - "https"
-      rule: "Host(`noop.home.scialom.org`)"
+      rule: "Host(`noop.${{ PINANAS_DOMAIN }}`)"
       middlewares:
         - default-headers
       tls: {}
@@ -12,7 +12,7 @@ http:
     noop:
       loadBalancer:
         servers:
-          - url: "https://192.168.1.12:0"
+          - url: "https://{{ PINANAS_HOST_IP }}:0"
         passHostHeader: true
   middlewares:
     https-redirect:

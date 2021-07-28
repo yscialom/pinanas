@@ -16,7 +16,6 @@ if ! command -v ansible-playbook >/dev/null ; then
     echo "This script requires ansible. See <https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html> for help installing it." >&2
     exit 1
 fi
-    
 
 
 #
@@ -60,4 +59,13 @@ for j2 in $(find "${ROOT}/templates" -type f -name "*.j2") ; do
 EOT
 done
 
-ANSIBLE_LOCALHOST_WARNING=false ansible-playbook -i /dev/null ${playbook}
+EXTRA_VARS="{
+  PUID: $(id -u),
+  GUID: $(id -g)
+}"
+
+export ANSIBLE_LOCALHOST_WARNING=false
+ansible-playbook \
+    --inventory /dev/null \
+    --extra-vars "${EXTRA_VARS}" \
+    ${playbook}

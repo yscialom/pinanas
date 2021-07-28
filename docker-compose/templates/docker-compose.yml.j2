@@ -4,6 +4,12 @@ networks:
   default:
 
 services:
+  #
+  ## === DHCPD ===
+  # DHCP Daemon: answer to dhcp requests to assign IPs to
+  # clients and set their primary DNS server. This is necessary
+  # for adGuardHome to work with zero configuration on clients.
+  ##
   dhcpd:
     image: {{ 'prehley/rpi-dhcpd' if ('arm' in ansible_architecture) else 'networkboot/dhcpd:1.1.0' }}
     container_name: dhcpd
@@ -11,14 +17,18 @@ services:
       - ./dhcpd/data:/data
       - ./dhcpd/cgroup:/sys/fs/cgroup
     hostname: dhcpd
-    networks:
-      default:
-        aliases:
-        - dhcpd
+    network_mode: host
     environment:
       - TZ={{ PINANAS_TZ }}
     restart: unless-stopped
 
+  #
+  ## === TRAEFIK ===
+  # Reverse proxy (HTTP, TCP, UDP): route requests to
+  # services hosted or not on the same host. This is
+  # useful to add SSO (authelia), HTTPS (let's encrypt),
+  # and protect services not suited to face the outside.
+  ##
   traefik:
     image: traefik:v2.4
     container_name: traefik
@@ -59,4 +69,37 @@ services:
       - "traefik.http.routers.traefik.entrypoints=http"
       - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
       - "traefik.http.routers.traefik.rule=Host(`traefik-dashboard.{{ PINANAS_DOMAIN }}`)"
+    restart: unless-stopped
+
+  #
+  ## === AUTHELIA ===
+  # Single Sign On: handle authentification to users
+  # on the whole network.
+  ##
+  authelia:
+    image: authelia/authelia:4
+    container_name: authelia
+    depends_on:
+      - traefik
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./authelia/config:/config
+    hostname: authelia
+    networks:
+      default:
+        aliases:
+          - authelia
+          - auth
+    environment:
+      - TZ={{ PINANAS_TZ }}
+      - PUID={{ PUID }}
+      - GUID={{ GUID }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=https://auth.{{ PINANAS_DOMAIN }}"
+      - "traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email"
+      - "traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true"
+      - "traefik.http.routers.authelia.entrypoints=https"
+      - "traefik.http.routers.authelia.rule=Host(`auth.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.routers.authelia.tls=true"
     restart: unless-stopped

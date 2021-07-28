@@ -4,6 +4,7 @@
 #
 PINANAS_HOST_HMAC:                           # MAC address of Pinana's host network card, eg 01:02:03:04:05:06
 PINANAS_HOST_IP:                             # Static IP of Pinana's host inside its private network, eg. 192.168.1.1
+PINANAS_DHCP_BASE:                           # Base IP for the network, eg. 192.168.1.0
 PINANAS_DHCP_SUBNET:                         # Private network subnet mask, eg. 255.255.255.0
 PINANAS_DHCP_GATEWAY:                        # Private network gateway, eg. 192.168.1.254
 PINANAS_DHCP_START:                          # First (included) IP of agents inside private network, eg. 192.168.1.10
@@ -18,3 +19,20 @@ PINANAS_TZ:                                  # Local timezone for ease to interp
 PINANAS_DOMAIN:                              # Domain name registered, eg. home.example.com
 PINANAS_DNS_PROVIDER_NAME:                   # Provider for registered name, eg. ovh
 PINANAS_DNS_PROVIDER_VARS:                   # See traefik documentation for your provider at <https://doc.traefik.io/traefik/https/acme/#providers>
+
+
+#
+## Services
+#
+# SMTP                                       # Send email; consult the documentation for your email provider, eg. https://support.google.com/a/answer/176600?hl=en
+PINANAS_SMTP_USERNAME:                       # SMTP username, eg. john.doe@gmail.com
+PINANAS_SMTP_PASSWORD:                       # SMTP password, eg. secret
+PINANAS_SMTP_SENDER:                         # SMTP sender email address, eg. admin@example.com
+PINANAS_SMTP_HOST:                           # SMTP server host, eg. smtp.gmail.com
+PINANAS_SMTP_PORT:                           # SMTP server port, eg 587
+
+#
+## Misc.
+#
+PINANAS_SECRET_AUTHELIA_SESSION:             # TODO: prepare.sh will replace this value with a generated secret
+PINANAS_SECRET_AUTHELIA_JWT:                 # TODO: prepare.sh will replace this value with a generated secret
