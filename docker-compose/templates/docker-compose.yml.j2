@@ -103,3 +103,48 @@ services:
       - "traefik.http.routers.authelia.rule=Host(`auth.{{ PINANAS_DOMAIN }}`)"
       - "traefik.http.routers.authelia.tls=true"
     restart: unless-stopped
+
+  #
+  ## === AD GUARD HOME ===
+  #
+  # Ad filter: acts as a primary DNS and filter
+  # hosts known to serve advertising.
+  ##
+  adguardhome:
+    image: adguard/adguardhome
+    container_name: adguardhome
+    depends_on:
+      - dhcpd
+      - traefik
+    volumes:
+      - ./adguardhome/config:/opt/adguardhome/conf
+      - ./adguardhome/data:/opt/adguardhome/work
+    hostname: adguardhome
+    networks:
+      default:
+        aliases:
+          - adguardhome
+          - dns
+    environment:
+      - TZ={{ PINANAS_TZ }}
+      - PUID={{ PUID }}
+      - GUID={{ GUID }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.adguardhome-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.adguardhome-secure.entrypoints=https"
+      - "traefik.http.routers.adguardhome-secure.middlewares=authelia@docker"
+      - "traefik.http.routers.adguardhome-secure.rule=Host(`adguardhome-dashboard.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.routers.adguardhome-secure.service=adguardhome"
+      - "traefik.http.routers.adguardhome-secure.tls=true"
+      - "traefik.http.routers.adguardhome.entrypoints=http"
+      - "traefik.http.routers.adguardhome.middlewares=adguardhome-https-redirect"
+      - "traefik.http.routers.adguardhome.rule=Host(`adguardhome-dashboard.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.services.adguardhome.loadbalancer.server.port=80"
+      - "traefik.tcp.routers.adblockhome-dns.entrypoints=dns-tcp"
+      - "traefik.tcp.routers.adblockhome-dns.service=adblockhome-dns"
+      - "traefik.tcp.services.adblockhome-dns.loadBalancer.server.port=53"
+      - "traefik.udp.routers.adblockhome-dns.entrypoints=dns-udp"
+      - "traefik.udp.routers.adblockhome-dns.service=adblockhome-dns"
+      - "traefik.udp.services.adblockhome-dns.loadBalancer.server.port=53"
+    restart: unless-stopped

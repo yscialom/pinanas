@@ -32,8 +32,8 @@ access_control:
     ## === ADMIN SERVICES ===
     #
 
-    # Reverse Proxy: Traefik
-    - domain: traefik-dashboard.home.scialom.org
+    # DNS / Ad filter: AdGuardHome
+    - domain: adguardhome-dashboard.{{ PINANAS_DOMAIN }}
       policy: two_factor
       subject:
       - "group:admins"

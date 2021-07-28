@@ -3,7 +3,7 @@ http:
     noop:
       entryPoints:
         - "https"
-      rule: "Host(`noop.${{ PINANAS_DOMAIN }}`)"
+      rule: "Host(`noop.{{ PINANAS_DOMAIN }}`)"
       middlewares:
         - default-headers
       tls: {}
