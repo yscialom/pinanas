@@ -18,7 +18,7 @@ designed to run on a small computer like a Raspberry PI. Its feature include:
 
 Installation
 ============
-TODO
+See [docker-compose](docker-compose/README.md)
 
 Usage
 =====
