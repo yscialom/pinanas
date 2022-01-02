@@ -2,15 +2,17 @@
 #
 ## network
 #
-host: 0.0.0.0
-port: 9091
+server:
+  host: 0.0.0.0
+  port: 9091
 
 default_redirection_url: https://dashboard.{{ PINANAS_DOMAIN }}/
 
 #
 ## system
 #
-log_level: debug
+log:
+  level: debug
 
 server:
   read_buffer_size: 4096
@@ -74,6 +76,14 @@ regulation:
   ban_time: 5m
 
 storage:
+  {% macro random_key(size) %}
+    {%- set chars = "0123456789abcdef" %}
+    {%- for _ in range(0,size) -%}
+      {{ chars|random }}
+    {%- endfor %}
+  {% endmacro %}
+
+  encryption_key: {{ random_key(32) }}
   local:
     path: /config/db.sqlite3
 
