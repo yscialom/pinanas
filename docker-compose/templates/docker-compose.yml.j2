@@ -14,6 +14,7 @@ services:
     image: {{ 'prehley/rpi-dhcpd' if ('arm' in ansible_architecture) else 'networkboot/dhcpd:1.1.0' }}
     container_name: dhcpd
     volumes:
+      - ./dhcpd/config/dhcpd.conf:/data/dhcpd.conf:ro
       - ./dhcpd/data:/data
       - ./dhcpd/cgroup:/sys/fs/cgroup
     hostname: dhcpd

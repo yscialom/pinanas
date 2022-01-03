@@ -47,7 +47,12 @@ cat > ${playbook} <<EOH
   gather_facts: yes
   tasks:
   - include_vars: ${ROOT}/settings.yml
-  - name: ensure traefik/acme.json exist
+  - name: ensure dhcpd/data exists
+    file:
+      path: "${ROOT}/dhcpd/data"
+      state: directory
+      mode: 0755
+  - name: ensure traefik/acme.json exists
     file:
       path: "${ROOT}/traefik/acme.json"
       state: touch
