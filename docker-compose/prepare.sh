@@ -30,6 +30,16 @@ fi
 playbook=$(mktemp)
 trap "rm -f -- ${playbook}" EXIT
 
+# Install plugins
+authelia_plugin_files="\
+:${ROOT}/authelia/authelia_password.py\
+"
+plugins_dir="$(dirname ${playbook})/filter_plugins"
+mkdir -p "${plugins_dir}"
+echo "${authelia_plugin_files}" | tr : '\n' | while read file ; do
+  [[ -r "${file}" ]] && cp "${file}" "${plugins_dir}/$(basename ${file})"
+done
+
 # Playbook header
 cat > ${playbook} <<EOH
 ---
@@ -40,7 +50,7 @@ cat > ${playbook} <<EOH
   - name: ensure traefik/acme.json exist
     file:
       path: "${ROOT}/traefik/acme.json"
-      state: file
+      state: touch
       mode: 0600
 EOH
 
