@@ -1,7 +1,7 @@
 subnet {{ PINANAS_DHCP_BASE }} netmask {{ PINANAS_DHCP_SUBNET }} {
     option routers                  {{ PINANAS_DHCP_GATEWAY }};
     option subnet-mask              {{ PINANAS_DHCP_SUBNET }};
-    option domain-name-servers      {{ PINANAS_HOST_IP }},{{ PINANAS_DHCP_UPSTREAM_DNS }};
+    option domain-name-servers      {{ PINANAS_HOST_IP }},{{ PINANAS_DHCP_UPSTREAM_DNS | join(',') }};
     range                           {{ PINANAS_DHCP_START }} {{ PINANAS_DHCP_END }};
 }
 host home {

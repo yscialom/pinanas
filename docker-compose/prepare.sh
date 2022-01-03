@@ -31,12 +31,12 @@ playbook=$(mktemp)
 trap "rm -f -- ${playbook}" EXIT
 
 # Install plugins
-authelia_plugin_files="\
-:${ROOT}/authelia/authelia_password.py\
+plugin_files="\
+:${ROOT}/utils/ansible_passwords.py\
 "
 plugins_dir="$(dirname ${playbook})/filter_plugins"
 mkdir -p "${plugins_dir}"
-echo "${authelia_plugin_files}" | tr : '\n' | while read file ; do
+echo "${plugin_files}" | tr : '\n' | while read file ; do
   [[ -r "${file}" ]] && cp "${file}" "${plugins_dir}/$(basename ${file})"
 done
 
@@ -81,7 +81,7 @@ done
 
 EXTRA_VARS="{
   PUID: $(id -u),
-  GUID: $(id -g)
+  PGID: $(id -g)
 }"
 
 export ANSIBLE_LOCALHOST_WARNING=false

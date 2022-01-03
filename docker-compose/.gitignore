@@ -1,8 +1,12 @@
 # Private files
-.env
-docker-compose.override.yml
+user.env
 settings.yml
 
 # Generated files
 docker-compose.yml
 
+# Application directories
+adguardhome
+authelia
+dhcpd
+traefik

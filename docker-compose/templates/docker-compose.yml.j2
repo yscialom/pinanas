@@ -94,7 +94,7 @@ services:
     environment:
       - TZ={{ PINANAS_TZ }}
       - PUID={{ PUID }}
-      - GUID={{ GUID }}
+      - PGID={{ PGID }}
     labels:
       - "traefik.enable=true"
       - "traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=https://auth.{{ PINANAS_DOMAIN }}"
@@ -118,8 +118,8 @@ services:
       - dhcpd
       - traefik
     volumes:
-      - ./adguardhome/config:/opt/adguardhome/conf
-      - ./adguardhome/data:/opt/adguardhome/work
+      - ./adguardhome/config:/opt/adguardhome/conf:ro
+      - ./adguardhome/data:/opt/adguardhome/work/data
     hostname: adguardhome
     networks:
       default:
@@ -129,7 +129,7 @@ services:
     environment:
       - TZ={{ PINANAS_TZ }}
       - PUID={{ PUID }}
-      - GUID={{ GUID }}
+      - PGID={{ PGID }}
     labels:
       - "traefik.enable=true"
       - "traefik.http.middlewares.adguardhome-https-redirect.redirectscheme.scheme=https"
