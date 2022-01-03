@@ -8,6 +8,8 @@ import bcrypt
 from ansible.module_utils.common.text.converters import to_native
 from ansible.errors import AnsibleFilterError
 
+ENCODING='utf-8'
+
 class Authelia:
     def password(self, cleartext):
         self.__command = ['docker', 'run', '--rm', 'authelia/authelia:4', 'authelia', 'hash-password', cleartext]
@@ -32,12 +34,12 @@ class Authelia:
 
 class Adguardhome:
     def password(self, cleartext):
-        return bcrypt.hashpw(cleartext, bcrypt.gensalt())
+        return bcrypt.hashpw(cleartext, bcrypt.gensalt()).decode(ENCODING)
 
 
 class FilterModule:
     def password(self, Implementation):
-        return lambda cleartext: Implementation().password(cleartext.encode('utf-8'))
+        return lambda cleartext: Implementation().password(cleartext.encode(ENCODING))
 
     def filters(self):
         return {
