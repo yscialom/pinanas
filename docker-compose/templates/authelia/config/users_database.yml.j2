@@ -1,9 +1,9 @@
 users:
 {% for user in PINANAS_USERS %}
   {{ user.login }}:
-    displayname: {{ user.fullname }}
-    password: {{ user.password | authelia_password }}
-    email: {{ user.email }}
+    displayname: "{{ user.fullname }}"
+    password: "{{ user.password | authelia_password }}"
+    email: "{{ user.email }}"
     groups:
     - admins
     - users

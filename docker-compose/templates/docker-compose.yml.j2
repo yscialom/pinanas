@@ -42,9 +42,9 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik/acme.json:/acme.json
-      - ./traefik/config.yml:/config.yml
-      - ./traefik/traefik.yml:/traefik.yml
+      - ./traefik/config/config.yml:/config.yml:ro
+      - ./traefik/config/traefik.yml:/traefik.yml:ro
+      - ./traefik/data/acme.json:/acme.json
     hostname: traefik
     networks:
       default:
@@ -118,7 +118,7 @@ services:
       - dhcpd
       - traefik
     volumes:
-      - ./adguardhome/config:/opt/adguardhome/conf:ro
+      - ./adguardhome/config:/opt/adguardhome/conf
       - ./adguardhome/data:/opt/adguardhome/work/data
     hostname: adguardhome
     networks:

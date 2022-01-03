@@ -1,13 +1,13 @@
 #!/bin/bash
-
 ROOT="$(dirname "$(readlink -f "${0}")")"
+DIST="$(readlink -f ${PWD})"
 
 #
 ## Check context
 #
-if [[ ! -f "${ROOT}/settings.yml" ]] ; then
-    echo "$0: error: ${ROOT}/settings.yml no such file." >&2
-    echo "Copy ${ROOT}/settings.yml.sample to ${ROOT}/settings.yml and fill in your personnal configuration." >&2
+if [[ ! -f "${DIST}/settings.yml" ]] ; then
+    echo "$0: error: ${DIST}/settings.yml no such file." >&2
+    echo "Copy ${ROOT}/settings.yml.sample to ${DIST}/settings.yml and fill in your personnal configuration." >&2
     exit 1
 fi
 
@@ -46,22 +46,23 @@ cat > ${playbook} <<EOH
 - hosts: localhost
   gather_facts: yes
   tasks:
-  - include_vars: ${ROOT}/settings.yml
-  - name: ensure dhcpd/data exists
+  - include_vars: ${DIST}/settings.yml
+  - name: ensure application directories exist
     file:
-      path: "${ROOT}/dhcpd/data"
+      path: "${DIST}/{{ item[0] }}/{{ item[1] }}"
       state: directory
       mode: 0755
+    loop: "{{ ['dhcpd', 'traefik', 'authelia', 'adguardhome'] | product(['config', 'data']) | list }}"
   - name: ensure traefik/acme.json exists
     file:
-      path: "${ROOT}/traefik/acme.json"
+      path: "${DIST}/traefik/data/acme.json"
       state: touch
       mode: 0600
 EOH
 
 # Playbook tasks
 for j2 in $(find "${ROOT}/templates" -type f -name "*.j2") ; do
-    destdir="$(dirname "${ROOT}/${j2#${ROOT}/templates/}")"
+    destdir="$(dirname "${DIST}/${j2#${ROOT}/templates/}")"
     filename="$(basename "${j2%.j2}")"
     cat >> ${playbook} <<EOT
   # handle ${j2}

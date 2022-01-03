@@ -1,12 +1,12 @@
 # Private files
-user.env
-settings.yml
+/user.env
+/settings.yml
 
 # Generated files
-docker-compose.yml
+/docker-compose.yml
 
 # Application directories
-adguardhome
-authelia
-dhcpd
-traefik
+/adguardhome
+/authelia
+/dhcpd
+/traefik

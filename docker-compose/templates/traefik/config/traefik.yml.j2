@@ -21,8 +21,8 @@ providers:
 certificatesResolvers:
   myresolver:
     acme:
-      email: yankel@scialom.org
+      email: "{{ PINANAS_DNS_PROVIDER_EMAIL }}"
       storage: /acme.json
       dnsChallenge:
-        provider: ovh
+        provider: {{ PINANAS_DNS_PROVIDER_NAME }}
         delayBeforeCHeck: 0
