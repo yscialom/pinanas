@@ -1,5 +1,0 @@
-all:
-  hosts:
-    pi:
-      ansible_host: @PINANAS_HOST@
-      ansible_user: pi

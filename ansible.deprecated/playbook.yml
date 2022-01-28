@@ -1,6 +1,0 @@
----
-- name: PiNanas
-  hosts: all
-  vars:
-  pre_tasks:
-  roles:
