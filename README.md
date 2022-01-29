@@ -84,6 +84,7 @@ Go to [OVH's API Key creation page](https://eu.api.ovh.com/createToken/) and fil
   - "PUT /domain/zone/*"
   - "POST /domain/zone/*"
   - "DELETE /domain/zone/*"
+
 And click `Create keys`.
 
 You will be given an Application Key, an Application Secret and a Consumer Key. Keep those secret and safe as you cannot retrieve them.
