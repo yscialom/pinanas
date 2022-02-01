@@ -1,0 +1,77 @@
+---
+#
+## Private network
+#
+# MAC address of Pinana's host network card, eg 01:02:03:04:05:06
+PINANAS_HOST_HMAC:
+
+# Static IP of Pinana's host inside its private network, eg. 192.168.1.1
+PINANAS_HOST_IP:
+
+# Base IP for the network, eg. 192.168.1.0
+PINANAS_DHCP_BASE:
+
+# Private network subnet mask, eg. 255.255.255.0
+PINANAS_DHCP_SUBNET:
+
+# Private network gateway, eg. 192.168.1.254
+PINANAS_DHCP_GATEWAY:
+
+# First (included) IP of agents inside private network, eg. 192.168.1.10
+PINANAS_DHCP_START:
+
+# Last (included) IP of agents inside private network, eg. 192.168.1.64
+PINANAS_DHCP_END:
+
+# Upstream DNS, eg. 8.8.8.8
+PINANAS_DHCP_UPSTREAM_DNS:
+
+
+#
+## Home
+#
+# Local timezone for ease to interpret logs, eg. Europe/Paris
+PINANAS_TZ:
+
+# Domain name registered, eg. home.example.com
+PINANAS_DOMAIN:
+
+# Provider for registered name, eg. ovh
+PINANAS_DNS_PROVIDER_NAME:
+
+# Email registered on the Provider, eg. johndoe@example.com
+PINANAS_DNS_PROVIDER_EMAIL:
+
+# See traefik documentation for your provider at <https://doc.traefik.io/traefik/https/acme/#providers>
+PINANAS_DNS_PROVIDER_VARS:
+
+
+#
+## Services
+#
+# SMTP                                       # Send email; consult the documentation for your email provider, eg. https://support.google.com/a/answer/176600?hl=en
+
+# SMTP username, eg. john.doe@gmail.com
+PINANAS_SMTP_USERNAME:
+
+# SMTP password, eg. secret
+PINANAS_SMTP_PASSWORD:
+
+# SMTP sender email address, eg. admin@example.com
+PINANAS_SMTP_SENDER:
+
+# SMTP server host, eg. smtp.gmail.com
+PINANAS_SMTP_HOST:
+
+# SMTP server port, eg 587
+PINANAS_SMTP_PORT:
+
+
+#
+## Misc.
+#
+# TODO: prepare.sh will replace this value with a generated secret
+PINANAS_SECRET_AUTHELIA_SESSION:
+
+# TODO: prepare.sh will replace this value with a generated secret
+PINANAS_SECRET_AUTHELIA_JWT:
