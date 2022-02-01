@@ -1,19 +1,24 @@
 http:
   routers:
-    noop:
+    {% for service in PINANAS_EXTERNAL_SERVICES -%}
+    {{ service.name }}:
       entryPoints:
         - "https"
-      rule: "Host(`noop.{{ PINANAS_DOMAIN }}`)"
+      rule: "Host(`{{ service.name }}.{{ PINANAS_DOMAIN }}`)"
       middlewares:
         - default-headers
+        - authelia@docker
       tls: {}
-      service: noop
+      service: {{ service.name }}
+    {% endfor -%}
   services:
-    noop:
+    {% for service in PINANAS_EXTERNAL_SERVICES -%}
+    {{ service.name }}:
       loadBalancer:
         servers:
-          - url: "https://{{ PINANAS_HOST_IP }}:0"
+          - url: "{{ service.url }}"
         passHostHeader: true
+    {% endfor -%}
   middlewares:
     https-redirect:
       redirectScheme:

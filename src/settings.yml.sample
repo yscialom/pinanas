@@ -70,8 +70,11 @@ PINANAS_SMTP_PORT:
 #
 ## Misc.
 #
-# TODO: prepare.sh will replace this value with a generated secret
+# List of name/redirection to serve external services through the common reverse-proxy
+PINANAS_EXTERNAL_SERVICES:
+
+# TODO: configure.sh will replace this value with a generated secret
 PINANAS_SECRET_AUTHELIA_SESSION:
 
-# TODO: prepare.sh will replace this value with a generated secret
+# TODO: configure.sh will replace this value with a generated secret
 PINANAS_SECRET_AUTHELIA_JWT:
