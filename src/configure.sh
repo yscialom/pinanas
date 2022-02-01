@@ -56,7 +56,7 @@ fi
 source "${VENV}"/bin/activate
 
 python3 -m pip install --upgrade pip
-pip install ansible==2.9
+pip install ansible==4.2
 
 
 #
