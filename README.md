@@ -65,6 +65,7 @@ cd /opt/pinanas
 Create a file `settings.yml` from [`src/settings.yml.sample`](src/settings.yml.sample) and fill in all values:
 ```bash
 cp /path/to/pinanas/src/settings.yml.sample settings.yml
+chmod 600 settings.yml # contains passwords
 nano settings.yml
 ```
 See [Get your DNS API keys](#get-your-dns-api-keys) below for how to set `PINANAS_DNS_PROVIDER_VARS`.

@@ -48,7 +48,7 @@ fi
 #
 
 if ! python3 -m venv "${VENV}" ; then
-    error "python -m venv not found."
+    error "'python -m venv' failed with code $?."
     cont "This script requires python virtual environments. See <https://docs.python.org/3/library/venv.html> for help installing it."
     exit 1
 fi
@@ -151,11 +151,10 @@ if [[ -n $(ss -Hul "sport = :domain") ]] ; then
     warn "Port udp/53 appears to be already in use. You should free it before starting pinanas."
     cont "On Ubuntu 18.04+ systems, in order to free udp/53 you can disable your local DNS cache server:"
     cont "    sudo mkdir -p /etc/systemd/resolved.conf.d"
-    cont "    cat | sudo tee -a /etc/systemd/resolved.conf.d/disable-for-pinanas.conf"
-    cont "    [Resolve]"
-    cont "    DNSStubListener=no"
-    cont "    ^D"
+    cont "    echo -e '[Resolve]\nDNSStubListener=no' | sudo tee -a /etc/systemd/resolved.conf.d/disable-for-pinanas.conf"
     cont "    sudo systemctl force-reload systemd-resolved"
+    cont "    sudo rm /etc/resolv.conf"
+    cont "    sudo ln -s ../run/systemd/resolve/resolv.conf /etc/resolv.conf"
 fi
 
 
