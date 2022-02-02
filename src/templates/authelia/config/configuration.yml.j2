@@ -35,11 +35,20 @@ access_control:
     #
 
     # DNS / Ad filter: AdGuardHome
-    - domain: adguardhome-dashboard.{{ PINANAS_DOMAIN }}
+    - domain: "adguardhome-dashboard.{{ PINANAS_DOMAIN }}"
       policy: two_factor
       subject:
       - "group:admins"
 
+    #
+    ## === EXTERNAL SERVICES ===
+    #
+    {% for service in PINANAS_EXTERNAL_SERVICES -%}
+    - domain: "{{ service.name }}.{{ PINANAS_DOMAIN }}"
+      policy: "{{ service.policy | default('two_factor') }}"
+      subject:
+      - "group:{{ service.group | default('admins') }}"
+    {% endfor %}
 
 jwt_secret: "{{ PINANAS_SECRET_AUTHELIA_JWT }}"
 
