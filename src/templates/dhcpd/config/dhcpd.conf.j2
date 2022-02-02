@@ -1,3 +1,4 @@
+#jinja2:lstrip_blocks: True
 subnet {{ PINANAS_DHCP_BASE }} netmask {{ PINANAS_DHCP_SUBNET }} {
     option routers                  {{ PINANAS_DHCP_GATEWAY }};
     option subnet-mask              {{ PINANAS_DHCP_SUBNET }};
@@ -8,3 +9,9 @@ host home {
     hardware ethernet {{ PINANAS_HOST_HMAC }};
     fixed-address {{ PINANAS_HOST_IP }};
 }
+{% for lease in PINANAS_DHCP_LEASES %}
+host {{ lease.name }} {
+    hardware ethernet {{ lease.hmac }};
+    fixed-address {{ lease.ip }};
+}
+{% endfor %}

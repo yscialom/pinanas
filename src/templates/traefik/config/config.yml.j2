@@ -1,6 +1,7 @@
+#jinja2:lstrip_blocks: True
 http:
   routers:
-    {% for service in PINANAS_EXTERNAL_SERVICES -%}
+    {% for service in PINANAS_EXTERNAL_SERVICES %}
     {{ service.name }}:
       entryPoints:
         - "https"
@@ -10,15 +11,15 @@ http:
         - authelia@docker
       tls: {}
       service: {{ service.name }}
-    {% endfor -%}
+    {% endfor %}
   services:
-    {% for service in PINANAS_EXTERNAL_SERVICES -%}
+    {% for service in PINANAS_EXTERNAL_SERVICES %}
     {{ service.name }}:
       loadBalancer:
         servers:
           - url: "{{ service.url }}"
         passHostHeader: true
-    {% endfor -%}
+    {% endfor %}
   middlewares:
     https-redirect:
       redirectScheme:

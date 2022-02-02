@@ -24,7 +24,15 @@ PINANAS_DHCP_START:
 PINANAS_DHCP_END:
 
 # Upstream DNS, eg. 8.8.8.8
-PINANAS_DHCP_UPSTREAM_DNS:
+PINANAS_DHCP_UPSTREAM_DNS: []
+# Example: [ 192.168.0.1, 192.168.1.1]
+
+# Fixed-address leases
+PINANAS_DHCP_LEASES: []
+# Example:
+#  - name: "DeviceName"
+#    hmac: "01:23:45:67:89:ab"
+#    ip: 192.168.137.42
 
 
 #
@@ -43,8 +51,7 @@ PINANAS_DNS_PROVIDER_NAME:
 PINANAS_DNS_PROVIDER_EMAIL:
 
 # See traefik documentation for your provider at <https://doc.traefik.io/traefik/https/acme/#providers>
-PINANAS_DNS_PROVIDER_VARS:
-
+PINANAS_DNS_PROVIDER_VARS: []
 
 #
 ## Services
@@ -71,7 +78,10 @@ PINANAS_SMTP_PORT:
 ## Misc.
 #
 # List of name/redirection to serve external services through the common reverse-proxy
-PINANAS_EXTERNAL_SERVICES:
+PINANAS_EXTERNAL_SERVICES: []
+# Example:
+#  - name: myservice
+#    url: "https://192.168.0.1:1234"
 
 # TODO: configure.sh will replace this value with a generated secret
 PINANAS_SECRET_AUTHELIA_SESSION:
