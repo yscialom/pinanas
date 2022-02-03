@@ -44,6 +44,14 @@ PINANAS_TZ:
 # Domain name registered, eg. home.example.com
 PINANAS_DOMAIN:
 
+# Pinanas users
+PINANAS_USERS: []
+# Example:
+#   - login: johndoe
+#     password: "s3cr3t"
+#     email: john@doe.com
+#     fullname: "John D. Doe"
+
 # Provider for registered name, eg. ovh
 PINANAS_DNS_PROVIDER_NAME:
 

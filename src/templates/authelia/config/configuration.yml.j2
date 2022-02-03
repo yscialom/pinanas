@@ -7,7 +7,7 @@ server:
   host: 0.0.0.0
   port: 9091
 
-default_redirection_url: https://dashboard.{{ PINANAS_DOMAIN }}/
+default_redirection_url: https://apps.{{ PINANAS_DOMAIN }}/
 
 #
 ## system
@@ -40,6 +40,21 @@ access_control:
       policy: two_factor
       subject:
       - "group:admins"
+
+    #
+    ## === USER SERVICES ===
+    #
+    # Application dashboard: Heimdall
+    - domain: "apps.{{ PINANAS_DOMAIN }}"
+      policy: one_factor
+      subject:
+      - "group:users"
+
+    # Web IDE: VS Code
+    - domain: "code.{{ PINANAS_DOMAIN }}"
+      policy: two_factor
+      subject:
+      - "group:users"
 
     #
     ## === EXTERNAL SERVICES ===
