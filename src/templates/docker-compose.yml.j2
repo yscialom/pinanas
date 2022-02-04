@@ -149,3 +149,31 @@ services:
       - "traefik.udp.routers.adblockhome-dns.service=adblockhome-dns"
       - "traefik.udp.services.adblockhome-dns.loadBalancer.server.port=53"
     restart: unless-stopped
+
+  #
+  ## === HEIMDALL ===
+  #
+  # Application dashboard
+  ##
+  heimdall:
+    image: lscr.io/linuxserver/heimdall:2.2.2
+    container_name: heimdall
+    environment:
+      - TZ={{ PINANAS_TZ }}
+      - PUID={{ PUID }}
+      - PGID={{ PGID }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.heimdall-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.heimdall-secure.entrypoints=https"
+      - "traefik.http.routers.heimdall-secure.middlewares=authelia@docker"
+      - "traefik.http.routers.heimdall-secure.rule=Host(`apps.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.routers.heimdall-secure.service=heimdall"
+      - "traefik.http.routers.heimdall-secure.tls=true"
+      - "traefik.http.routers.heimdall.entrypoints=http"
+      - "traefik.http.routers.heimdall.middlewares=heimdall-https-redirect"
+      - "traefik.http.routers.heimdall.rule=Host(`apps.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.services.heimdall.loadbalancer.server.port=80"
+    volumes:
+      - ./heimdall/config:/config
+    restart: unless-stopped
