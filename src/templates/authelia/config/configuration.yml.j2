@@ -50,6 +50,10 @@ access_control:
       subject:
       - "group:users"
 
+    # Cloud: Nextcloud
+    - domain: "cloud.{{ PINANAS_DOMAIN }}"
+      policy: bypass
+
     # Web IDE: VS Code
     - domain: "code.{{ PINANAS_DOMAIN }}"
       policy: two_factor

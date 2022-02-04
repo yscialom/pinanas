@@ -177,3 +177,33 @@ services:
     volumes:
       - ./heimdall/config:/config
     restart: unless-stopped
+
+  #
+  ## === NEXTCLOUD ===
+  #
+  # Nextcloud gives you access to all your files wherever you are.
+  ##
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud:23.0.0
+    container_name: nextcloud
+    environment:
+      - TZ={{ PINANAS_TZ }}
+      - PUID={{ PUID }}
+      - PGID={{ PGID }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nextcloud-secure.entrypoints=https"
+      - "traefik.http.routers.nextcloud-secure.middlewares=authelia@docker"
+      - "traefik.http.routers.nextcloud-secure.rule=Host(`cloud.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.routers.nextcloud-secure.service=nextcloud-secure"
+      - "traefik.http.routers.nextcloud-secure.tls=true"
+      - "traefik.http.routers.nextcloud.entrypoints=http"
+      - "traefik.http.routers.nextcloud.rule=Host(`cloud.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.routers.nextcloud.middlewares=nextcloud-https-redirect"
+      - "traefik.http.middlewares.nextcloud-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.services.nextcloud-secure.loadbalancer.server.scheme=https"
+      - "traefik.http.services.nextcloud-secure.loadbalancer.server.port=443"
+    volumes:
+      - ./nextcloud/config:/config
+      - ./nextcloud/data:/data
+    restart: unless-stopped
