@@ -203,7 +203,6 @@ services:
       - "traefik.http.middlewares.nextcloud-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.services.nextcloud-secure.loadbalancer.server.scheme=https"
       - "traefik.http.services.nextcloud-secure.loadbalancer.server.port=443"
-
     volumes:
       - ./nextcloud/config:/config
       - ./nextcloud/data:/data
