@@ -1,0 +1,41 @@
+#jinja2:lstrip_blocks: True
+#!/bin/bash
+
+[[ -f /config/installed ]] && exit
+
+function is_nextcloud_installed () {
+  php -r '
+    $configfile = "/config/www/nextcloud/config/config.php";
+    file_exists($configfile) or exit(1);
+    require($configfile);
+    exit(isset($CONFIG["installed"]) && $CONFIG["installed"] ? 0 : 1);
+  '
+}
+
+function main () {
+  while ! is_nextcloud_installed ; do
+    echo "*** Nextcloud not yet installed, deferring... ***"
+    sleep 15
+  done
+
+  echo "*** Installing Nextcloud user_oidc application ***"
+  sudo -u  "#${PUID}" /config/www/nextcloud/occ app:install user_oidc
+
+  echo "*** Configuring Nextcloud user_oidc application ***"
+  {% macro make_secret(name) -%}
+    {{ (PINANAS_MASTER_SECRET + name) | password_hash('sha256', PINANAS_DOMAIN) | b64encode }}
+  {%- endmacro %}
+  sudo -u  "#${PUID}" /config/www/nextcloud/occ \
+    user_oidc:provider Authelia \
+    --clientid="nextcloud" \
+    --clientsecret="{{ make_secret('identity_providers.oidc.clients[nextcloud]') }}" \
+    --discoveryuri="https://auth.{{ PINANAS_DOMAIN }}/.well-known/openid-configuration" \
+    --scope="openid groups email profile" \
+    --unique-uid=0 \
+    --no-interaction
+
+  echo "*** Nextcloud user_oidc application ready ***"
+  touch /config/installed
+}
+
+(main) &
