@@ -1,6 +1,6 @@
 #jinja2:lstrip_blocks: True
-{%- macro secret(name) -%}
-  {{ (PINANAS_MAIN_SECRET + name) | password_hash('sha256', PINANAS_DOMAIN) | b64encode }}
+{%- macro make_secret(name) -%}
+  {{ (PINANAS_MASTER_SECRET + name) | password_hash('sha256', PINANAS_DOMAIN) | b64encode }}
 {%- endmacro %}
 ---
 #
@@ -73,7 +73,7 @@ access_control:
       - "group:{{ service.group | default('admins') }}"
     {% endfor %}
 
-jwt_secret: "{{ secret('jwt_secret') }}"
+jwt_secret: "{{ make_secret('jwt_secret') }}"
 
 totp:
   issuer: authelia.com
@@ -97,7 +97,7 @@ session:
   name: authelia_session
   domain: {{ PINANAS_DOMAIN }}
   same_site: lax
-  secret: "{{ secret('session.secret') }}"
+  secret: "{{ make_secret('session.secret') }}"
   expiration: 2h
   inactivity: 15m
   remember_me_duration: 1M
@@ -108,7 +108,7 @@ regulation:
   ban_time: 5m
 
 storage:
-  encryption_key: "{{ secret('storage.encryption_key') }}"
+  encryption_key: "{{ make_secret('storage.encryption_key') }}"
   local:
     path: /config/db.sqlite3
 
@@ -123,7 +123,7 @@ notifier:
 
 identity_providers:
   oidc:
-    hmac_secret: "{{ secret('identity_providers.oidc.hmac_secret') }}"
+    hmac_secret: "{{ make_secret('identity_providers.oidc.hmac_secret') }}"
     issuer_private_key: |
       {{ 'indent=6' | authelia_sshkey }}
     access_token_lifespan: 1h
@@ -134,7 +134,7 @@ identity_providers:
     clients:
       - id: nextcloud
         description: Nextcloud
-        secret: "{{ secret('identity_providers.oidc.clients[nextcloud]') }}"
+        secret: "{{ make_secret('identity_providers.oidc.clients[nextcloud]') }}"
         public: false
         authorization_policy: one_factor
         audience: []
