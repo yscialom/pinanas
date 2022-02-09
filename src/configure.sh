@@ -93,7 +93,7 @@ cat > ${playbook} <<EOH
       path: "${DIST}/{{ item[0] }}/{{ item[1] }}"
       state: directory
       mode: 0755
-    loop: "{{ ['dhcpd', 'traefik', 'authelia', 'adguardhome'] | product(['config', 'data']) | list }}"
+    loop: "{{ ['dhcpd', 'traefik', 'authelia', 'adguardhome', 'heimdall', 'nextcloud'] | product(['config', 'data']) | list }}"
   - name: ensure traefik/acme.json exists
     file:
       path: "${DIST}/traefik/data/acme.json"
@@ -135,7 +135,8 @@ export ANSIBLE_LOCALHOST_WARNING=false
 ansible-playbook \
     --inventory /dev/null \
     --extra-vars "${EXTRA_VARS}" \
-    ${playbook}
+    ${playbook} \
+    $*
 
 ansible_status=$?
 if [[ ${ansible_status} != 0 ]] ; then
