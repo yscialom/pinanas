@@ -134,7 +134,7 @@ identity_providers:
     clients:
       - id: nextcloud
         description: Nextcloud
-        secret: "{{ make_secret('identity_providers.oidc.clients[nextcloud]') }}"
+        secret: "{{ make_secret('identity_providers.oidc.clients[nextcloud].secret') }}"
         public: false
         authorization_policy: one_factor
         audience: []

@@ -28,7 +28,7 @@ function main () {
   sudo -u  "#${PUID}" /config/www/nextcloud/occ \
     user_oidc:provider Authelia \
     --clientid="nextcloud" \
-    --clientsecret="{{ make_secret('identity_providers.oidc.clients[nextcloud]') }}" \
+    --clientsecret="{{ make_secret('identity_providers.oidc.clients[nextcloud].secret') }}" \
     --discoveryuri="https://auth.{{ PINANAS_DOMAIN }}/.well-known/openid-configuration" \
     --scope="openid groups email profile" \
     --unique-uid=0 \
