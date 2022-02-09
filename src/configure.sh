@@ -135,7 +135,8 @@ export ANSIBLE_LOCALHOST_WARNING=false
 ansible-playbook \
     --inventory /dev/null \
     --extra-vars "${EXTRA_VARS}" \
-    ${playbook}
+    ${playbook} \
+    $*
 
 ansible_status=$?
 if [[ ${ansible_status} != 0 ]] ; then
