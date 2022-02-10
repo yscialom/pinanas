@@ -44,6 +44,12 @@ access_control:
       subject:
       - "group:admins"
 
+    # Resource monitor: Netdata
+    - domain: "resources.{{ PINANAS_DOMAIN }}"
+      policy: one_factor
+      subject:
+      - "group:admins"
+
     #
     ## === USER SERVICES ===
     #
