@@ -70,6 +70,8 @@ nano settings.yml
 ```
 See [Get your DNS API keys](#get-your-dns-api-keys) below for how to set `PINANAS_DNS_PROVIDER_VARS`.
 
+--- Remember to save and keep your settings.yml file on an external medium, it will allow you to quickly reconfigure your PINANAS ---
+
 ### Get your DNS API keys
 
 #### OVH
