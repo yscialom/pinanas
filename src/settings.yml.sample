@@ -8,7 +8,7 @@
 #
 
 pinanas:
-  # Registered domain name. Type: string. Example: "home.example.com"
+  # Registered domain name. Type: string. Example: "home.example.com".
   domain:
 
   # Master password to encrypt/derive all PiNanas secrets. Type: string.
@@ -16,7 +16,7 @@ pinanas:
   master-secret:
 
   # Locale timezone. Type: string. Example: "Europe/Paris".
-  # Use a TZ database name, see <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>
+  # Use a TZ database name, see <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>.
   timezone:
 
   # Users. Type: List of users.
@@ -71,17 +71,16 @@ pinanas:
       upstreams:
 
       # PiNanas DNS provider.
-      # See traefik documentation for your provider at <https://doc.traefik.io/traefik/https/acme/#providers>
+      # See traefik documentation for your provider at <https://doc.traefik.io/traefik/https/acme/#providers>.
       provider:
-        # Provider's name. Stype: string. Example: "ovh"
+        # Provider's name. Stype: string. Example: "ovh".
         name:
 
-        # Email address used for registration. Type: string. Example: johndoe@example.com
+        # Email address used for registration. Type: string. Example: "johndoe@example.com".
         email:
 
         # API variables. Type: list of variables.
-        # Variable: { name: string, value: string }.
-        # Example:
+        # Variable: { name: string, value: string }. Example:
         # - name: MY_PROVIDER_API_KEY
         #   value: "super_secret_api_secret"
         # - name: MY_PROVIDER_ENDPOINT
@@ -89,7 +88,7 @@ pinanas:
         api:
 
     # Send email; consult the documentation for your email provider.
-    # eg. for gmail: <https://support.google.com/a/answer/176600?hl=en>
+    # eg. for gmail: <https://support.google.com/a/answer/176600?hl=en>.
     smtp:
       # Server hostname. Type: string. Example: "smtp.gmail.com".
       host:
@@ -103,5 +102,5 @@ pinanas:
       # Password. Type: string. Example: "s3cr3t".
       password:
 
-      # Send emails as. Type: string. Example: "contact@{{ pinanas.domain }}"
+      # Send emails as. Type: string. Example: "contact@{{ pinanas.domain }}".
       sender:
