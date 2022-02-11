@@ -9,9 +9,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - run: |
+      - name: Clone
+        uses: actions/checkout@v2
+
+      - name: Prepare settings from secrets
+        shell: bash
+        env:
+          settings_pinanas_master_secret: "${{ secrets.settings_pinanas_master_secret }}"
+          settings_pinanas_network_dns_provider_api: "${{ secrets.settings_pinanas_network_dns_provider_api }}"
+          settings_pinanas_network_dns_provider_email: "${{ secrets.settings_pinanas_network_dns_provider_email }}"
+          settings_pinanas_network_dns_provider_name: "${{ secrets.settings_pinanas_network_dns_provider_name }}"
+          settings_pinanas_network_smtp_host: "${{ secrets.settings_pinanas_network_smtp_host }}"
+          settings_pinanas_network_smtp_password: "${{ secrets.settings_pinanas_network_smtp_password }}"
+          settings_pinanas_network_smtp_port: "${{ secrets.settings_pinanas_network_smtp_port }}"
+          settings_pinanas_network_smtp_sender: "${{ secrets.settings_pinanas_network_smtp_sender }}"
+          settings_pinanas_network_smtp_username: "${{ secrets.settings_pinanas_network_smtp_username }}"
+        run: |
           mkdir dist
           cp test/settings-ci.yml dist/settings.yml
-          cd dist
-          ../src/configure.sh
+          for secret in $(grep -Eo 'settings_[a-z_-]+' dist/settings.yml | sort -u) ; do
+            sed -i "s/secrets\.${secret}/${secret}/g" dist/settings.yml
+          done
+
+      - name: Configure
+        run: cd dist && ../src/configure.sh
