@@ -11,9 +11,9 @@ pinanas:
   # Registered domain name. Type: string. Example: "home.example.com".
   domain: test.pinanas.scialom.org
 
-  # Master password to encrypt/derive all PiNanas secrets. Type: string.
+  # Master password to encrypt/derive all PiNanas secrets_ Type: string_
   # Example: "Randomly-generated-complex-string-with-mixed-case-digits-and-special-characters".
-  master-secret: "${{ secrets.settings.pinanas.master-secret }}"
+  master-secret: "${{ secrets_settings_pinanas_master_secret }}"
 
   # Locale timezone. Type: string. Example: "Europe/Paris".
   # Use a TZ database name, see <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>.
@@ -82,10 +82,10 @@ pinanas:
       # See traefik documentation for your provider at <https://doc.traefik.io/traefik/https/acme/#providers>.
       provider:
         # Provider's name. Stype: string. Example: "ovh".
-        name: "${{ secrets.settings.pinanas.network.dns.provider.name }}"
+        name: "${{ secrets_settings_pinanas_network_dns_provider_name }}"
 
         # Email address used for registration. Type: string. Example: "johndoe@example.com".
-        email: "${{ secrets.settings.pinanas.network.dns.provider.email }}"
+        email: "${{ secrets_settings_pinanas_network_dns_provider_email }}"
 
         # API variables. Type: list of variables.
         # Variable: { name: string, value: string }. Example:
@@ -93,23 +93,23 @@ pinanas:
         #   value: "super_secret_api_secret"
         # - name: MY_PROVIDER_ENDPOINT
         #   value: my-provider-narnia
-        api: ${{ secrets.settings.pinanas.network.dns.provider.api }}
+        api: ${{ secrets_settings_pinanas_network_dns_provider_api }}
 
 
     # Send email; consult the documentation for your email provider.
     # eg. for gmail: <https://support.google.com/a/answer/176600?hl=en>.
     smtp:
       # Server hostname. Type: string. Example: "smtp.gmail.com".
-      host: "${{ secrets.settings.pinanas.network.smtp.host }}"
+      host: "${{ secrets_settings_pinanas_network_smtp_host }}"
 
       # Server port number. Type: integer. Example: 587.
-      port: "${{ secrets.settings.pinanas.network.smtp.port }}"
+      port: "${{ secrets_settings_pinanas_network_smtp_port }}"
 
       # Email address or username. Type: string. Example: "johndoe@gmail.com".
-      username: "${{ secrets.settings.pinanas.network.smtp.username }}"
+      username: "${{ secrets_settings_pinanas_network_smtp_username }}"
 
       # Password. Type: string. Example: "s3cr3t".
-      password: "${{ secrets.settings.pinanas.network.smtp.password }}"
+      password: "${{ secrets_settings_pinanas_network_smtp_password }}"
 
       # Send emails as. Type: string. Example: "contact@{{ pinanas.domain }}".
-      sender:  "${{ secrets.settings.pinanas.network.smtp.sender }}"
+      sender:  "${{ secrets_settings_pinanas_network_smtp_sender }}"
