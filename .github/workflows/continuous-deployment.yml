@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: action/checkout
       - run: |
-        mkdir dist
-        cp test/settings-ci.yml dist/settings.yml
-        cd dist
-        ../src/configure.sh
+          mkdir dist
+          cp test/settings-ci.yml dist/settings.yml
+          cd dist
+          ../src/configure.sh
