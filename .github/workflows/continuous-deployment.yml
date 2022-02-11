@@ -28,8 +28,9 @@ jobs:
           mkdir dist
           cp test/settings-ci.yml dist/settings.yml
           for secret in $(grep -Eo 'settings_[a-z_-]+' dist/settings.yml | sort -u) ; do
-            sed -i "s/secrets\.${secret}/${secret}/g" dist/settings.yml
+            sed -i "s/\\\${{ *secrets\.${secret} *}}/${${secret}}/g" dist/settings.yml
           done
+          cat dist/settings.yml
 
       - name: Configure
         run: cd dist && ../src/configure.sh
