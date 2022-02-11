@@ -1,0 +1,17 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches: [feature/ci]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: action/checkout
+      - run: |
+        mkdir dist
+        cp test/settings-ci.yml dist/settings.yml
+        cd dist
+        ../src/configure.sh
