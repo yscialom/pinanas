@@ -27,9 +27,15 @@ jobs:
         run: |
           mkdir dist
           cp test/settings-ci.yml dist/settings.yml
-          for secret in $(grep -Eo 'settings_[a-z_-]+' dist/settings.yml | sort -u) ; do
-            sed -i "s/\\\${{ *secrets\.${secret} *}}/${${secret}}/g" dist/settings.yml
-          done
+          sed -i 's/@settings_pinanas_master_secret@/${{ secrets.settings_pinanas_master_secret }}/g' dist/settings.yml
+          sed -i 's/@settings_pinanas_network_dns_provider_api@/${{ secrets.settings_pinanas_network_dns_provider_api }}/g' dist/settings.yml
+          sed -i 's/@settings_pinanas_network_dns_provider_email@/${{ secrets.settings_pinanas_network_dns_provider_email }}/g' dist/settings.yml
+          sed -i 's/@settings_pinanas_network_dns_provider_name@/${{ secrets.settings_pinanas_network_dns_provider_name }}/g' dist/settings.yml
+          sed -i 's/@settings_pinanas_network_smtp_host@/${{ secrets.settings_pinanas_network_smtp_host }}/g' dist/settings.yml
+          sed -i 's/@settings_pinanas_network_smtp_password@/${{ secrets.settings_pinanas_network_smtp_password }}/g' dist/settings.yml
+          sed -i 's/@settings_pinanas_network_smtp_port@/${{ secrets.settings_pinanas_network_smtp_port }}/g' dist/settings.yml
+          sed -i 's/@settings_pinanas_network_smtp_sender@/${{ secrets.settings_pinanas_network_smtp_sender }}/g' dist/settings.yml
+          sed -i 's/@settings_pinanas_network_smtp_username@/${{ secrets.settings_pinanas_network_smtp_username }}/g' dist/settings.yml
           cat dist/settings.yml
 
       - name: Configure
