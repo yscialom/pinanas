@@ -23,13 +23,13 @@ function main () {
 
   echo "*** Configuring Nextcloud user_oidc application ***"
   {% macro make_secret(name) -%}
-    {{ (PINANAS_MASTER_SECRET + name) | password_hash('sha256', PINANAS_DOMAIN) | b64encode }}
+    {{ (pianas.master-secret + name) | password_hash('sha256', pinanas.domain) | b64encode }}
   {%- endmacro %}
   sudo -u  "#${PUID}" /config/www/nextcloud/occ \
     user_oidc:provider Authelia \
     --clientid="nextcloud" \
     --clientsecret="{{ make_secret('identity_providers.oidc.clients[nextcloud].secret') }}" \
-    --discoveryuri="https://auth.{{ PINANAS_DOMAIN }}/.well-known/openid-configuration" \
+    --discoveryuri="https://auth.{{ pinanas.domain }}/.well-known/openid-configuration" \
     --scope="openid groups email profile" \
     --unique-uid=0 \
     --no-interaction

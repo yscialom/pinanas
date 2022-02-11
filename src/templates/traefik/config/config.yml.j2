@@ -1,11 +1,11 @@
 #jinja2:lstrip_blocks: True
 http:
   routers:
-    {% for service in PINANAS_EXTERNAL_SERVICES %}
+    {% for service in pianans.services %}
     {{ service.name }}:
       entryPoints:
         - "https"
-      rule: "Host(`{{ service.name }}.{{ PINANAS_DOMAIN }}`)"
+      rule: "Host(`{{ service.name }}.{{ pinanas.domain }}`)"
       middlewares:
         - default-headers
         - authelia@docker
@@ -13,7 +13,7 @@ http:
       service: {{ service.name }}
     {% endfor %}
   services:
-    {% for service in PINANAS_EXTERNAL_SERVICES %}
+    {% for service in pianans.services %}
     {{ service.name }}:
       loadBalancer:
         servers:

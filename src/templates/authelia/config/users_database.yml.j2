@@ -1,5 +1,5 @@
 users:
-{% for user in PINANAS_USERS %}
+{% for user in pinanas.users %}
   {{ user.login }}:
     displayname: "{{ user.fullname }}"
     password: "{{ user.password | authelia_password }}"

@@ -20,7 +20,7 @@ services:
     hostname: dhcpd
     network_mode: host
     environment:
-      - TZ={{ PINANAS_TZ }}
+      - TZ={{ pinanas.timezone }}
     restart: unless-stopped
 
   #
@@ -52,8 +52,8 @@ services:
           - traefik
           - traefik-dashboard
     environment:
-      - TZ={{ PINANAS_TZ }}
-{% for var in PINANAS_DNS_PROVIDER_VARS %}
+      - TZ={{ pinanas.timezone }}
+{% for var in pinanas.network.dns.provider.api %}
       - {{ var.name }}={{ var.value }}
 {% endfor %}
     labels:
@@ -61,15 +61,15 @@ services:
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.traefik-secure.entrypoints=https"
-      - "traefik.http.routers.traefik-secure.rule=Host(`traefik-dashboard.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.routers.traefik-secure.rule=Host(`traefik-dashboard.{{ pinanas.domain }}`)"
       - "traefik.http.routers.traefik-secure.service=api@internal"
       - "traefik.http.routers.traefik-secure.tls=true"
       - "traefik.http.routers.traefik-secure.tls.certresolver=myresolver"
-      - "traefik.http.routers.traefik-secure.tls.domains[0].main={{ PINANAS_DOMAIN }}"
-      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.{{ PINANAS_DOMAIN }}"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main={{ pinanas.domain }}"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.{{ pinanas.domain }}"
       - "traefik.http.routers.traefik.entrypoints=http"
       - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
-      - "traefik.http.routers.traefik.rule=Host(`traefik-dashboard.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.routers.traefik.rule=Host(`traefik-dashboard.{{ pinanas.domain }}`)"
     restart: unless-stopped
 
   #
@@ -92,16 +92,16 @@ services:
           - authelia
           - auth
     environment:
-      - TZ={{ PINANAS_TZ }}
+      - TZ={{ pinanas.timezone }}
       - PUID={{ PUID }}
       - PGID={{ PGID }}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=https://auth.{{ PINANAS_DOMAIN }}"
+      - "traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=https://auth.{{ pinanas.domain }}"
       - "traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email"
       - "traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true"
       - "traefik.http.routers.authelia.entrypoints=https"
-      - "traefik.http.routers.authelia.rule=Host(`auth.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.routers.authelia.rule=Host(`auth.{{ pinanas.domain }}`)"
       - "traefik.http.routers.authelia.tls=true"
     restart: unless-stopped
 
@@ -127,7 +127,7 @@ services:
           - adguardhome
           - dns
     environment:
-      - TZ={{ PINANAS_TZ }}
+      - TZ={{ pinanas.timezone }}
       - PUID={{ PUID }}
       - PGID={{ PGID }}
     labels:
@@ -135,12 +135,12 @@ services:
       - "traefik.http.middlewares.adguardhome-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.adguardhome-secure.entrypoints=https"
       - "traefik.http.routers.adguardhome-secure.middlewares=authelia@docker"
-      - "traefik.http.routers.adguardhome-secure.rule=Host(`adguardhome-dashboard.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.routers.adguardhome-secure.rule=Host(`adguardhome-dashboard.{{ pinanas.domain }}`)"
       - "traefik.http.routers.adguardhome-secure.service=adguardhome"
       - "traefik.http.routers.adguardhome-secure.tls=true"
       - "traefik.http.routers.adguardhome.entrypoints=http"
       - "traefik.http.routers.adguardhome.middlewares=adguardhome-https-redirect"
-      - "traefik.http.routers.adguardhome.rule=Host(`adguardhome-dashboard.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.routers.adguardhome.rule=Host(`adguardhome-dashboard.{{ pinanas.domain }}`)"
       - "traefik.http.services.adguardhome.loadbalancer.server.port=80"
       - "traefik.tcp.routers.adblockhome-dns.entrypoints=dns-tcp"
       - "traefik.tcp.routers.adblockhome-dns.service=adblockhome-dns"
@@ -179,7 +179,7 @@ services:
           - netdata
           - resources
     environment:
-      - TZ={{ PINANAS_TZ }}
+      - TZ={{ pinanas.timezone }}
       - PUID={{ PUID }}
       - PGID={{ PGID }}
     labels:
@@ -187,12 +187,12 @@ services:
       - "traefik.http.middlewares.netdata-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.netdata-secure.entrypoints=https"
       - "traefik.http.routers.netdata-secure.middlewares=authelia@docker"
-      - "traefik.http.routers.netdata-secure.rule=Host(`resources.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.routers.netdata-secure.rule=Host(`resources.{{ pinanas.domain }}`)"
       - "traefik.http.routers.netdata-secure.service=netdata"
       - "traefik.http.routers.netdata-secure.tls=true"
       - "traefik.http.routers.netdata.entrypoints=http"
       - "traefik.http.routers.netdata.middlewares=netdata-https-redirect"
-      - "traefik.http.routers.netdata.rule=Host(`resources.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.routers.netdata.rule=Host(`resources.{{ pinanas.domain }}`)"
       - "traefik.http.services.netdata.loadbalancer.server.port=19999"
     restart: unless-stopped
 
@@ -210,7 +210,7 @@ services:
           - heimdall
           - apps
     environment:
-      - TZ={{ PINANAS_TZ }}
+      - TZ={{ pinanas.timezone }}
       - PUID={{ PUID }}
       - PGID={{ PGID }}
     labels:
@@ -218,12 +218,12 @@ services:
       - "traefik.http.middlewares.heimdall-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.heimdall-secure.entrypoints=https"
       - "traefik.http.routers.heimdall-secure.middlewares=authelia@docker"
-      - "traefik.http.routers.heimdall-secure.rule=Host(`apps.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.routers.heimdall-secure.rule=Host(`apps.{{ pinanas.domain }}`)"
       - "traefik.http.routers.heimdall-secure.service=heimdall"
       - "traefik.http.routers.heimdall-secure.tls=true"
       - "traefik.http.routers.heimdall.entrypoints=http"
       - "traefik.http.routers.heimdall.middlewares=heimdall-https-redirect"
-      - "traefik.http.routers.heimdall.rule=Host(`apps.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.routers.heimdall.rule=Host(`apps.{{ pinanas.domain }}`)"
       - "traefik.http.services.heimdall.loadbalancer.server.port=80"
     volumes:
       - ./heimdall/config:/config
@@ -243,18 +243,18 @@ services:
           - nextcloud
           - cloud
     environment:
-      - TZ={{ PINANAS_TZ }}
+      - TZ={{ pinanas.timezone }}
       - PUID={{ PUID }}
       - PGID={{ PGID }}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nextcloud-secure.entrypoints=https"
       - "traefik.http.routers.nextcloud-secure.middlewares=authelia@docker"
-      - "traefik.http.routers.nextcloud-secure.rule=Host(`cloud.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.routers.nextcloud-secure.rule=Host(`cloud.{{ pinanas.domain }}`)"
       - "traefik.http.routers.nextcloud-secure.service=nextcloud-secure"
       - "traefik.http.routers.nextcloud-secure.tls=true"
       - "traefik.http.routers.nextcloud.entrypoints=http"
-      - "traefik.http.routers.nextcloud.rule=Host(`cloud.{{ PINANAS_DOMAIN }}`)"
+      - "traefik.http.routers.nextcloud.rule=Host(`cloud.{{ pinanas.domain }}`)"
       - "traefik.http.routers.nextcloud.middlewares=nextcloud-https-redirect"
       - "traefik.http.middlewares.nextcloud-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.services.nextcloud-secure.loadbalancer.server.scheme=https"

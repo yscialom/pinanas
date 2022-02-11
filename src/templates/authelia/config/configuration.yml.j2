@@ -1,6 +1,6 @@
 #jinja2:lstrip_blocks: True
 {%- macro make_secret(name) -%}
-  {{ (PINANAS_MASTER_SECRET + name) | password_hash('sha256', PINANAS_DOMAIN) | b64encode }}
+  {{ (pianas.master-secret + name) | password_hash('sha256', pinanas.domain) | b64encode }}
 {%- endmacro %}
 ---
 #
@@ -10,7 +10,7 @@ server:
   host: 0.0.0.0
   port: 9091
 
-default_redirection_url: "https://apps.{{ PINANAS_DOMAIN }}/"
+default_redirection_url: "https://apps.{{ pinanas.domain }}/"
 
 #
 ## system
@@ -39,13 +39,13 @@ access_control:
     #
 
     # DNS / Ad filter: AdGuardHome
-    - domain: "adguardhome-dashboard.{{ PINANAS_DOMAIN }}"
+    - domain: "adguardhome-dashboard.{{ pinanas.domain }}"
       policy: two_factor
       subject:
       - "group:admins"
 
     # Resource monitor: Netdata
-    - domain: "resources.{{ PINANAS_DOMAIN }}"
+    - domain: "resources.{{ pinanas.domain }}"
       policy: one_factor
       subject:
       - "group:admins"
@@ -54,17 +54,17 @@ access_control:
     ## === USER SERVICES ===
     #
     # Application dashboard: Heimdall
-    - domain: "apps.{{ PINANAS_DOMAIN }}"
+    - domain: "apps.{{ pinanas.domain }}"
       policy: one_factor
       subject:
       - "group:users"
 
     # Cloud: Nextcloud
-    - domain: "cloud.{{ PINANAS_DOMAIN }}"
+    - domain: "cloud.{{ pinanas.domain }}"
       policy: bypass
 
     # Web IDE: VS Code
-    - domain: "code.{{ PINANAS_DOMAIN }}"
+    - domain: "code.{{ pinanas.domain }}"
       policy: two_factor
       subject:
       - "group:users"
@@ -72,8 +72,8 @@ access_control:
     #
     ## === EXTERNAL SERVICES ===
     #
-    {% for service in PINANAS_EXTERNAL_SERVICES %}
-    - domain: "{{ service.name }}.{{ PINANAS_DOMAIN }}"
+    {% for service in pianans.services %}
+    - domain: "{{ service.name }}.{{ pinanas.domain }}"
       policy: "{{ service.policy | default('two_factor') }}"
       subject:
       - "group:{{ service.group | default('admins') }}"
@@ -101,7 +101,7 @@ authentication_backend:
 
 session:
   name: authelia_session
-  domain: {{ PINANAS_DOMAIN }}
+  domain: {{ pinanas.domain }}
   same_site: lax
   secret: "{{ make_secret('session.secret') }}"
   expiration: 2h
@@ -121,11 +121,11 @@ storage:
 notifier:
   disable_startup_check: true
   smtp:
-    username: "{{ PINANAS_SMTP_USERNAME }}"
-    password: "{{ PINANAS_SMTP_PASSWORD }}"
-    sender: "{{ PINANAS_SMTP_SENDER }}"
-    host: "{{ PINANAS_SMTP_HOST }}"
-    port: "{{ PINANAS_SMTP_PORT }}"
+    username: "{{ pinanas.network.smtp.username }}"
+    password: "{{ pinanas.network.smtp.password }}"
+    sender: "{{ pinanas.network.smtp.sender }}"
+    host: "{{ pinanas.network.smtp.host }}"
+    port: "{{ pinanas.network.smtp.port }}"
 
 identity_providers:
   oidc:
@@ -150,7 +150,7 @@ identity_providers:
           - email
           - profile
         redirect_uris:
-          - "https://cloud.{{ PINANAS_DOMAIN }}/apps/user_oidc/code"
+          - "https://cloud.{{ pinanas.domain }}/apps/user_oidc/code"
         grant_types:
           - refresh_token
           - authorization_code

@@ -3,7 +3,7 @@ bind_host: 0.0.0.0
 bind_port: 80
 beta_bind_port: 0
 users:
-{% for user in PINANAS_USERS %}
+{% for user in pinanas.users %}
 - name: "{{ user.login }}"
   password: "{{ user.password | adguardhome_password }}"
 {% endfor %}
@@ -36,7 +36,7 @@ dns:
   ratelimit_whitelist: []
   refuse_any: true
   upstream_dns:
-  {% for dns in  PINANAS_DHCP_UPSTREAM_DNS %}
+  {% for dns in  pinanas.network.dns.upstream %}
   - {{ dns }}
   {% endfor %}
   upstream_dns_file: ""
@@ -73,13 +73,13 @@ dns:
   cache_time: 30
   rewrites:
   - domain: pi
-    answer: {{ PINANAS_HOST_IP }}
+    answer: {{ pinanas.network.ip }}
   - domain: dns
-    answer: {{ PINANAS_HOST_IP }}
+    answer: {{ pinanas.network.ip }}
   - domain: dhcp
-    answer: {{ PINANAS_HOST_IP }}
+    answer: {{ pinanas.network.ip }}
   - domain: home
-    answer: {{ PINANAS_HOST_IP }}
+    answer: {{ pinanas.network.ip }}
   blocked_services:
   - ok
   - qq
