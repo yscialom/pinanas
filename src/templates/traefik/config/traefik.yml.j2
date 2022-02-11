@@ -21,8 +21,8 @@ providers:
 certificatesResolvers:
   myresolver:
     acme:
-      email: "{{ PINANAS_DNS_PROVIDER_EMAIL }}"
+      email: "{{ pinanas.network.dns.provider.email }}"
       storage: /acme.json
       dnsChallenge:
-        provider: {{ PINANAS_DNS_PROVIDER_NAME }}
+        provider: {{ pinanas.network.dns.provider.name }}
         delayBeforeCHeck: 0

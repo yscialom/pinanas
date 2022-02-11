@@ -1,95 +1,107 @@
 ---
+##
+# This is PiNanas configuration file: settings.yml.
 #
-## Private network
+# Once every mandatory value has been set, you can call PiNanas'
+# configure.sh script from the directory directly containing this
+# file. See README.md for more information.
 #
-# MAC address of Pinana's host network card, eg 01:02:03:04:05:06
-PINANAS_HOST_HMAC:
 
-# Static IP of Pinana's host inside its private network, eg. 192.168.1.1
-PINANAS_HOST_IP:
+pinanas:
+  # Registered domain name. Type: string. Example: "home.example.com"
+  domain:
 
-# Base IP for the network, eg. 192.168.1.0
-PINANAS_DHCP_BASE:
+  # Master password to encrypt/derive all PiNanas secrets. Type: string.
+  # Example: "Randomly-generated-complex-string-with-mixed-case-digits-and-special-characters".
+  master-secret:
 
-# Private network subnet mask, eg. 255.255.255.0
-PINANAS_DHCP_SUBNET:
+  # Locale timezone. Type: string. Example: "Europe/Paris".
+  # Use a TZ database name, see <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>
+  timezone:
 
-# Private network gateway, eg. 192.168.1.254
-PINANAS_DHCP_GATEWAY:
+  # Users. Type: List of users.
+  # User: { login: string, password: string, email: string, fullname: string }. Exemple:
+  # - login: johndoe
+  #   password: "s3cr3t"
+  #   email: john@doe.com
+  #   fullname: "John D. Doe"
+  users:
 
-# First (included) IP of agents inside private network, eg. 192.168.1.10
-PINANAS_DHCP_START:
+  # List of services external to PiNanas to serve through it. Type: list of services.
+  # Service: { name: string, url: string }. Example:
+  # - name: "myservice"'
+  #   url: "https://192.168.0.2:1234"
+  services:
 
-# Last (included) IP of agents inside private network, eg. 192.168.1.64
-PINANAS_DHCP_END:
+  network:
+    # MAC address of PiNana's host network card. Type: string. Example: "01:02:03:04:05:06".
+    hmac:
+    # Desired IP address of PiNanas's host. Type: string. Example "192.168.0.1".
+    ip:
 
-# Upstream DNS, eg. 8.8.8.8
-PINANAS_DHCP_UPSTREAM_DNS: []
-# Example: [ 192.168.0.1, 192.168.1.1]
+    dhcp:
 
-# Fixed-address leases
-PINANAS_DHCP_LEASES: []
-# Example:
-#  - name: "DeviceName"
-#    hmac: "01:23:45:67:89:ab"
-#    ip: 192.168.137.42
+      # Base IP for the network. Type: string. Example: "192.168.0.0".
+      base:
 
+      # Network subnet mask. Type: string. Example: "255.255.255.0".
+      subnet:
 
-#
-## Home
-#
-# Local timezone for ease to interpret logs, eg. Europe/Paris
-PINANAS_TZ:
+      # Network gateway. Type: string. Example: "192.168.0.254".
+      gateway:
 
-# Domain name registered, eg. home.example.com
-PINANAS_DOMAIN:
+      range:
+        # First (included) IP of clients inside the network. Type: string. Example: "192.168.0.16".
+        start:
 
-# Pinanas users
-PINANAS_USERS: []
-# Example:
-#   - login: johndoe
-#     password: "s3cr3t"
-#     email: john@doe.com
-#     fullname: "John D. Doe"
+        # Last (included) IP of clients inside the network. Type: string. Example: "192.168.0.64".
+        end:
 
-# Provider for registered name, eg. ovh
-PINANAS_DNS_PROVIDER_NAME:
+      # Fixed-address leases. Type: list of leases.
+      # Lease: { name: string, hmac: string, ip: string }. Example:
+      #  - name: "DeviceName"
+      #    hmac: "01:23:45:67:89:ab"
+      #    ip: "192.168.0.42"
+      fix-address-leases:
 
-# Email registered on the Provider, eg. johndoe@example.com
-PINANAS_DNS_PROVIDER_EMAIL:
+    dns:
+      # Upstream DNS servers. Type: list of strings. Example:
+      # - 1.1.1.1
+      # - 1.0.0.1
+      upstreams:
 
-# See traefik documentation for your provider at <https://doc.traefik.io/traefik/https/acme/#providers>
-PINANAS_DNS_PROVIDER_VARS: []
+      # PiNanas DNS provider.
+      # See traefik documentation for your provider at <https://doc.traefik.io/traefik/https/acme/#providers>
+      provider:
+        # Provider's name. Stype: string. Example: "ovh"
+        name:
 
-#
-## Services
-#
-# SMTP                                       # Send email; consult the documentation for your email provider, eg. https://support.google.com/a/answer/176600?hl=en
+        # Email address used for registration. Type: string. Example: johndoe@example.com
+        email:
 
-# SMTP username, eg. john.doe@gmail.com
-PINANAS_SMTP_USERNAME:
+        # API variables. Type: list of variables.
+        # Variable: { name: string, value: string }.
+        # Example:
+        # - name: MY_PROVIDER_API_KEY
+        #   value: "super_secret_api_secret"
+        # - name: MY_PROVIDER_ENDPOINT
+        #   value: my-provider-narnia
+        api:
 
-# SMTP password, eg. secret
-PINANAS_SMTP_PASSWORD:
+    # Send email; consult the documentation for your email provider.
+    # eg. for gmail: <https://support.google.com/a/answer/176600?hl=en>
+    smtp:
+      # Server hostname. Type: string. Example: "smtp.gmail.com".
+      host:
 
-# SMTP sender email address, eg. admin@example.com
-PINANAS_SMTP_SENDER:
+      # Server port number. Type: integer. Example: 587.
+      port:
 
-# SMTP server host, eg. smtp.gmail.com
-PINANAS_SMTP_HOST:
+      # Email address or username. Type: string. Example: "johndoe@gmail.com".
+      username:
 
-# SMTP server port, eg 587
-PINANAS_SMTP_PORT:
+      # Password. Type: string. Example: "s3cr3t".
+      password:
 
-
-#
-## Misc.
-#
-# List of name/redirection to serve external services through the common reverse-proxy
-PINANAS_EXTERNAL_SERVICES: []
-# Example:
-#  - name: myservice
-#    url: "https://192.168.0.1:1234"
-
-# Master secret used to derive others
-PINANAS_MASTER_SECRET:
+      # Send emails as. Type: string. Example: "contact@{{ pinanas.domain }}"
+      sender:
