@@ -41,3 +41,6 @@ jobs:
 
       - name: Start
         run: cd dist && docker-compose up -d
+
+      - name: Test dhcpd
+        run: sudo dhclient -v | grep DHCPOFFER
