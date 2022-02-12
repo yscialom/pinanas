@@ -37,7 +37,7 @@ jobs:
           envsubst <test/settings-ci.yml >dist/settings.yml
 
       - name: Configure
-        run: cd dist && ../src/configure.sh && ls -l && pwd
+        run: cd dist && ../src/configure.sh
 
       - name: Start
-        run: pwd ; ls -l ; docker-compose up -d
+        run: cd dist && docker-compose up -d
