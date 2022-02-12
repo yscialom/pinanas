@@ -9,7 +9,7 @@ host home {
     hardware ethernet {{ pinanas.network.hmac }};
     fixed-address {{ pinanas.network.ip }};
 }
-{% for lease in pinanas.network.dhcp.fix-address-leases %}
+{% for lease in pinanas.network.dhcp.fixed_address_leases %}
 host {{ lease.name }} {
     hardware ethernet {{ lease.hmac }};
     fixed-address {{ lease.ip }};
