@@ -1,4 +1,7 @@
 #jinja2:lstrip_blocks: True
+{%- macro make_secret(name) -%}
+  {{ (pinanas.master_secret + name) | password_hash('sha256', 65534 | random(seed=pinanas.domain) | string) | b64encode }}
+{%- endmacro %}
 #!/bin/bash
 
 [[ -f /config/installed ]] && exit
@@ -22,9 +25,6 @@ function main () {
   sudo -u  "#${PUID}" /config/www/nextcloud/occ app:install user_oidc
 
   echo "*** Configuring Nextcloud user_oidc application ***"
-  {% macro make_secret(name) -%}
-    {{ (pinanas.master_secret + name) | password_hash('sha256', pinanas.domain) | b64encode }}
-  {%- endmacro %}
   sudo -u  "#${PUID}" /config/www/nextcloud/occ \
     user_oidc:provider Authelia \
     --clientid="nextcloud" \
