@@ -28,6 +28,8 @@ pinanas:
   users:
     - login: johndoe
       password: johndoe-password
+      email: johndoe@example.com
+      fullname: "John Doe (JD)"
 
   # List of services external to PiNanas to serve through it. Type: list of services.
   # Service: { name: string, url: string }. Example:
