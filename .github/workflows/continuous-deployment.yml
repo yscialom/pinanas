@@ -38,3 +38,6 @@ jobs:
 
       - name: Configure
         run: cd dist && ../src/configure.sh
+
+      - name: Start
+        run: docker-compose up -d
