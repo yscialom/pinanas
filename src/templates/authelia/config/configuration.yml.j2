@@ -1,6 +1,6 @@
 #jinja2:lstrip_blocks: True
 {%- macro make_secret(name) -%}
-  {{ (pinanas.master-secret + name) | password_hash('sha256', pinanas.domain) | b64encode }}
+  {{ (pinanas.master_secret + name) | password_hash('sha256', pinanas.domain) | b64encode }}
 {%- endmacro %}
 ---
 #

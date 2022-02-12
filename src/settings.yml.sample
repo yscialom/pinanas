@@ -13,7 +13,7 @@ pinanas:
 
   # Master password to encrypt/derive all PiNanas secrets. Type: string.
   # Example: "Randomly-generated-complex-string-with-mixed-case-digits-and-special-characters".
-  master-secret:
+  master_secret:
 
   # Locale timezone. Type: string. Example: "Europe/Paris".
   # Use a TZ database name, see <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>.

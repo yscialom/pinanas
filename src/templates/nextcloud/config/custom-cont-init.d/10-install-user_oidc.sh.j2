@@ -23,7 +23,7 @@ function main () {
 
   echo "*** Configuring Nextcloud user_oidc application ***"
   {% macro make_secret(name) -%}
-    {{ (pinanas.master-secret + name) | password_hash('sha256', pinanas.domain) | b64encode }}
+    {{ (pinanas.master_secret + name) | password_hash('sha256', pinanas.domain) | b64encode }}
   {%- endmacro %}
   sudo -u  "#${PUID}" /config/www/nextcloud/occ \
     user_oidc:provider Authelia \
