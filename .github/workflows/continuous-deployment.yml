@@ -11,11 +11,11 @@ jobs:
     steps:
       - name: Disable DNS cache server to free 53/udp up
         run: |
-          mkdir -p /etc/systemd/resolved.conf.d
-          echo -e '[Resolve]\nDNSStubListener=no' >/etc/systemd/resolved.conf.d/disable-for-pinanas.conf
-          systemctl force-reload systemd-resolved
-          rm /etc/resolv.conf
-          ln -s ../run/systemd/resolve/resolv.conf /etc/resolv.conf
+          sudo mkdir -p /etc/systemd/resolved.conf.d
+          echo -e '[Resolve]\nDNSStubListener=no' | sudo tee -a /etc/systemd/resolved.conf.d/disable-for-pinanas.conf
+          sudo systemctl force-reload systemd-resolved
+          sudo rm /etc/resolv.conf
+          sudo ln -s ../run/systemd/resolve/resolv.conf /etc/resolv.conf
 
       - name: Clone
         uses: actions/checkout@v2
