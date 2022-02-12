@@ -9,6 +9,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Disable DNS cache server to free 53/udp up
+        run: |
+          mkdir -p /etc/systemd/resolved.conf.d
+          echo -e '[Resolve]\nDNSStubListener=no' >/etc/systemd/resolved.conf.d/disable-for-pinanas.conf
+          systemctl force-reload systemd-resolved
+          rm /etc/resolv.conf
+          ln -s ../run/systemd/resolve/resolv.conf /etc/resolv.conf
+
       - name: Clone
         uses: actions/checkout@v2
 
@@ -27,7 +35,6 @@ jobs:
         run: |
           mkdir dist
           envsubst <test/settings-ci.yml >dist/settings.yml
-          cat dist/settings.yml
 
       - name: Configure
         run: cd dist && ../src/configure.sh
