@@ -36,7 +36,7 @@ dns:
   ratelimit_whitelist: []
   refuse_any: true
   upstream_dns:
-  {% for dns in  pinanas.network.dns.upstream %}
+  {% for dns in  pinanas.network.dns.upstreams %}
   - {{ dns }}
   {% endfor %}
   upstream_dns_file: ""
