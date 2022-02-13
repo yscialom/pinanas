@@ -35,6 +35,7 @@ function web_expect () {
         *) echo "$0: error: Unknown option ${opt}." ; exit 1 ;;
         esac
     done
+    echo "expected_http_code: ${expected_http_code}"
 
     # request
     response=$(mktemp)
