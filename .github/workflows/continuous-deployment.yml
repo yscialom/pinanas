@@ -51,4 +51,4 @@ jobs:
       #    offer=$(sudo dhclient -v 2>&1 | grep DHCPOFFER)
 
       - name: Test traefik dashboard
-        run: test/traefik-dashboard.sh
+        run: cd test && traefik-dashboard.sh
