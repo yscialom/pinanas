@@ -50,8 +50,9 @@ jobs:
           cd dist
           docker-compose up -d
           #docker-compose ps --services --filter "status=running" | grep traefik
+          set -x
           sleep 30
-          curl -v "http://pinanas-ci.scialom.org"
+          curl -v "http://traefik-dashboard.pinanas-ci.scialom.org"
 
       # requires auto detection of networking properties (hmac of default inteface, ...)
       #- name: Test dhcpd
