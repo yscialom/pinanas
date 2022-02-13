@@ -33,6 +33,10 @@ pinanas:
   #   url: "https://192.168.0.2:1234"
   services:
 
+  acme:
+    # Use Let's Encrypt stagging servers. Type: boolean. Optional, default: false. Example: true.
+    stagging: false
+
   network:
     # MAC address of PiNana's host network card. Type: string. Example: "01:02:03:04:05:06".
     hmac:

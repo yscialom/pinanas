@@ -39,6 +39,10 @@ pinanas:
     - name: external
       url: "http://localhost"
 
+  acme:
+    # Use Let's Encrypt stagging servers. Type: boolean. Optional. Example: false.
+    stagging: true
+
   network:
     # MAC address of PiNana's host network card. Type: string. Example: "01:02:03:04:05:06".
     hmac: "01:02:03:04:05:06"
@@ -96,7 +100,6 @@ pinanas:
         # - name: MY_PROVIDER_ENDPOINT
         #   value: my-provider-narnia
         api: ${settings_pinanas_network_dns_provider_api}
-
 
     # Send email; consult the documentation for your email provider.
     # eg. for gmail: <https://support.google.com/a/answer/176600?hl=en>.
