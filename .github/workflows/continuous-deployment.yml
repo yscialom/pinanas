@@ -8,6 +8,9 @@ on:
       - release/**
 
 
+#TODO: split in jobs and use encrypted artefacts
+# - artefacts: https://docs.github.com/en/actions/advanced-guides/storing-workflow-data-as-artifacts
+# - encrypt: https://www.tecmint.com/encrypt-decrypt-files-tar-openssl-linux/
 jobs:
   build:
     runs-on: ubuntu-latest
