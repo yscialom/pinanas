@@ -20,6 +20,7 @@ function test_http_code () {
     if [[ ${actual} != ${expected} ]] ; then
         error "'${url}': http_code: ${actual}; expected: ${expected}."
         exit 3
+    fi
 }
 
 function web_expect () {
