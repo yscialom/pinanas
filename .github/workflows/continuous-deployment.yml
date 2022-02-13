@@ -2,7 +2,11 @@ name: Continuous Deployment
 
 on:
   push:
-    branches: [feature/ci]
+    branches:
+      - feature/**
+      - develop
+      - release/**
+
 
 jobs:
   build:
