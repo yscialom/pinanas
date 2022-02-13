@@ -46,7 +46,11 @@ jobs:
         run: cd dist && ../src/configure.sh
 
       - name: Start
-        run: cd dist && docker-compose up -d
+        run: |
+          cd dist
+          docker-compose up -d
+          #docker-compose ps --services --filter "status=running" | grep traefik
+          sleep 30
 
       # requires auto detection of networking properties (hmac of default inteface, ...)
       #- name: Test dhcpd

@@ -38,7 +38,7 @@ function web_expect () {
 
     # request
     response=$(mktemp)
-    docker run curlimages/curl:7.80.0 --silent --output /dev/null --write-out '%{json}' "${url}" > ${response}
+    docker run --rm curlimages/curl:7.80.0 --silent --output /dev/null --write-out '%{json}' "${url}" >${response}
 
     # check curl status
     test_exit_status curl $? 0 || exit $?
