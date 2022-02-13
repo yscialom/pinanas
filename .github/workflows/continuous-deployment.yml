@@ -53,6 +53,7 @@ jobs:
           set -x
           sleep 30
           curl -v "http://traefik-dashboard.pinanas-ci.scialom.org"
+          docker-compose logs -f traefik
 
       # requires auto detection of networking properties (hmac of default inteface, ...)
       #- name: Test dhcpd
