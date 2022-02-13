@@ -52,7 +52,7 @@ jobs:
           #docker-compose ps --services --filter "status=running" | grep traefik
           set -x
           sleep 30
-          curl -v "http://traefik-dashboard.pinanas-ci.scialom.org"
+          curl -v "http://traefik-dashboard.pinanas-ci.scialom.org" || true
           docker-compose logs -f traefik
 
       # requires auto detection of networking properties (hmac of default inteface, ...)
