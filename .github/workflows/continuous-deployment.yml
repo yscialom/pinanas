@@ -21,7 +21,6 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Prepare settings from secrets
-        shell: bash
         env:
           settings_pinanas_master_secret: "${{ secrets.settings_pinanas_master_secret }}"
           settings_pinanas_network_dns_provider_api: "${{ secrets.settings_pinanas_network_dns_provider_api }}"
@@ -42,5 +41,10 @@ jobs:
       - name: Start
         run: cd dist && docker-compose up -d
 
-      - name: Test dhcpd
-        run: sudo dhclient -v | grep DHCPOFFER
+      # requires auto detection of networking properties (hmac of default inteface, ...)
+      #- name: Test dhcpd
+      #  run: |
+      #    offer=$(sudo dhclient -v 2>&1 | grep DHCPOFFER)
+
+      - name: Test traefik dashboard
+        run: test/traefik-dashboard.sh
