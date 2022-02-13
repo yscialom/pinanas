@@ -23,8 +23,6 @@ function test_http_code () {
     fi
 }
 
-alias curl='docker run curlimages/curl:7.80.0'
-
 function web_expect () {
     local url="${1}"
     shift
@@ -40,7 +38,7 @@ function web_expect () {
 
     # request
     response=$(mktemp)
-    curl --silent --output /dev/null --write-out '%{json}' "${url}" > ${response}
+    docker run curlimages/curl:7.80.0 --silent --output /dev/null --write-out '%{json}' "${url}" > ${response}
 
     # check curl status
     test_exit_status curl $? 0 || exit $?
