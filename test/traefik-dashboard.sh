@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TEST_DIR="$(dirname "$($readlink -f "$0")")"
+TEST_DIR="$(dirname "$(readlink -f "$0")")"
 source "${TEST_DIR}/web-functions.sh"
 
 domain="pinanas-ci.scialom.org"
