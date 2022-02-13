@@ -50,5 +50,8 @@ jobs:
       #  run: |
       #    offer=$(sudo dhclient -v 2>&1 | grep DHCPOFFER)
 
+      - name: Update curl?
+        run: sudo apt -y install curl
+
       - name: Test traefik dashboard
         run: test/traefik-dashboard.sh
