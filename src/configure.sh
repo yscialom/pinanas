@@ -1,7 +1,7 @@
 #!/bin/sh
-[ -z "${PINANAS_SRC}" ] && PINANAS_SRC="$(dirname "$(readlink -f "${0}")")"
+[ -z "${PINANAS_SRC}" ]  && PINANAS_SRC="$(dirname "$(readlink -f "${0}")")"
 [ -z "${PINANAS_DIST}" ] && PINANAS_DIST="$(readlink -f "${PWD}")"
-[ -z "${PINANAS_VENV}" ] && PINANAS_VENV="${DIST}/.venv"
+[ -z "${PINANAS_VENV}" ] && PINANAS_VENV="${PINANAS_DIST}/.venv"
 
 
 #
@@ -96,22 +96,22 @@ prepare () {
     ## Playbooks
     # Playbook header
     cat > ${playbook} <<EOH
-    ---
-    - hosts: localhost
-      gather_facts: yes
-      tasks:
-      - include_vars: /pinanas/dist/settings.yml
-      - name: ensure application directories exist
-        file:
-          path: "/pinanas/dist/{{ item[0] }}/{{ item[1] }}"
-          state: directory
-          mode: 0755
-        loop: "{{ ['dhcpd', 'traefik', 'authelia', 'adguardhome', 'heimdall', 'nextcloud'] | product(['config', 'data']) | list }}"
-      - name: ensure traefik/acme.json exists
-        file:
-          path: "/pinanas/dist/traefik/data/acme.json"
-          state: touch
-          mode: 0600
+---
+- hosts: localhost
+  gather_facts: yes
+  tasks:
+  - include_vars: /pinanas/dist/settings.yml
+  - name: ensure application directories exist
+    file:
+      path: "/pinanas/dist/{{ item[0] }}/{{ item[1] }}"
+      state: directory
+      mode: 0755
+    loop: "{{ ['dhcpd', 'traefik', 'authelia', 'adguardhome', 'heimdall', 'nextcloud'] | product(['config', 'data']) | list }}"
+  - name: ensure traefik/acme.json exists
+    file:
+      path: "/pinanas/dist/traefik/data/acme.json"
+      state: touch
+      mode: 0600
 EOH
 
     # Playbook tasks
@@ -119,16 +119,16 @@ EOH
         destdir="$(dirname "/pinanas/dist/${j2#/pinanas/src/templates/}")"
         filename="$(basename "${j2%.j2}")"
         cat >> ${playbook} <<EOT
-      - name: ensure ${destdir} exists
-        file:
-          path: "${destdir}"
-          state: directory
-      - name: create ${destdir}/${filename} from settings
-        template:
-          src:  "${j2}"
-          dest: "${destdir}/${filename}"
-          force: $([ "${OPT_FORCE}" = "true" ] && echo yes || echo no)
-        delegate_to: localhost
+- name: ensure ${destdir} exists
+  file:
+    path: "${destdir}"
+    state: directory
+- name: create ${destdir}/${filename} from settings
+  template:
+    src:  "${j2}"
+    dest: "${destdir}/${filename}"
+    force: $([ "${OPT_FORCE}" = "true" ] && echo yes || echo no)
+  delegate_to: localhost
 
 EOT
     done
