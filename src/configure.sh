@@ -34,8 +34,7 @@ run_in_docker () {
         -e PINANAS_DIST="${PINANAS_DIST}" \
         -e PINANAS_VENV="${PINANAS_VENV}" \
         python:3-alpine \
-        "/pinanas/src/$(basename "${0}")" \
-        "$@"
+        sh -c "apk add --no-cache gcc musl-dev libffi-dev && \"/pinanas/src/$(basename "${0}")\" $@"
 }
 
 
@@ -128,7 +127,7 @@ EOH
         template:
           src:  "${j2}"
           dest: "${destdir}/${filename}"
-          force: $([ ${OPT_FORCE} = true ] && echo yes || echo no)
+          force: $([ "${OPT_FORCE}" = "true" ] && echo yes || echo no)
         delegate_to: localhost
 
 EOT
@@ -170,7 +169,7 @@ report () {
     cont "You can clean work files with ./distclean.sh"
     cont "Start your services with docker-compose up -d"
 
-    if [ -n "$(ss -Hul "sport = :domain")" ] ; then
+    if netstat -lan | grep -qE ':53\W' ; then
         warn "Port udp/53 appears to be already in use. You should free it before starting pinanas."
         cont "On Ubuntu 18.04+ systems, in order to free udp/53 you can disable your local DNS cache server:"
         cont "    sudo mkdir -p /etc/systemd/resolved.conf.d"
@@ -202,13 +201,13 @@ EOF
 main_host () {
     run_in_docker "$@"
     report
-    clean
 }
 
 main_guest () {
     check "$@"
     prepare
     install "$@"
+    clean
 }
 
 if [ -f /.dockerenv ]
