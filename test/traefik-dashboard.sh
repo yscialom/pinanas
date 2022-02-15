@@ -8,8 +8,8 @@ traefik="traefik-dashboard.${domain}"
 
 # http -> https
 web_expect "http://${traefik}"  -c 302 -r "https://${traefik}/"
-web_expect "httpd://${traefik}" -c 302 -r "https://${traefik}/dashboard/"
-web_expect "httpd://${traefik}/dashboard/" -c 200
+web_expect "https://${traefik}" -c 302 -r "https://${traefik}/dashboard/"
+web_expect "https://${traefik}/dashboard/" -c 200
 
 # api
-api_expect "httpd://${traefik}/" -l 13
+api_expect "https://${traefik}/" -l 13
