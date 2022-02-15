@@ -16,10 +16,11 @@ RUN apk add --no-cache \
 
 RUN mkdir -m 777 /pinanas-config
 
-# Setup user
-RUN addgroup -g ${PGID} docker \
-    && adduser -u ${PUID} -D -G docker pinanas
-USER pinanas
+# Setup user & group
+RUN getent group ${PGID} >/dev/null || addgroup -g ${PGID} docker                        # create group if necessary
+RUN getent passwd ${PUID} >/dev/null || adduser -u ${PUID} -D pinanas                    # create user if necessary
+RUN adduser $(getent passwd ${PUID} | cut -d: -f1) $(getent group ${PGID} | cut -d: -f1) # add user to group
+USER ${PUID}:${PGID}
 
 # Add and run configure
 ADD configure-logging.sh /configure-logging.sh
