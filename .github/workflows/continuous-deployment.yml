@@ -52,6 +52,7 @@ jobs:
           while [[ $(docker container inspect netdata | jq 'map(select(.State.Status == "running")) | any') != "true" ]] ; do
               sleep 5
           done
+          sleep 10
 
       # requires auto detection of networking properties (hmac of default inteface, ...)
       #- name: Test dhcpd
