@@ -32,7 +32,7 @@ function web_expect () {
     docker run --rm --net host curlimages/curl:7.77.0 --silent --output /dev/null --write-out '%{json}' "${url}" >${response}
 
     # check curl status
-    test_field exit_status $? 0 || exit $?
+    test_field exit_status "${url}" $? 0 || exit $?
 
     # check response
     if [[ -n ${expected_http_code} ]] ; then
@@ -66,7 +66,7 @@ function api_expect () {
     docker run --rm --net host curlimages/curl:7.77.0 --silent "${url}" >${response}
 
     # check curl status
-    test_field exit_status $? 0 || exit $?
+    test_field exit_status "${url}" $? 0 || exit $?
 
     # check length
     if [[ -n ${expected_length} ]] ; then
