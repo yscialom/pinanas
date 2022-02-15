@@ -9,7 +9,7 @@
 
 pinanas:
   # Registered domain name. Type: string. Example: "home.example.com".
-  domain: test.pinanas.scialom.org
+  domain: pinanas-ci.scialom.org
 
   # Master password to encrypt/derive all PiNanas secrets. Type: string_
   # Example: "Randomly-generated-complex-string-with-mixed-case-digits-and-special-characters".
