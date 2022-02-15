@@ -49,10 +49,9 @@ jobs:
         run: |
           cd dist
           docker-compose up -d
-          #docker-compose ps --services --filter "status=running" | grep traefik
-          set -x
-          sleep 30
-          curl -v "http://traefik-dashboard.pinanas-ci.scialom.org" || true
+          while [[ $(docker container inspect netdata | jq 'map(select(.State.Status == "running")) | any') != "true" ]] ; do
+              sleep 5
+          done
 
       # requires auto detection of networking properties (hmac of default inteface, ...)
       #- name: Test dhcpd

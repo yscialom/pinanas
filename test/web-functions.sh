@@ -42,7 +42,7 @@ function web_expect () {
 
     # check redirect
     if [[ -n ${expected_redirect_url} ]] ; then
-        local actual_redirect_url=$(jq .redirect_url <${response})
+        local actual_redirect_url=$(jq -r '.redirect_url | tostring' <${response})
         test_field redirect_url "${url}" ${actual_redirect_url} ${expected_redirect_url} || exit $?
     fi
 
