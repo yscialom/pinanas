@@ -14,6 +14,13 @@ function test_field () {
     fi
 }
 
+function curl_ () {
+    docker run --rm --net host \
+        -v /tmp/letsencrypt-stg-root-x1.pem:/tmp/letsencrypt-stg-root-x1.pem:ro \
+        curlimages/curl:7.77.0 \
+        --cacert /tmp/letsencrypt-stg-root-x1.pem "$@"
+}
+
 function web_expect () {
     local url="${1}"
     shift
@@ -29,7 +36,7 @@ function web_expect () {
 
     # request
     response=$(mktemp)
-    docker run --rm --net host curlimages/curl:7.77.0 --silent --output /dev/null --write-out '%{json}' "${url}" >${response}
+    curl_ --silent --output /dev/null --write-out '%{json}' "${url}" >${response}
 
     # check curl status
     test_field exit_status "${url}" $? 0 || exit $?
@@ -63,7 +70,7 @@ function api_expect () {
 
     # request
     response=$(mktemp)
-    docker run --rm --net host curlimages/curl:7.77.0 --silent "${url}" >${response}
+    curl_ --silent "${url}" >${response}
 
     # check curl status
     test_field exit_status "${url}" $? 0 || exit $?
