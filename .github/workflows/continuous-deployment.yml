@@ -1,16 +1,20 @@
 name: Continuous Deployment
 
 on:
+  pull_request: ~
   push:
     branches:
-      - feature/**
+      - feature/** # TODO: remove
       - develop
       - release/**
+    tags:
+      - v**
 
 
 #TODO: split in jobs and use encrypted artefacts
 # - artefacts: https://docs.github.com/en/actions/advanced-guides/storing-workflow-data-as-artifacts
 # - encrypt: https://www.tecmint.com/encrypt-decrypt-files-tar-openssl-linux/
+# - cache?
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -49,10 +53,7 @@ jobs:
         run: |
           cd dist
           docker-compose up -d
-          while [[ $(docker container inspect netdata | jq 'map(select(.State.Status == "running")) | any') != "true" ]] ; do
-              sleep 5
-          done
-          sleep 10
+          timeout 60 test/wait-for-traefik.sh
 
       # requires auto detection of networking properties (hmac of default inteface, ...)
       #- name: Test dhcpd
