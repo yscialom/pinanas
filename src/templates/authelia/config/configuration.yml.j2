@@ -1,6 +1,6 @@
 #jinja2:lstrip_blocks: True
 {%- macro make_secret(name) -%}
-  {{ (pianas.master-secret + name) | password_hash('sha256', pinanas.domain) | b64encode }}
+  {{ (pinanas.master-secret + name) | password_hash('sha256', pinanas.domain) | b64encode }}
 {%- endmacro %}
 ---
 #
@@ -72,7 +72,7 @@ access_control:
     #
     ## === EXTERNAL SERVICES ===
     #
-    {% for service in pianans.services %}
+    {% for service in pinanas.services %}
     - domain: "{{ service.name }}.{{ pinanas.domain }}"
       policy: "{{ service.policy | default('two_factor') }}"
       subject:
