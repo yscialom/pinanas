@@ -6,7 +6,7 @@ PINANAS_VENV="${PINANAS_DIST}/.venv"
 . ${PINANAS_SRC}/build/configure-logging.sh
 
 configure () {
-    local tag=pinanas-config
+    local tag=pinanas-config:latest
     docker build \
         --rm \
         -t ${tag} \
