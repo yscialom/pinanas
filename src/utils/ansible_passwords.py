@@ -14,14 +14,13 @@ ENCODING='utf-8'
 
 class Authelia:
     def key(self, opt=''):
-        tmpdir = tempfile.mkdtemp()
         try:
-            _ = self.__run(['docker', 'run', '--rm', '-u', '{}'.format(os.getuid()), '-v', '{}:/keys'.format(tmpdir), 'authelia/authelia:4', 'authelia',
-                'rsa', 'generate', '--dir', '/keys'])
-            with open('{}/key.pem'.format(tmpdir)) as keyfile:
+            _ = self.__run(['docker', 'run', '--rm', '-u', '{}'.format(os.getuid()), '-v', 'pinanas-config:/pinanas-config', 'authelia/authelia:4', 'authelia',
+                'rsa', 'generate', '--dir', '/pinanas-config/keys'])
+            with open('/pinanas-config/keys/key.pem') as keyfile:
                 key = keyfile.read()
         finally:
-            shutil.rmtree(tmpdir)
+            shutil.rmtree('/pinanas-config/keys')
         return self.__transform(key, opt)
 
     def password(self, cleartext):

@@ -23,6 +23,10 @@ certificatesResolvers:
     acme:
       email: "{{ pinanas.network.dns.provider.email }}"
       storage: /acme.json
+      {% if (pinanas.acme.stagging | default(false)) == true -%}
+      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      {% endif %}
+
       dnsChallenge:
         provider: {{ pinanas.network.dns.provider.name }}
         delayBeforeCHeck: 0
