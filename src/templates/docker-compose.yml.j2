@@ -170,7 +170,7 @@ services:
       - /etc/os-release:/host/etc/os-release:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /var/log/fail2ban.log:/var/log/fail2ban.log:ro
-      - ./dhcpd/data/dhcpd.leases:/var/lib/dhcp/dhcpd.leases:ro
+      - ./dhcpd/data:/var/lib/dhcp:ro
       - ./netdata/config:/etc/netdata
     hostname: netdata
     networks:
