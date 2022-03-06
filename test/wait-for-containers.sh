@@ -10,11 +10,14 @@ function wait_for_container {
     local waiting_done="false"
     while [[ ${waiting_done} != "true" ]] ; do
         local container_state="$(docker inspect "${container_id}" --format '{{ .State.Status }}')"
-        if [[ "${container_state}" == "running" ]]; then
-            local health_status="$(docker inspect "${container_id}" --format '{{ .State.Health.Status }}')"
-            cont "${container_name}: container_state=${container_state}, health_status=${health_status}"
-            if [[ ${health_status} == "healthy" ]]; then
-                waiting_done="true"
+        if [[ ${container_state} == "running" ]]; then
+            local health_available="$(docker inspect "${container_id}" --format '{{ .State.Health }}')"
+            if [[ ${health_available} != "<nil>" ]] ; then
+                local health_status="$(docker inspect "${container_id}" --format '{{ .State.Health.Status }}')"
+                cont "${container_name}: container_state=${container_state}, health_status=${health_status}"
+                if [[ ${health_status} == "healthy" ]]; then
+                    waiting_done="true"
+                fi
             fi
         else
             cont "${container_name}: container_state=${container_state}"
