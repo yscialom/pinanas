@@ -41,21 +41,19 @@ function web_expect () {
     curl_ --silent --output /dev/null --write-out '%{json}' "${url}" >${response}
 
     # check curl status
-    test_field exit_status "${url}" $? 0 ${silent} || exit $?
+    test_field exit_status "${url}" $? 0 ${silent} || return
 
     # check response
     if [[ -n ${expected_http_code} ]] ; then
         local actual_http_code=$(jq .http_code <${response})
-        test_field http_code "${url}" ${actual_http_code} ${expected_http_code} ${silent} || exit $?
+        test_field http_code "${url}" ${actual_http_code} ${expected_http_code} ${silent} || return
     fi
 
     # check redirect
     if [[ -n ${expected_redirect_url} ]] ; then
         local actual_redirect_url=$(jq -r '.redirect_url | tostring' <${response})
-        test_field redirect_url "${url}" ${actual_redirect_url} ${expected_redirect_url} ${silent} || exit $?
+        test_field redirect_url "${url}" ${actual_redirect_url} ${expected_redirect_url} ${silent} || return
     fi
-
-    rm -- "${response}"
 }
 
 function api_expect () {
@@ -75,13 +73,11 @@ function api_expect () {
     curl_ --silent "${url}" >${response}
 
     # check curl status
-    test_field exit_status "${url}" $? 0 || exit $?
+    test_field exit_status "${url}" $? 0 || return
 
     # check length
     if [[ -n ${expected_length} ]] ; then
         local actual_length=$(jq '. | length' <${response})
-        test_field length "${url}" ${actual_length} ${expected_length} || exit $?
+        test_field length "${url}" ${actual_length} ${expected_length} || return
     fi
-
-    rm -- "${response}"
 }
