@@ -70,7 +70,7 @@ function api_expect () {
     shift
 
     # get tests options
-    while getopts "l:" opt ; do
+    while getopts "l:q:" opt ; do
         case "${opt}" in
         l) local expected_length=${OPTARG} ;;
         q) local query="${OPTARG}" ;;
