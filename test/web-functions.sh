@@ -73,13 +73,14 @@ function api_expect () {
     while getopts "l:" opt ; do
         case "${opt}" in
         l) local expected_length=${OPTARG} ;;
+        q) local query="${OPTARG}"
         *) error "Unknown option ${opt}." ; exit 1 ;;
         esac
     done
 
     # request
     response=$(mktemp)
-    curl_ --silent "${url}" >${response}
+    curl_ --silent --header "Accept: application/json" "${url}" >${response}
 
     # check curl status
     test_field exit_status "${url}" $? 0 || return
@@ -88,5 +89,11 @@ function api_expect () {
     if [[ -n ${expected_length} ]] ; then
         local actual_length=$(jq '. | length' <${response})
         test_field length "${url}" ${actual_length} ${expected_length} || return
+    fi
+
+    # check query
+    if [[ -n ${query} ]] ; then
+        local result=$(jq "${query}" <${response})
+        test_field "${query}" "${url}" ${result} true || return
     fi
 }
