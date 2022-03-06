@@ -73,7 +73,7 @@ function api_expect () {
     while getopts "l:" opt ; do
         case "${opt}" in
         l) local expected_length=${OPTARG} ;;
-        q) local query="${OPTARG}"
+        q) local query="${OPTARG}" ;;
         *) error "Unknown option ${opt}." ; exit 1 ;;
         esac
     done
