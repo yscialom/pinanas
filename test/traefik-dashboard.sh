@@ -12,4 +12,8 @@ web_expect "https://${traefik}" -c 302 -r "https://${traefik}/dashboard/"
 web_expect "https://${traefik}/dashboard/" -c 200
 
 # api
-api_expect "https://${traefik}/" -l 13
+api_expect "https://${traefik}/api/http/routers" -l 12
+api_expect "https://${traefik}/api/http/services" -l 10
+api_expect "https://${traefik}/api/http/middlewares" -l 12
+api_expect "https://${traefik}/api/udp/routers" -l 1
+api_expect "https://${traefik}/api/udp/services" -l 1

@@ -13,7 +13,7 @@ fatal() { log "$(red FATAL)"    "$(red "$@")" ; }
 function curl_ () {
     docker run --rm --net host \
         -v /tmp/letsencrypt-stg-root-x1.pem:/tmp/letsencrypt-stg-root-x1.pem:ro \
-        curlimages/curl:7.77.0 -vvvv\
+        curlimages/curl:7.77.0 \
         --cacert /tmp/letsencrypt-stg-root-x1.pem "$@"
 }
 
