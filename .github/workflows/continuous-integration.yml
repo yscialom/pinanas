@@ -57,8 +57,7 @@ jobs:
           cd dist
           docker-compose up -d
           timeout 60 ../test/wait-for-traefik.sh
-          cat traefik/data/acme.json
-          timeout 60 docker-compose logs -f traefik
+          sleep 120
 
       # requires auto detection of networking properties (hmac of default inteface, ...)
       #- name: Test dhcpd
