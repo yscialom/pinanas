@@ -10,12 +10,14 @@ function wait_for_container {
     local waiting_done="false"
     while [[ ${waiting_done} != "true" ]] ; do
         local container_state="$(docker inspect "${container_id}" --format '{{ .State.Status }}')"
-        if [[ ${container_state} == "running" ]]; then
+        if [[ ${container_state} == "running" ]] ; then
             local health_available="$(docker inspect "${container_id}" --format '{{ .State.Health }}')"
-            if [[ ${health_available} != "<nil>" ]] ; then
+            if [[ ${health_available} == "<nil>" ]] ; then
+                waiting_done="true"
+            else
                 local health_status="$(docker inspect "${container_id}" --format '{{ .State.Health.Status }}')"
                 cont "${container_name}: container_state=${container_state}, health_status=${health_status}"
-                if [[ ${health_status} == "healthy" ]]; then
+                if [[ ${health_status} == "healthy" ]] ; then
                     waiting_done="true"
                 fi
             fi
@@ -23,14 +25,10 @@ function wait_for_container {
             cont "${container_name}: container_state=${container_state}"
             waiting_done="true"
         fi
-        sleep 1;
-    done;
+        sleep 1
+    done
 }
 
-wait_for_container adguardhome
-wait_for_container authelia
-wait_for_container dhcpd
-wait_for_container heimdall
-wait_for_container netdata
-wait_for_container nextcloud
-wait_for_container traefik
+for service in $(docker-compose ps --services) ; do
+    wait_for_container "${service}"
+done
