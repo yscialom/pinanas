@@ -56,7 +56,7 @@ jobs:
         run: |
           cd dist
           docker-compose up -d
-          timeout 120 ../test/wait-for-traefik.sh
+          timeout 120 ../test/wait-for-containers.sh
 
       # requires auto detection of networking properties (hmac of default inteface, ...)
       #- name: Test dhcpd
