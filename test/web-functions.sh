@@ -24,8 +24,8 @@ function test_field () {
     local expected="${4}"
     local silent="${5}"
 
-    if [[ "${actual}" != "${expected}" ]] ; then
-        [[ -z "${silent}" ]] && error "'${url}': ${field}: '${actual}'; expected: '${expected}'."
+    if [[ ${actual} != ${expected} ]] ; then
+        [[ ${silent} != "yes" ]] && error "'${url}': ${field}: '${actual}'; expected: '${expected}'."
         return 10
     fi
 }
