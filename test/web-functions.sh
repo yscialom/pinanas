@@ -35,6 +35,7 @@ function web_expect () {
     shift
 
     # get tests options
+    local opt OPTARG OPTIND # required as to not be set in the global namespace and affect subsequent calls
     while getopts "sc:r:" opt ; do
         case "${opt}" in
         s) local silent=yes ;;
