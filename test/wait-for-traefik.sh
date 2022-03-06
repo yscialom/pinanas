@@ -6,7 +6,7 @@ source "${TEST_DIR}/web-functions.sh"
 domain="pinanas-ci.scialom.org"
 traefik="traefik-dashboard.${domain}"
 
-until web_expect "http://${traefik}" -s -c 302 ; do
+until web_expect "https://${traefik}/" -s -c 302 ; do
     info "Waiting for traefik to start..."
     sleep 10
 done
