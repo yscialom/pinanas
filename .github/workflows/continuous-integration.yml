@@ -56,7 +56,7 @@ jobs:
         run: |
           cd dist
           docker-compose up -d
-          timeout 120 ../test/wait-for-containers.sh # to be replaced by compose v2 --wait option
+          timeout 120 ../test/wait-for-containers.sh && sleep 30 # to be replaced by compose v2 --wait option
 
       # requires auto detection of networking properties (hmac of default inteface, ...)
       #- name: Test dhcpd

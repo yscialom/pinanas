@@ -25,7 +25,7 @@ function wait_for_container {
             cont "${container_name}: container_state=${container_state}"
             waiting_done="true"
         fi
-        sleep 1
+        sleep 5
     done
 }
 
