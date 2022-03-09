@@ -13,7 +13,7 @@ web_expect "https://${traefik}" -c 302 -r "https://${traefik}/dashboard/"
 web_expect "https://${traefik}/dashboard/" -c 200
 
 #tmp
-curl -s "https://${traefik}/api/http/services
+curl -s "https://${traefik}/api/http/services"
 
 # api
 api_expect "https://${traefik}/api/overview" -q '.http.services.total==10'
