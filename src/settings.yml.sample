@@ -146,4 +146,6 @@ nextcloud:
   # to access to files out of your database, change the path bellow:
   # For example, could be usefull for videos stored on an external drive
 
+  # In Nextcloud, the path will be "/ext_storage"
+
   ext_storage: ./external
