@@ -126,15 +126,18 @@ mysql:
   # Name of your database for Nextcloud (like "pinanas-nextcloud"). Type: string
   database:
 
+  # Define where database, datafiles (users, files versionning, etc) will be stored.
+  # Example: "./mysql" or "path/to/external_drive/mysql"
+  #
+  # If you want to use an external disk, don't forget to mount the disk before ;)
+  
+  mysql_db_path: 
+
 nextcloud:
 
-  # Define the directory path where your data will be stored
-  # By default, if you want to use primary disk, uncomment the first line, data will be in your home directory. 
-  # If you want to use an external disk, fullfill with "/path/to/external-disk/nextcloud" - don't forget to mount the disk before ;)
- 
-  data_path: ./nextcloud
-  #data_path: /path/to/external-disk/nextcloud
+  # Define where your data will be stored
+  # Example: ./nextcloud or path/to/external_drive/nextcloud
 
-  # Define where config files will be stored, like your data.
-  config_path: ./nextcloud
-  #config_path: /path/to/external-disk/nextcloud
+  # If you want to use an external disk, don't forget to mount the disk before ;)
+ 
+  nextcloud_data_path:

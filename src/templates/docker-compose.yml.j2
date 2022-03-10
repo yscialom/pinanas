@@ -239,20 +239,20 @@ services:
   # Nextcloud gives you access to all your files wherever you are.
   ##
   mariadb:
-  image: linuxserver/mariadb:10.5.13
-  container_name: mariadb
-  depends_on:
-    - dhcpd
-  volumes:
-    - /path/to/storage:/var/lib/mysql
-  environment:
-    - MYSQL_ROOT_PASSWORD={{ pinanas.master_secret }}
-    - MYSQL_USER={{ mysql.user }}
-    - MYSQL_PASSWORD={{ mysql.user_password }}
-    - MYSQL_DATABASE={{ mysql.database }}
-  ports:
-    - 3306:3306
-  restart: unless-stopped
+    image: linuxserver/mariadb:10.5.13
+    container_name: mariadb
+    depends_on:
+      - dhcpd
+    volumes:
+      - {{ mysql_db_path }}:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD={{ pinanas.master_secret }}
+      - MYSQL_USER={{ mysql.user }}
+      - MYSQL_PASSWORD={{ mysql.user_password }}
+      - MYSQL_DATABASE={{ mysql.database }}
+    ports:
+      - 3306:3306
+    restart: unless-stopped
     
   nextcloud:
     image: lscr.io/linuxserver/nextcloud:23.0.0
@@ -292,6 +292,6 @@ services:
       - "traefik.http.middlewares.hsts.headers.stsseconds=31536000"
       - "traefik.http.routers.nextcloud-secure.middlewares=hsts"
     volumes:
-      - {{ nextcloud.config_path }}/config:/config
+      - {{ nextcloud.data_path }}/config:/config
       - {{ nextcloud.data_path}}/data:/data
     restart: unless-stopped
