@@ -141,3 +141,9 @@ nextcloud:
   # If you want to use an external disk, don't forget to mount the disk before ;)
  
   data_path:
+
+  # If you want to use the nextcloud app "External Storage" with a local directory
+  # to access to files out of your database, change the path bellow:
+  # For example, could be usefull for videos stored on an external drive
+
+  ext_storage: ./external

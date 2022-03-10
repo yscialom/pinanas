@@ -293,5 +293,6 @@ services:
       - "traefik.http.routers.nextcloud-secure.middlewares=hsts"
     volumes:
       - {{ nextcloud.data_path }}/config:/config
-      - {{ nextcloud.data_path}}/data:/data
+      - {{ nextcloud.data_path }}/data:/data
+      - {{ nextcloud.ext_storage }}:/ext_storage
     restart: unless-stopped
