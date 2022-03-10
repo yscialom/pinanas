@@ -108,3 +108,33 @@ pinanas:
 
       # Send emails as. Type: string. Example: "contact@{{ pinanas.domain }}".
       sender:
+
+##
+#
+# Nextcloud with MySQL database (like MariaDB) need some variables to be defined
+#
+mysql:
+ 
+  # Create an user used to connect Nextcloud app with Mysql database
+  # Username will be entered as "Username" on the configuration of the database Mysql/MariaDB
+  # on your first access to Nextcloud web interface. Type: string
+  user:
+ 
+  # User password for the MYSQL database. Type: string
+  user_password:
+
+  # Name of your database for Nextcloud (like "pinanas-nextcloud"). Type: string
+  database:
+
+nextcloud:
+
+  # Define the directory path where your data will be stored
+  # By default, if you want to use primary disk, uncomment the first line, data will be in your home directory. 
+  # If you want to use an external disk, fullfill with "/path/to/external-disk/nextcloud" - don't forget to mount the disk before ;)
+ 
+  data_path: ./nextcloud
+  #data_path: /path/to/external-disk/nextcloud
+
+  # Define where config files will be stored, like your data.
+  config_path: ./nextcloud
+  #config_path: /path/to/external-disk/nextcloud

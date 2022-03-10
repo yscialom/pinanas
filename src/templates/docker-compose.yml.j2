@@ -158,6 +158,8 @@ services:
   netdata:
     image: netdata/netdata:v1.33
     container_name: netdata
+    depends_on:
+      - dhcpd
     cap_add:
       - SYS_PTRACE
     security_opt:
@@ -204,6 +206,8 @@ services:
   heimdall:
     image: lscr.io/linuxserver/heimdall:2.2.2
     container_name: heimdall
+    depends_on:
+      - dhcpd
     networks:
       default:
         aliases:
@@ -234,9 +238,29 @@ services:
   #
   # Nextcloud gives you access to all your files wherever you are.
   ##
+  mariadb:
+  image: linuxserver/mariadb:10.5.13
+  container_name: mariadb
+  depends_on:
+    - dhcpd
+  volumes:
+    - /path/to/storage:/var/lib/mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD={{ pinanas.master_secret }}
+    - MYSQL_USER={{ mysql.user }}
+    - MYSQL_PASSWORD={{ mysql.user_password }}
+    - MYSQL_DATABASE={{ mysql.database }}
+  ports:
+    - 3306:3306
+  restart: unless-stopped
+    
   nextcloud:
     image: lscr.io/linuxserver/nextcloud:23.0.0
     container_name: nextcloud
+    depends_on:
+      - dhcpd
+    links:
+      - mariadb
     networks:
       default:
         aliases:
@@ -246,6 +270,10 @@ services:
       - TZ={{ pinanas.timezone }}
       - PUID={{ PUID }}
       - PGID={{ PGID }}
+      - MYSQL_USER={{ mysql.user }}
+      - MYSQL_PASSWORD={{ mysql.user_password }}
+      - MYSQL_DATABASE={{ mysql.database }}
+      - MYSQL_HOST=mariadb
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nextcloud-secure.entrypoints=https"
@@ -264,6 +292,6 @@ services:
       - "traefik.http.middlewares.hsts.headers.stsseconds=31536000"
       - "traefik.http.routers.nextcloud-secure.middlewares=hsts"
     volumes:
-      - ./nextcloud/config:/config
-      - ./nextcloud/data:/data
+      - {{ nextcloud.config_path }}/config:/config
+      - {{ nextcloud.data_path}}/data:/data
     restart: unless-stopped
