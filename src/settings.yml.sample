@@ -149,3 +149,4 @@ nextcloud:
   # In Nextcloud, the path will be "/ext_storage"
 
   ext_storage: ./external
+
