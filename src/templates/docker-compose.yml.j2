@@ -244,7 +244,7 @@ services:
     depends_on:
       - dhcpd
     volumes:
-      - {{ mysql_db_path }}:/var/lib/mysql
+      - {{ mysql.db_path }}:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD={{ pinanas.master_secret }}
       - MYSQL_USER={{ mysql.user }}

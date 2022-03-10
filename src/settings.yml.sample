@@ -131,7 +131,7 @@ mysql:
   #
   # If you want to use an external disk, don't forget to mount the disk before ;)
   
-  mysql_db_path: 
+  db_path: 
 
 nextcloud:
 
@@ -140,4 +140,4 @@ nextcloud:
 
   # If you want to use an external disk, don't forget to mount the disk before ;)
  
-  nextcloud_data_path:
+  data_path:
