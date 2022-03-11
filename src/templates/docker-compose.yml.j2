@@ -241,7 +241,7 @@ services:
   ##
   mariadb:
     image: linuxserver/mariadb:10.5.13-alpine
-    container_name: db
+    container_name: database
     depends_on:
       - dhcpd
     network:
@@ -249,14 +249,21 @@ services:
         aliases:
           - mariadb
           - mysql
-          - db
+          - database
+          - sql
     volumes:
       - ./mariadb/data:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD={{ pinanas.master_secret }}
-      - MYSQL_USER={{ mysql.user }}
-      - MYSQL_PASSWORD={{ mysql.user_password }}
-      - MYSQL_DATABASE={{ mysql.database }}
+      - TZ={{ pinanas.timezone }}
+      - PUID={{ PUID }}
+      - PGID={{ PGID }}
+      {%- macro make_secret(name) -%}
+        {{ (pinanas.master_secret + name) | password_hash('sha256', 65534 | random(seed=pinanas.domain) | string) | b64encode }}
+      {%- endmacro %}
+      - MYSQL_ROOT_PASSWORD="{{ make_secret('mysql.root_password') }}"
+      - MYSQL_USER=pinanas
+      - MYSQL_PASSWORD="{{ make_secret('mysql.password') }}"
+      - MYSQL_DATABASE=pinanas
     restart: unless-stopped
     
   nextcloud:
@@ -264,9 +271,9 @@ services:
     container_name: nextcloud
     depends_on:
       - dhcpd
-      - db
+      - database
     links:
-      - db
+      - database
     networks:
       default:
         aliases:
@@ -280,10 +287,13 @@ services:
       - TZ={{ pinanas.timezone }}
       - PUID={{ PUID }}
       - PGID={{ PGID }}
-      - MYSQL_USER={{ mysql.user }}
-      - MYSQL_PASSWORD={{ mysql.user_password }}
-      - MYSQL_DATABASE={{ mysql.database }}
-      - MYSQL_HOST=mariadb
+      {%- macro make_secret(name) -%}
+        {{ (pinanas.master_secret + name) | password_hash('sha256', 65534 | random(seed=pinanas.domain) | string) | b64encode }}
+      {%- endmacro %}
+      - MYSQL_USER=pinanas
+      - MYSQL_PASSWORD="{{ make_secret('mysql.password') }}"
+      - MYSQL_DATABASE=pinanas
+      - MYSQL_HOST=database
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nextcloud-secure.entrypoints=https"
