@@ -148,5 +148,7 @@ nextcloud:
 
   # In Nextcloud, the path will be "/ext_storage"
 
-  ext_storage: ./external
+  # Path to external storage. Type: string. Example: ./media/ext_storage
+
+  ext_storage:
 
