@@ -2,6 +2,7 @@
 version: "3"
 networks:
   default:
+  database:
 
 services:
   #
@@ -240,9 +241,15 @@ services:
   ##
   mariadb:
     image: linuxserver/mariadb:10.5.13-alpine
-    container_name: mariadb
+    container_name: db
     depends_on:
       - dhcpd
+    network:
+      database:
+        aliases:
+          - mariadb
+          - mysql
+          - db
     volumes:
       - ./mariadb/data:/var/lib/mysql
     environment:
@@ -250,8 +257,6 @@ services:
       - MYSQL_USER={{ mysql.user }}
       - MYSQL_PASSWORD={{ mysql.user_password }}
       - MYSQL_DATABASE={{ mysql.database }}
-    ports:
-      - 3306:3306
     restart: unless-stopped
     
   nextcloud:
@@ -259,10 +264,15 @@ services:
     container_name: nextcloud
     depends_on:
       - dhcpd
+      - db
     links:
-      - mariadb
+      - db
     networks:
       default:
+        aliases:
+          - nextcloud
+          - cloud
+      database:
         aliases:
           - nextcloud
           - cloud
