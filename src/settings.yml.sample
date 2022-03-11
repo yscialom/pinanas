@@ -109,46 +109,8 @@ pinanas:
       # Send emails as. Type: string. Example: "contact@{{ pinanas.domain }}".
       sender:
 
-##
-#
-# Nextcloud with MySQL database (like MariaDB) need some variables to be defined
-#
-mysql:
- 
-  # Create an user used to connect Nextcloud app with Mysql database
-  # Username will be entered as "Username" on the configuration of the database Mysql/MariaDB
-  # on your first access to Nextcloud web interface. Type: string
-  user:
- 
-  # User password for the MYSQL database. Type: string
-  user_password:
-
-  # Name of your database for Nextcloud (like "pinanas-nextcloud"). Type: string
-  database:
-
-  # Define where database, datafiles (users, files versionning, etc) will be stored.
-  # Example: "./mysql" or "path/to/external_drive/mysql"
-  #
-  # If you want to use an external disk, don't forget to mount the disk before ;)
-  
-  db_path: 
-
 nextcloud:
 
-  # Define where your data will be stored
-  # Example: ./nextcloud or path/to/external_drive/nextcloud
-
-  # If you want to use an external disk, don't forget to mount the disk before ;)
- 
-  data_path:
-
-  # If you want to use the nextcloud app "External Storage" with a local directory
-  # to access to files out of your database, change the path bellow:
-  # For example, could be usefull for videos stored on an external drive
-
-  # In Nextcloud, the path will be "/ext_storage"
-
   # Path to external storage. Type: string. Example: ./media/ext_storage
-
   ext_storage:
 
