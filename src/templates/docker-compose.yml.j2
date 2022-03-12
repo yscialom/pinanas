@@ -257,9 +257,11 @@ services:
       - TZ={{ pinanas.timezone }}
       - PUID={{ PUID }}
       - PGID={{ PGID }}
+
       {%- macro make_secret(name) -%}
         {{ (pinanas.master_secret + name) | password_hash('sha256', 65534 | random(seed=pinanas.domain) | string) | b64encode }}
       {%- endmacro %}
+
       - MYSQL_ROOT_PASSWORD="{{ make_secret('mysql.root_password') }}"
       - MYSQL_USER=pinanas
       - MYSQL_PASSWORD="{{ make_secret('mysql.password') }}"
@@ -287,9 +289,11 @@ services:
       - TZ={{ pinanas.timezone }}
       - PUID={{ PUID }}
       - PGID={{ PGID }}
+
       {%- macro make_secret(name) -%}
         {{ (pinanas.master_secret + name) | password_hash('sha256', 65534 | random(seed=pinanas.domain) | string) | b64encode }}
       {%- endmacro %}
+
       - MYSQL_USER=pinanas
       - MYSQL_PASSWORD="{{ make_secret('mysql.password') }}"
       - MYSQL_DATABASE=pinanas
