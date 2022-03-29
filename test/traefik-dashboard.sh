@@ -12,13 +12,10 @@ web_expect "http://${traefik}"  -c 302 -r "https://${traefik}/"
 web_expect "https://${traefik}" -c 302 -r "https://${traefik}/dashboard/"
 web_expect "https://${traefik}/dashboard/" -c 200
 
-#tmp
-curl -sk "https://${traefik}/api/http/services"
-
 # api
-api_expect "https://${traefik}/api/overview" -q '.http.services.total==10'
+api_expect "https://${traefik}/api/overview" -q '.http.services.total==11'
 api_expect "https://${traefik}/api/overview" -q '.http.middlewares.total==12'
-api_expect "https://${traefik}/api/overview" -q '.http.routers.total==12'
+api_expect "https://${traefik}/api/overview" -q '.http.routers.total==13'
 api_expect "https://${traefik}/api/overview" -q '.udp.routers.total==1'
 api_expect "https://${traefik}/api/overview" -q '.udp.services.total==1'
 for entity in .{http,udp,tcp}.{services,middlewares,routers} do
