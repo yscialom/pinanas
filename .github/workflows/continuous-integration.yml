@@ -57,8 +57,6 @@ jobs:
           cd dist
           docker-compose up -d
           timeout 120 ../test/wait-for-containers.sh && sleep 60 # to be replaced by compose v2 --wait option
-          docker-compose logs traefik | grep -v 'Empty rule' | grep -v 'authelia@docker'
-          cat traefik/data/acme.json
 
       # requires auto detection of networking properties (hmac of default inteface, ...)
       #- name: Test dhcpd
