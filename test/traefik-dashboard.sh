@@ -18,6 +18,6 @@ api_expect "https://${traefik}/api/overview" -q '.http.middlewares.total==12'
 api_expect "https://${traefik}/api/overview" -q '.http.routers.total==13'
 api_expect "https://${traefik}/api/overview" -q '.udp.routers.total==1'
 api_expect "https://${traefik}/api/overview" -q '.udp.services.total==1'
-for entity in .{http,udp,tcp}.{services,middlewares,routers} do
+for entity in .{http,udp,tcp}.{services,middlewares,routers} ; do
     api_expect "https://${traefik}/api/overview" -q "${entity}.warnings==0 and ${entity}.errors==0"
 done
