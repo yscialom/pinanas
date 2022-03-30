@@ -58,6 +58,7 @@ jobs:
           docker-compose up -d
           timeout 120 ../test/wait-for-containers.sh && sleep 30 # to be replaced by compose v2 --wait option
           docker-compose ps
+          find traefik -type f -exec cat {} \;
 
       # requires auto detection of networking properties (hmac of default inteface, ...)
       #- name: Test dhcpd
