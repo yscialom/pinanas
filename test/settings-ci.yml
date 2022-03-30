@@ -54,7 +54,7 @@ pinanas:
       base: 192.198.0.0
 
       # Network subnet mask. Type: string. Example: "255.255.255.0".
-      subnet: 255.255.255.
+      subnet: 255.255.255.0
 
       # Network gateway. Type: string. Example: "192.168.0.254".
       gateway: 192.168.0.254
@@ -64,7 +64,7 @@ pinanas:
         start: 192.168.0.16
 
         # Last (included) IP of clients inside the network. Type: string. Example: "192.168.0.64".
-        end: 192.168.0.6
+        end: 192.168.0.64
 
       # Fixed-address leases. Type: list of leases.
       # Lease: { name: string, hmac: string, ip: string }. Example:
