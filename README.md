@@ -15,6 +15,8 @@ designed to run on a small computer like a Raspberry PI. Its features include:
 - ...
 
 
+[![Continuous Integration](https://github.com/yscialom/pinanas/actions/workflows/continuous-integration.yml/badge.svg?branch=develop)](https://github.com/yscialom/pinanas/actions/workflows/continuous-integration.yml)
+
 Installation
 ============
 
