@@ -1,6 +1,7 @@
 api:
   dashboard: true
   debug: true
+ping: {}
 entryPoints:
   http:
     address: ":80"
@@ -25,8 +26,7 @@ certificatesResolvers:
       storage: /acme.json
       {% if (pinanas.acme.stagging | default(false)) == true -%}
       caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
-      {% endif %}
-
+      {% endif -%}
       dnsChallenge:
         provider: {{ pinanas.network.dns.provider.name }}
         delayBeforeCHeck: 0

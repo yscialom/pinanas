@@ -70,6 +70,8 @@ services:
       - "traefik.http.routers.traefik.entrypoints=http"
       - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
       - "traefik.http.routers.traefik.rule=Host(`traefik-dashboard.{{ pinanas.domain }}`)"
+    healthcheck:
+      test: traefik healthcheck --ping
     restart: unless-stopped
 
   #
