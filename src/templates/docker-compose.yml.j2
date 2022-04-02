@@ -318,5 +318,5 @@ services:
     volumes:
       - ./nextcloud/config:/config
       - ./nextcloud/data:/data
-      - {{ nextcloud.ext_storage if nextcloud.ext_storage is not none else './nextcloud/media' }}:/media/{{ nextcloud.ext_storage if nextcloud.est_storage is not none }}
+      - ./nextcloud/media:/media
     restart: unless-stopped
