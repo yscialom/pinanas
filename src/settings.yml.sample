@@ -92,7 +92,7 @@ pinanas:
         api:
 
     # Send email; consult the documentation for your email provider.
-    # eg. for gmail: <https://support.google.com/a/answer/176600?hl=en>.
+    # eg. for gmail: <https://support.google.com/accounts/answer/185833>.
     smtp:
       # Server hostname. Type: string. Example: "smtp.gmail.com".
       host:
@@ -108,9 +108,3 @@ pinanas:
 
       # Send emails as. Type: string. Example: "contact@{{ pinanas.domain }}".
       sender:
-
-nextcloud:
-
-  # Path to external storage. Type: string. Example: ./media/ext_storage
-  ext_storage:
-
