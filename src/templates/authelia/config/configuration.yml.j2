@@ -138,7 +138,7 @@ identity_providers:
     clients:
       - id: nextcloud
         description: Nextcloud
-        secret: "{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[nextcloud].secret')[:16] }}"
+        secret: "{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[nextcloud].secret') }}"
         public: false
         authorization_policy: one_factor
         audience: []
