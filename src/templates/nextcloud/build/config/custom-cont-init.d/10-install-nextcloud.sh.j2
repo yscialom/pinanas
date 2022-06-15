@@ -17,9 +17,8 @@ function install_nextcloud () {
     --database-user=pinanas-nextcloud \
     "--database-pass={{ secrets.make_secret('pinanas.nextcloud.database_password') }}" \
     "--admin-pass={{ secrets.make_secret('pinanas.nextcloud.admin_password') }}" \
-    --data-dir=/data
-
-  echo "*** Nextcloud base application ready ***"
+    --data-dir=/data \
+  && echo "*** Nextcloud base application ready ***"
 }
 
 install_nextcloud

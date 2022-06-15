@@ -28,7 +28,7 @@ function install_user_oidc () {
   echo "*** Configuring Nextcloud user_oidc application ***"
   occ user_oidc:provider Authelia \
     --clientid="nextcloud" \
-    --clientsecret="{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[nextcloud].secret') }}" \
+    --clientsecret="{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[nextcloud].secret')[:16] }}" \
     --discoveryuri="https://auth.{{ pinanas.domain }}/.well-known/openid-configuration" \
     --scope="openid groups email profile" \
     --unique-uid=0 \
