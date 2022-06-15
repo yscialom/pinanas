@@ -262,7 +262,7 @@ services:
           - database
           - sql
     volumes:
-      - ./database/data:/var/lib/mysql
+      - ./database/data:/config
     environment:
       - TZ={{ pinanas.timezone }}
       - PUID={{ PUID }}
