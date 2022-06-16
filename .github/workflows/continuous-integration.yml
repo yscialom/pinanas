@@ -63,8 +63,8 @@ jobs:
       #  run: |
       #    offer=$(sudo dhclient -v 2>&1 | grep DHCPOFFER)
 
-      - name: Test traefik dashboard
+      - name: Test Traefik dashboard
         run: test/traefik-dashboard.sh
 
-      - name: Test traefik dashboard
-        run: cd dist && ../test/nextcloud.sh
+      - name: Test Nextcloud
+        run: cd dist && ../test/nextcloud-install.sh
