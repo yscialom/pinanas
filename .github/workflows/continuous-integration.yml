@@ -65,3 +65,6 @@ jobs:
 
       - name: Test traefik dashboard
         run: test/traefik-dashboard.sh
+
+      - name: Test traefik dashboard
+        run: cd dist && ../test/nextcloud.sh
