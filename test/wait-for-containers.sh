@@ -9,6 +9,7 @@ function wait_for_container {
     info "Waiting for container ${container_name} (id: ${container_id})"
     local waiting_done="false"
     while [[ ${waiting_done} != "true" ]] ; do
+        sleep ${sleep_time:-0}
         local container_state="$(docker inspect "${container_id}" --format '{{ .State.Status }}')"
         if [[ ${container_state} == "running" ]] ; then
             local health_available="$(docker inspect "${container_id}" --format '{{ .State.Health }}')"
@@ -25,7 +26,7 @@ function wait_for_container {
             cont "${container_name}: container_state=${container_state}"
             waiting_done="true"
         fi
-        sleep 5
+        local sleep_time=5 # secondes
     done
 }
 

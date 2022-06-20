@@ -30,7 +30,7 @@ function test_oidc () {
     local actual_discovery_endpoint=$(occ user_oidc:provider --output=json --ansi \
         | jq -r '.[] | select(.identifier=="Authelia") .discoveryEndpoint' \
         || true )
-        test_field "openid connect" "${actual_discovery_endpoint}" "${expected_discovery_endpoint}"
+        test_field "url" "openid connect" "${actual_discovery_endpoint}" "${expected_discovery_endpoint}"
 }
 
 test_install
