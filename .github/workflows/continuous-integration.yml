@@ -20,51 +20,57 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: "Prepare test environment: Disable DNS cache server to free 53/udp up"
-        run: |
-          sudo mkdir -p /etc/systemd/resolved.conf.d
-          echo -e '[Resolve]\nDNSStubListener=no' | sudo tee -a /etc/systemd/resolved.conf.d/disable-for-pinanas.conf
-          sudo systemctl force-reload systemd-resolved
-          sudo rm /etc/resolv.conf
-          sudo ln -s ../run/systemd/resolve/resolv.conf /etc/resolv.conf
+    - name: tmp1
+      run: |
+        docker version
+        docker ps
+        docker images
 
-      - name: "Prepare test environment: download Let's Encrypt's staging root certificate"
-        run: curl -o /tmp/letsencrypt-stg-root-x1.pem 'https://letsencrypt.org/certs/staging/letsencrypt-stg-root-x1.pem'
+      # - name: "Prepare test environment: Disable DNS cache server to free 53/udp up"
+      #   run: |
+      #     sudo mkdir -p /etc/systemd/resolved.conf.d
+      #     echo -e '[Resolve]\nDNSStubListener=no' | sudo tee -a /etc/systemd/resolved.conf.d/disable-for-pinanas.conf
+      #     sudo systemctl force-reload systemd-resolved
+      #     sudo rm /etc/resolv.conf
+      #     sudo ln -s ../run/systemd/resolve/resolv.conf /etc/resolv.conf
 
-      - name: Clone
-        uses: actions/checkout@v2
+      # - name: "Prepare test environment: download Let's Encrypt's staging root certificate"
+      #   run: curl -o /tmp/letsencrypt-stg-root-x1.pem 'https://letsencrypt.org/certs/staging/letsencrypt-stg-root-x1.pem'
 
-      - name: Prepare settings from secrets
-        env:
-          settings_pinanas_master_secret: "${{ secrets.settings_pinanas_master_secret }}"
-          settings_pinanas_network_dns_provider_api: "${{ secrets.settings_pinanas_network_dns_provider_api }}"
-          settings_pinanas_network_dns_provider_email: "${{ secrets.settings_pinanas_network_dns_provider_email }}"
-          settings_pinanas_network_dns_provider_name: "${{ secrets.settings_pinanas_network_dns_provider_name }}"
-          settings_pinanas_network_smtp_host: "${{ secrets.settings_pinanas_network_smtp_host }}"
-          settings_pinanas_network_smtp_password: "${{ secrets.settings_pinanas_network_smtp_password }}"
-          settings_pinanas_network_smtp_port: "${{ secrets.settings_pinanas_network_smtp_port }}"
-          settings_pinanas_network_smtp_sender: "${{ secrets.settings_pinanas_network_smtp_sender }}"
-          settings_pinanas_network_smtp_username: "${{ secrets.settings_pinanas_network_smtp_username }}"
-        run: |
-          mkdir dist
-          envsubst <test/settings-ci.yml >dist/settings.yml
+      # - name: Clone
+      #   uses: actions/checkout@v2
 
-      - name: Configure
-        run: cd dist && ../src/configure.sh
+      # - name: Prepare settings from secrets
+      #   env:
+      #     settings_pinanas_master_secret: "${{ secrets.settings_pinanas_master_secret }}"
+      #     settings_pinanas_network_dns_provider_api: "${{ secrets.settings_pinanas_network_dns_provider_api }}"
+      #     settings_pinanas_network_dns_provider_email: "${{ secrets.settings_pinanas_network_dns_provider_email }}"
+      #     settings_pinanas_network_dns_provider_name: "${{ secrets.settings_pinanas_network_dns_provider_name }}"
+      #     settings_pinanas_network_smtp_host: "${{ secrets.settings_pinanas_network_smtp_host }}"
+      #     settings_pinanas_network_smtp_password: "${{ secrets.settings_pinanas_network_smtp_password }}"
+      #     settings_pinanas_network_smtp_port: "${{ secrets.settings_pinanas_network_smtp_port }}"
+      #     settings_pinanas_network_smtp_sender: "${{ secrets.settings_pinanas_network_smtp_sender }}"
+      #     settings_pinanas_network_smtp_username: "${{ secrets.settings_pinanas_network_smtp_username }}"
+      #   run: |
+      #     mkdir dist
+      #     envsubst <test/settings-ci.yml >dist/settings.yml
 
-      - name: Start
-        run: |
-          cd dist
-          docker-compose up -d
-          timeout 120 ../test/wait-for-containers.sh && sleep 120 # to be replaced by compose v2 --wait option
+      # - name: Configure
+      #   run: cd dist && ../src/configure.sh
 
-      # requires auto detection of networking properties (hmac of default inteface, ...)
-      #- name: Test dhcpd
-      #  run: |
-      #    offer=$(sudo dhclient -v 2>&1 | grep DHCPOFFER)
+      # - name: Start
+      #   run: |
+      #     cd dist
+      #     docker-compose up -d
+      #     timeout 120 ../test/wait-for-containers.sh && sleep 120 # to be replaced by compose v2 --wait option
 
-      - name: Test Traefik dashboard
-        run: test/traefik-dashboard.sh
+      # # requires auto detection of networking properties (hmac of default inteface, ...)
+      # #- name: Test dhcpd
+      # #  run: |
+      # #    offer=$(sudo dhclient -v 2>&1 | grep DHCPOFFER)
 
-      - name: Test Nextcloud
-        run: cd dist && ../test/nextcloud-install.sh
+      # - name: Test Traefik dashboard
+      #   run: test/traefik-dashboard.sh dist
+
+      # - name: Test Nextcloud
+      #   run: test/nextcloud-install.sh dist
