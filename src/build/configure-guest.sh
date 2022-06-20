@@ -36,18 +36,18 @@ prepare () {
 
     . /pinanas/venv/bin/activate
     python3 -m pip install --upgrade pip
-    pip3 install ansible==4.2
+    pip3 install ansible==5.6
 
     ## Apply private configuration
-    # Create playbook file
-    playbook=/pinanas/venv/ansible/playbook.yml
-    mkdir -p "$(dirname "${playbook}")"
+    # Create playbook directory
+    playbook_dir="/pinanas/venv/ansible"
+    mkdir -p "${playbook_dir}"
 
     # Install plugins
     plugin_files="\
     :/pinanas/src/utils/ansible_passwords.py\
     "
-    plugins_dir="$(dirname ${playbook})/filter_plugins"
+    plugins_dir="${playbook_dir}/filter_plugins"
     mkdir -p "${plugins_dir}"
 
     echo "${plugin_files}" | tr : '\n' | while read -r file ; do
@@ -58,6 +58,8 @@ prepare () {
     done
 
     ## Playbooks
+    playbook="${playbook_dir}/playbook.yml"
+
     # Playbook header
     cat > ${playbook} <<EOH
 ---
@@ -70,7 +72,7 @@ prepare () {
       path: "/pinanas/dist/{{ item[0] }}/{{ item[1] }}"
       state: directory
       mode: 0755
-    loop: "{{ ['dhcpd', 'traefik', 'authelia', 'adguardhome', 'heimdall', 'nextcloud'] | product(['config', 'data']) | list }}"
+    loop: "{{ ['dhcpd', 'traefik', 'authelia', 'adguardhome', 'heimdall', 'database', 'nextcloud'] | product(['config', 'data']) | list }}"
   - name: ensure traefik/acme.json exists
     file:
       path: "/pinanas/dist/traefik/data/acme.json"
@@ -96,6 +98,9 @@ EOH
 
 EOT
     done
+
+    # Make Jinja find secrets.j2
+    ln -fs /pinanas/src/utils/secrets.j2 ${playbook_dir}/.
 }
 
 

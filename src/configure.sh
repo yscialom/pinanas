@@ -26,8 +26,8 @@ configure () {
         -v "${PINANAS_DIST}":/pinanas/dist \
         -v "${PINANAS_VENV}":/pinanas/venv \
         -v /var/run/docker.sock:/var/run/docker.sock \
-        ${tag}
-
+        ${tag} \
+        "$@"
 }
 
 report () {
@@ -47,5 +47,5 @@ report () {
     fi
 }
 
-configure
+configure "$@"|| exit $?
 report
