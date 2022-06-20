@@ -8,7 +8,7 @@ domain="pinanas-ci.scialom.org"
 authelia="auth.${domain}"
 
 function occ () {
-    docker exec -u1000 nextcloud /config/www/nextcloud/occ "$@"
+    docker exec -u$(id -u) nextcloud /config/www/nextcloud/occ "$@"
 }
 
 function test_install () {
