@@ -23,6 +23,8 @@ jobs:
     - name: tmp1
       run: |
         docker run -d ubuntu tail -f /dev/null
+    - name: tmp2
+      run: |
         docker ps
 
       # - name: "Prepare test environment: Disable DNS cache server to free 53/udp up"
