@@ -1,0 +1,16 @@
+#!/bin/bash
+
+[[ -f /config/installed ]] && exit
+
+function add_to_crontab () {
+    local user="${1}"
+    local period="${2}"
+    shift ; shift
+    local command="${@}"
+
+    local cronline="$(echo -e "${period}\t${command}")"
+    ( crontab -u${user} -l ; echo "${cronline}" ) | crontab -u${user} -
+}
+
+function daily () { echo -e "0\t${1:-0}\t*\t*\t*" ; }
+add_to_crontab root "$(daily 3)" "s6-setuidgid abc /config/www/nextcloud/occ files:scan --all"
