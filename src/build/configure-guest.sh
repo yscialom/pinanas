@@ -66,6 +66,7 @@ prepare () {
 - hosts: localhost
   gather_facts: yes
   tasks:
+  - include_vars: /pinanas/src/default-settings.yml
   - include_vars: /pinanas/dist/settings.yml
   - name: ensure application directories exist
     file:
