@@ -8,9 +8,9 @@ function add_to_crontab () {
     shift ; shift
     local command="${@}"
 
-    local cronline="${period}\t${command}"
-    ( crontab -u${user} -l ; echo "${line}" ) | crontab -u${user} -
+    local cronline="$(echo -e "${period}\t${command}")"
+    ( crontab -u${user} -l ; echo "${cronline}" ) | crontab -u${user} -
 }
 
-function daily () { echo "0\t${1:-0}\t*\t*\t*" ; }
+function daily () { echo -e "0\t${1:-0}\t*\t*\t*" ; }
 add_to_crontab root "$(daily 3)" "s6-setuidgid abc /config/www/nextcloud/occ files:scan --all"
