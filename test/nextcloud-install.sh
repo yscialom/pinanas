@@ -7,8 +7,13 @@ source "${TEST_DIR}/web-functions.sh"
 domain="pinanas-ci.scialom.org"
 authelia="auth.${domain}"
 
+function cmd () {
+    local user="${1}" ; shift
+    docker exec -u "${user}" nextcloud "$@"
+}
+
 function occ () {
-    docker exec -u$(id -u) nextcloud /config/www/nextcloud/occ "$@"
+    cmd $(id -u) /config/www/nextcloud/occ "$@"
 }
 
 function test_install () {
@@ -33,5 +38,14 @@ function test_oidc () {
         test_field "url" "openid connect" "${actual_discovery_endpoint}" "${expected_discovery_endpoint}"
 }
 
+function test_cron () {
+    function croncount () {
+        pattern="${1}"
+        cmd 0 crontab -l | grep -Ec "${pattern}"
+    }
+    test_field "cron:files:scan" "crontab -l" $(croncount "files:scan --all") 1
+}
+
 test_install
 test_oidc
+test_cron
