@@ -16,12 +16,12 @@ pinanas:
       gateway: {{ ansible_default_ipv4.gateway }}
 
       range:
-        {% set netrange = [ ansible_default_ipv4.network, ansible_default_ipv4.netmask ] | join('/') | ansible.netcommon.ipaddr('net') %}
+        __range: {{ [ ansible_default_ipv4.network, ansible_default_ipv4.netmask ] | join('/') | ansible.netcommon.ipaddr('net') }}
         # First (included) IP of clients inside the network. Type: string. Example: "192.168.0.16".
-        start: {{ netrange | ansible.netcommon.ipaddr('1') | ansible.netcommon.ipaddr('ip') }}
+        start: {{ __range | ansible.netcommon.ipaddr('1') | ansible.netcommon.ipaddr('ip') }}
 
         # Last (included) IP of clients inside the network. Type: string. Example: "192.168.0.64".
-        end: {{ netrange | ansible.netcommon.ipaddr('-1') | ansible.netcommon.ipaddr('ip') }}
+        end: {{ __range | ansible.netcommon.ipaddr('-1') | ansible.netcommon.ipaddr('ip') }}
 
     dns:
       # Upstream DNS servers. Type: list of strings. Example:
