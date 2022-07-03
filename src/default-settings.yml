@@ -16,7 +16,7 @@ pinanas:
       gateway: {{ ansible_default_ipv4.gateway }}
 
       range:
-        __range: {{ [ ansible_default_ipv4.network, ansible_default_ipv4.netmask ] | join('/') | ansible.netcommon.ipaddr('net') }}
+        __range: "{{ [ ansible_default_ipv4.network, ansible_default_ipv4.netmask ] | join('/') | ansible.netcommon.ipaddr('net') }}""
         # First (included) IP of clients inside the network. Type: string. Example: "192.168.0.16".
         start: {{ __range | ansible.netcommon.ipaddr('1') | ansible.netcommon.ipaddr('ip') }}
 
