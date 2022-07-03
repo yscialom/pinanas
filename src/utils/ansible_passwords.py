@@ -15,7 +15,7 @@ ENCODING='utf-8'
 class Authelia:
     def key(self, opt=''):
         try:
-            _ = self.__run(['docker', 'run', '--rm', '-u', '{}'.format(os.getuid()), '-v', 'pinanas-config:/pinanas-config', 'authelia/authelia:4', 'authelia',
+            _ = self.__run(['docker', 'run', '--rm', '-u', '{}'.format(os.getuid()), '-v', 'pinanas-config:/pinanas-config', 'authelia/authelia:4.35', 'authelia',
                 'rsa', 'generate', '--dir', '/pinanas-config/keys'])
             with open('/pinanas-config/keys/key.pem') as keyfile:
                 key = keyfile.read()
