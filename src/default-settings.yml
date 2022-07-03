@@ -3,17 +3,17 @@ pinanas:
     # MAC address of PiNana's host network card. Type: string. Example: "01:02:03:04:05:06".
     hmac: "{{ ansible_default_ipv4.macaddress }}"
     # Desired IP address of PiNanas's host. Type: string. Example "192.168.0.1".
-    ip: {{ ansible_default_ipv4.address }}
+    ip: "{{ ansible_default_ipv4.address }}"
 
     dhcp:
       # Base IP for the network. Type: string. Example: "192.168.0.0".
-      base: {{ ansible_default_ipv4.network }}
+      base: "{{ ansible_default_ipv4.network }}"
 
       # Network subnet mask. Type: string. Example: "255.255.255.0".
-      subnet: {{ ansible_default_ipv4.netmask }}
+      subnet: "{{ ansible_default_ipv4.netmask }}"
 
       # Network gateway. Type: string. Example: "192.168.0.254".
-      gateway: {{ ansible_default_ipv4.gateway }}
+      gateway: "{{ ansible_default_ipv4.gateway }}"
 
       range:
         __range: "{{ [ ansible_default_ipv4.network, ansible_default_ipv4.netmask ] | join('/') | ansible.netcommon.ipaddr('net') }}"
@@ -27,4 +27,4 @@ pinanas:
       # Upstream DNS servers. Type: list of strings. Example:
       # - 1.1.1.1
       # - 1.0.0.1
-      upstreams: {{ ansible_dns.nameservers }}
+      upstreams: "{{ ansible_dns.nameservers }}"
