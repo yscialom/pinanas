@@ -60,7 +60,7 @@ pinanas:
         # Last (included) IP of clients inside the network. Type: string. Default: auto discovery. Example: "192.168.0.64".
         #end:
 
-      # Fixed-address leases. Type: list of leases.
+      # Fixed-address leases. Type: list of leases. Optional, default: [].
       # Lease: { name: string, hmac: string, ip: string }. Example:
       #  - name: "DeviceName"
       #    hmac: "01:23:45:67:89:ab"
