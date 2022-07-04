@@ -31,6 +31,9 @@ jobs:
       - name: "Prepare test environment: download Let's Encrypt's staging root certificate"
         run: curl -o /tmp/letsencrypt-stg-root-x1.pem 'https://letsencrypt.org/certs/staging/letsencrypt-stg-root-x1.pem'
 
+      - name: "Prepare test environment: install ansible ipaddr's dependency: python3-netaddr"
+        run: sudo apt install python3-netaddr
+
       - name: Clone
         uses: actions/checkout@v2
 

@@ -68,10 +68,10 @@ prepare () {
   tasks:
   - include_vars: /pinanas/src/default-settings.yml
   - include_vars: /pinanas/dist/settings.yml
-  - name: Combine default + custom
+  - name: combine default + custom
     set_fact:
       pinanas: "{{ pinanas | combine(pinanas_default) }}"
-  - name: Print settings
+  - name: print settings
     debug:
       var: pinanas
   - name: ensure application directories exist
