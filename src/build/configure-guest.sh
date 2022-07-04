@@ -71,9 +71,6 @@ prepare () {
   - name: combine default + custom
     set_fact:
       pinanas: "{{ pinanas | combine(pinanas_default, recursive=True) }}"
-  - name: print settings
-    debug:
-      var: pinanas
   - name: ensure application directories exist
     file:
       path: "/pinanas/dist/{{ item[0] }}/{{ item[1] }}"
