@@ -59,9 +59,6 @@ jobs:
           docker-compose up -d
           timeout 120 ../test/wait-for-containers.sh && sleep 120 # to be replaced by compose v2 --wait option
 
-      - name: Test dhcpd
-        run: test/dhcpd/dhcpd.sh dist
-
       - name: Test Traefik dashboard
         run: test/traefik-dashboard.sh dist
 
