@@ -35,33 +35,32 @@ pinanas:
 
   acme:
     # Use Let's Encrypt stagging servers. Type: boolean. Optional, default: false. Example: true.
-    stagging: false
+    #stagging:
 
   network:
-    # MAC address of PiNana's host network card. Type: string. Example: "01:02:03:04:05:06".
-    hmac:
-    # Desired IP address of PiNanas's host. Type: string. Example "192.168.0.1".
-    ip:
+    # MAC address of PiNana's host network card. Type: string. Default: auto discovery. Example: "01:02:03:04:05:06".
+    #hmac:
+    # Desired IP address of PiNanas's host. Type: string. Default: auto discovery. Example "192.168.0.1".
+    #ip:
 
     dhcp:
+      # Base IP for the network. Type: string. Default: auto discovery. Example: "192.168.0.0".
+      #base:
 
-      # Base IP for the network. Type: string. Example: "192.168.0.0".
-      base:
+      # Network subnet mask. Type: string. Default: auto discovery. Example: "255.255.255.0".
+      #subnet:
 
-      # Network subnet mask. Type: string. Example: "255.255.255.0".
-      subnet:
-
-      # Network gateway. Type: string. Example: "192.168.0.254".
-      gateway:
+      # Network gateway. Type: string. Default: auto discovery. Example: "192.168.0.254".
+      #gateway:
 
       range:
-        # First (included) IP of clients inside the network. Type: string. Example: "192.168.0.16".
-        start:
+        # First (included) IP of clients inside the network. Type: string. Default: auto discovery. Example: "192.168.0.16".
+        #start:
 
-        # Last (included) IP of clients inside the network. Type: string. Example: "192.168.0.64".
-        end:
+        # Last (included) IP of clients inside the network. Type: string. Default: auto discovery. Example: "192.168.0.64".
+        #end:
 
-      # Fixed-address leases. Type: list of leases.
+      # Fixed-address leases. Type: list of leases. Optional, default: [].
       # Lease: { name: string, hmac: string, ip: string }. Example:
       #  - name: "DeviceName"
       #    hmac: "01:23:45:67:89:ab"
@@ -69,10 +68,10 @@ pinanas:
       fixed_address_leases:
 
     dns:
-      # Upstream DNS servers. Type: list of strings. Example:
+      # Upstream DNS servers. Type: list of strings. Default: auto discovery. Example:
       # - 1.1.1.1
       # - 1.0.0.1
-      upstreams:
+      #upstreams:
 
       # PiNanas DNS provider.
       # See traefik documentation for your provider at <https://doc.traefik.io/traefik/https/acme/#providers>.

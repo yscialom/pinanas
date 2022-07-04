@@ -46,7 +46,7 @@ Download
 ### Via git
 From your PiNanas host, anywhere:
 ```bash
-git clone --depth 1 --branch develop https://github.com/yscialom/pinanas.git
+git clone --depth 1 --branch master https://github.com/yscialom/pinanas.git
 ```
 
 ### Direct download

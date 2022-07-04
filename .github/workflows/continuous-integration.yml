@@ -17,6 +17,7 @@ on:
 # - cache?
 jobs:
   build:
+    name: "Build & Test"
     runs-on: ubuntu-latest
 
     steps:
@@ -57,11 +58,6 @@ jobs:
           cd dist
           docker-compose up -d
           timeout 120 ../test/wait-for-containers.sh && sleep 120 # to be replaced by compose v2 --wait option
-
-      # requires auto detection of networking properties (hmac of default inteface, ...)
-      #- name: Test dhcpd
-      #  run: |
-      #    offer=$(sudo dhclient -v 2>&1 | grep DHCPOFFER)
 
       - name: Test Traefik dashboard
         run: test/traefik-dashboard.sh dist

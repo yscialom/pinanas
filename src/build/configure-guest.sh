@@ -66,7 +66,11 @@ prepare () {
 - hosts: localhost
   gather_facts: yes
   tasks:
+  - include_vars: /pinanas/src/default-settings.yml
   - include_vars: /pinanas/dist/settings.yml
+  - name: combine default + custom
+    set_fact:
+      pinanas: "{{ pinanas | combine(pinanas_default, recursive=True) }}"
   - name: ensure application directories exist
     file:
       path: "/pinanas/dist/{{ item[0] }}/{{ item[1] }}"
