@@ -17,6 +17,7 @@ on:
 # - cache?
 jobs:
   build:
+    name: "Build & Test"
     runs-on: ubuntu-latest
 
     steps:

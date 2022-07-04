@@ -70,7 +70,7 @@ prepare () {
   - include_vars: /pinanas/dist/settings.yml
   - name: combine default + custom
     set_fact:
-      pinanas: "{{ pinanas | combine(pinanas_default) }}"
+      pinanas: "{{ pinanas | combine(pinanas_default, recursive=True) }}"
   - name: print settings
     debug:
       var: pinanas
