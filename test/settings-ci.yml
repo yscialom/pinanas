@@ -54,7 +54,7 @@ pinanas:
         - name: DeviceName
           hmac: "01:23:45:67:89:ab"
           ip: 192.168.0.42
-
+    dns:
       # PiNanas DNS provider.
       # See traefik documentation for your provider at <https://doc.traefik.io/traefik/https/acme/#providers>.
       provider:
