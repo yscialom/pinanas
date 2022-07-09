@@ -14,3 +14,5 @@ function add_to_crontab () {
 
 function daily () { echo -e "0\t${1:-0}\t*\t*\t*" ; }
 add_to_crontab root "$(daily 3)" "s6-setuidgid abc /config/www/nextcloud/occ files:scan --all"
+
+chown abc:abc /config/crontabs
