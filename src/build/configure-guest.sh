@@ -141,6 +141,8 @@ clean () {
     cat > "/pinanas/dist/distclean.sh" <<EOF
 #!/bin/bash
 rm -rf -- "${PINANAS_VENV}"
+docker rmi pinanas-config
+docker images -f dangling=true -q | xargs docker rmi
 rm -- \$0
 EOF
     chmod +x "/pinanas/dist/distclean.sh"
