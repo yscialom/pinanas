@@ -3,4 +3,4 @@
 [[ -f /config/www/nextcloud/config/installed ]] && exit
 
 echo "*** Nextcloud installation complete ***"
-su abc -c touch /config/www/nextcloud/config/installed
+sudo -u abc touch /config/www/nextcloud/config/installed
