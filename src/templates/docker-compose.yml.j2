@@ -314,7 +314,7 @@ services:
       - "traefik.http.middlewares.hsts.headers.stsseconds=31536000"
       - "traefik.http.routers.nextcloud-secure.middlewares=hsts"
     volumes:
-      - /nextcloud/data/crontabs:/config/crontabs
+      - ./nextcloud/data/crontabs:/config/crontabs
       - ./nextcloud/data/generated-config:/config/www/nextcloud/config
       - ./nextcloud/data/files:/data
     restart: unless-stopped

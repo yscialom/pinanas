@@ -1,7 +1,7 @@
 {%- import 'secrets.j2' as secrets with context -%}
 #!/bin/bash
 
-[[ -f /config/installed ]] && exit
+[[ -f /config/www/nextcloud/config/installed ]] && exit
 
 function occ () {
     sudo -u  "#${PUID}" /config/www/nextcloud/occ "$@"
