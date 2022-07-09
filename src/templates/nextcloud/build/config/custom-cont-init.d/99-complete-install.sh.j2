@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[[ -f /config/installed ]] && exit
+[[ -f /config/www/nextcloud/config/installed ]] && exit
 
 echo "*** Nextcloud installation complete ***"
-touch /config/installed
+sudo -u abc touch /config/www/nextcloud/config/installed

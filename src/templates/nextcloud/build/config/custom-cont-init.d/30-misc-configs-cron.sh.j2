@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[[ -f /config/installed ]] && exit
+[[ -f /config/www/nextcloud/config/installed ]] && exit
 
 function add_to_crontab () {
     local user="${1}"
@@ -14,3 +14,5 @@ function add_to_crontab () {
 
 function daily () { echo -e "0\t${1:-0}\t*\t*\t*" ; }
 add_to_crontab root "$(daily 3)" "s6-setuidgid abc /config/www/nextcloud/occ files:scan --all"
+
+chown --recursive abc:abc /config/crontabs
