@@ -240,7 +240,7 @@ services:
       - "traefik.http.routers.heimdall.rule=Host(`apps.{{ pinanas.domain }}`)"
       - "traefik.http.services.heimdall.loadbalancer.server.port=80"
     volumes:
-      - ./heimdall/config:/config
+      - ./heimdall/data:/config/www
     restart: unless-stopped
 
 
