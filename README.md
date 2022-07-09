@@ -43,15 +43,15 @@ During installation or operation, PiNanas requires:
 Download
 --------
 
+### Direct download
+Go and donwload our [latest release](https://github.com/yscialom/pinanas/releases) Source code.
+Unzip it anywhere.
+
 ### Via git
 From your PiNanas host, anywhere:
 ```bash
 git clone --depth 1 --branch master https://github.com/yscialom/pinanas.git
 ```
-
-### Direct download
-Go and donwload our [latest release](https://github.com/yscialom/pinanas/releases) Source code.
-Unzip it anywhere.
 
 
 Settings
@@ -60,6 +60,7 @@ Settings
 Create the installation directory for PiNanas, e.g. in `/opt/pinanas` and go there:
 ```bash
 sudo mkdir -p /opt/pinanas
+sudo chown $(id -un):$(id -gn)
 cd /opt/pinanas
 ```
 
