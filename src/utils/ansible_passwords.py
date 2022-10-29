@@ -50,7 +50,7 @@ class Authelia:
 
     def __error(self, command, e=None):
         redacted_command_string = ' '.join(command[:-1]+['*****'])
-        formatted_error_string = e.replace(command[-1], '*****') if e else ""
+        formatted_error_string = e.replace(str(command[-1]), '*****') if e else ""
         raise AnsibleFilterError("Error running '{}'; msg: '{}'.".format(redacted_command_string, formatted_error_string))
 
 
