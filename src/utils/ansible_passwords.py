@@ -46,7 +46,7 @@ class Authelia:
         matches = regex.match(authelia_stdout)
         if not matches:
             return self.__error(command, "Unable to extract ciphered password")
-        return matches.group(1)
+        return matches.group(2)
 
     def __error(self, command, e=None):
         redacted_command_string = ' '.join(command[:-1]+['*****'])
