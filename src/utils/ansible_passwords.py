@@ -24,9 +24,9 @@ class Authelia:
         return self.__transform(key, opt)
 
     def password(self, cleartext):
-        stdout = self.__run(['docker', 'run', '--rm', 'authelia/authelia:4', 'authelia',
-            'hash-password', cleartext])
-        return self.__extract_ciphertext(stdout)
+        command = ['docker', 'run', '--rm', 'authelia/authelia:4', 'authelia', 'hash-password', cleartext]
+        stdout = self.__run(command)
+        return self.__extract_ciphertext(command, stdout)
 
     def __run(self, command):
         try:
@@ -41,11 +41,11 @@ class Authelia:
         key_lines = key.splitlines()
         return key_lines[0] + '\n' + re.sub(r'^', ' '*indent, '\n'.join(key_lines[1:]), flags=re.MULTILINE)
 
-    def __extract_ciphertext(self, authelia_stdout):
+    def __extract_ciphertext(self, command, authelia_stdout):
         regex = re.compile('^Password hash: ([0-9A-Za-z,$/=+-]+)$')
         matches = regex.match(authelia_stdout)
         if not matches:
-            return self.__error("Unable to extract ciphered password")
+            return self.__error(command, "Unable to extract ciphered password")
         return matches.group(1)
 
     def __error(self, command, e=None):
