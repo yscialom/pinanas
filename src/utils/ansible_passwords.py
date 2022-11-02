@@ -24,9 +24,9 @@ class Authelia:
         return self.__transform(key, opt)
 
     def password(self, cleartext):
-        stdout = self.__run(['docker', 'run', '--rm', 'authelia/authelia:4', 'authelia',
-            'hash-password', cleartext])
-        return self.__extract_ciphertext(stdout)
+        command = ['docker', 'run', '--rm', 'authelia/authelia:4', 'authelia', 'hash-password', '--', cleartext]
+        stdout = self.__run(command)
+        return self.__extract_ciphertext(command, stdout)
 
     def __run(self, command):
         try:
@@ -41,16 +41,16 @@ class Authelia:
         key_lines = key.splitlines()
         return key_lines[0] + '\n' + re.sub(r'^', ' '*indent, '\n'.join(key_lines[1:]), flags=re.MULTILINE)
 
-    def __extract_ciphertext(self, authelia_stdout):
-        regex = re.compile('^Password hash: ([0-9A-Za-z,$/=+-]+)$')
+    def __extract_ciphertext(self, command, authelia_stdout):
+        regex = re.compile('^(Password hash|Digest): ([0-9A-Za-z,$/=+-]+)$')
         matches = regex.match(authelia_stdout)
         if not matches:
-            return self.__error("Unable to extract ciphered password")
-        return matches.group(1)
+            return self.__error(command, "Unable to extract ciphered password")
+        return matches.group(2)
 
     def __error(self, command, e=None):
         redacted_command_string = ' '.join(command[:-1]+['*****'])
-        formatted_error_string = e.replace(command[-1], '*****') if e else ""
+        formatted_error_string = e.replace(str(command[-1]), '*****') if e else ""
         raise AnsibleFilterError("Error running '{}'; msg: '{}'.".format(redacted_command_string, formatted_error_string))
 
 
