@@ -18,6 +18,7 @@ configure () {
     docker volume create pinanas-config >/dev/null # used for inter-container communication
     docker run \
         --rm \
+        --net host `# necessary to detect network properties from default settings` \
         -e PINANAS_SRC="${PINANAS_SRC}" \
         -e PINANAS_DIST="${PINANAS_DIST}" \
         -e PINANAS_VENV="${PINANAS_VENV}" \
