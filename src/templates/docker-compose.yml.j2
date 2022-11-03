@@ -261,8 +261,6 @@ services:
           - mysql
           - database
           - sql
-    volumes:
-      - ./database/data:/config/database
     environment:
       - TZ={{ pinanas.timezone }}
       - PUID={{ PUID }}
@@ -271,6 +269,10 @@ services:
       - MYSQL_USER=pinanas-nextcloud
       - "MYSQL_PASSWORD={{ secrets.make_secret('pinanas.nextcloud.database_password') }}"
       - MYSQL_DATABASE=pinanas-nextcloud
+    volumes:
+      - ./database/data/databases:/config/databases
+      - ./database/data/log:/config/log
+      - ./database/config:/config
     restart: unless-stopped
 
   nextcloud:
