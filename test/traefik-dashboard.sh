@@ -8,7 +8,7 @@ domain="pinanas-ci.scialom.org"
 traefik="traefik-dashboard.${domain}"
 
 # http -> https
-web_expect "http://${traefik}"  -c 302 -r "https://${traefik}/"
+web_expect "http://${traefik}"  -c 301 -r "https://${traefik}/"
 web_expect "https://${traefik}" -c 302 -r "https://${traefik}/dashboard/"
 web_expect "https://${traefik}/dashboard/" -c 200
 

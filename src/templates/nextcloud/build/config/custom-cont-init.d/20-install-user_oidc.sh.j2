@@ -32,6 +32,7 @@ function install_user_oidc () {
     --discoveryuri="https://auth.{{ pinanas.domain }}/.well-known/openid-configuration" \
     --scope="openid groups email profile" \
     --unique-uid=0 \
+    --mapping-uid="preferred_username" \
     --no-interaction
 
   echo "*** Nextcloud user_oidc application ready ***"
