@@ -12,7 +12,8 @@ RUN apk add --no-cache \
     gcc \
     musl-dev \
     libffi-dev \
-    docker-cli
+    docker-cli \
+    zip
 
 RUN mkdir -m 777 /pinanas-config
 
