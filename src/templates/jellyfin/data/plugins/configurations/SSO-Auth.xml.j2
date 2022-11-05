@@ -11,7 +11,7 @@
         <PluginConfiguration>
           <OidEndpoint>https://auth.{{ pinanas.domain }}/.well-known/openid-configuration</OidEndpoint>
           <OidClientId>jellyfin</OidClientId>
-          <OidSecret>{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[jellyfin].secret')[:16] }}</OidSecret>
+          <OidSecret>{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[jellyfin].secret') }}</OidSecret>
           <Enabled>true</Enabled>
           <EnableAuthorization>true</EnableAuthorization>
           <EnableAllFolders>true</EnableAllFolders>

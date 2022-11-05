@@ -166,7 +166,7 @@ identity_providers:
         userinfo_signing_algorithm: none
       - id: jellyfin
         description: Jellyfin
-        secret: "{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[jellyfin].secret')[:16] }}"
+        secret: "{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[jellyfin].secret') }}"
         authorization_policy: one_factor
         audience: []
         scopes:
