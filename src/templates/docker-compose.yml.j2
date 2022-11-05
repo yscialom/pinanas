@@ -357,7 +357,7 @@ services:
     volumes:
       - ./jellyfin/config/branding.xml:/config/branding.xml
       - ./jellyfin/config/libraries:/config/data/root
-      - ./jellyfin/data:/config/data
       - ./jellyfin/data/tvshows:/data/tvshows
       - ./jellyfin/data/movies:/data/movies
+      - ./jellyfin/data:/config/data
     restart: unless-stopped

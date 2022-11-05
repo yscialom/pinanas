@@ -8,3 +8,11 @@
       src: https://github.com/9p4/jellyfin-plugin-sso/releases/download/v3.4.0.2/sso-authentication_3.4.0.0.zip
       dest: "/pinanas/dist/jellyfin/data/plugins/SSO Authentication_3.4.0.0"
       remote_src: yes
+  - name: Ensure libraries exist
+    file:
+      path: "/pinanas/dist/jellyfin/data/{{ item }}"
+      state: directory
+    loop:
+      - movies
+      - tvshows
+rue Blood - S01E01 - Strange Love
