@@ -12,7 +12,11 @@ RUN apk add --no-cache \
     gcc \
     musl-dev \
     libffi-dev \
-    docker-cli
+    docker-cli \
+    openssl-dev \
+    build-base \
+    rust \
+    cargo
 
 RUN mkdir -m 777 /pinanas-config
 
