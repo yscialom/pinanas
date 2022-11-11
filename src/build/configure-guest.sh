@@ -70,7 +70,7 @@ prepare () {
   - include_vars: /pinanas/dist/settings.yml
   - name: combine default + custom
     set_fact:
-      pinanas: "{{ pinanas | combine(pinanas_default, recursive=True) }}"
+      pinanas: "{{ pinanas_default | combine(pinanas, recursive=True) }}"
   - name: ensure application directories exist
     file:
       path: "/pinanas/dist/{{ item[0] }}/{{ item[1] }}"
