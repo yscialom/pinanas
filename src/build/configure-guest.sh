@@ -16,7 +16,7 @@ check () {
     if [ "${1}" = "--force" ] ; then
         shift
         OPT_FORCE=true
-        rm -rf -- /pianans/venv
+        rm -rf -- /pinanas/venv
     fi
 }
 
