@@ -27,7 +27,7 @@ pinanas:
   #   fullname: "John D. Doe"
   users:
     - login: johndoe
-      password: "${settings_johndoe_password}"
+      password: "${settings_pinanas_johndoe_password}"
       email: johndoe@example.com
       fullname: "John Doe (JD)"
 
