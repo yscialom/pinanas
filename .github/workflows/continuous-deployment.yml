@@ -22,25 +22,26 @@ jobs:
           known_hosts: unnecessary
 
       - name: Clean workspace
-        run: ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "rm -rf ~/pinanas" # TODO: add to known_hosts
+        run: ssh -p 8022 -i TODO continuous-deployment@${{ secrets.SSH_HOST }} -C "rm -rf ~/pinanas" # TODO: add to known_hosts
 
       - name: Stop previous PiNanas
-        run: ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "[[ -d ~/dist ]] && cd dist && docker-compose down"
+        run: ssh -p 8022 -i TODO continuous-deployment@${{ secrets.SSH_HOST }} -C "[[ -d ~/dist ]] && cd dist && docker-compose down"
 
       - name: Remove docker containers, volumes, networks and images
         run: |
-          ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "docker container prune --force"
-          ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "docker volume prune --force"
-          ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "docker network prune --force"
-          ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "docker image prune --force --all"
+          ssh -p 8022 -i TODO continuous-deployment@${{ secrets.SSH_HOST }} -C "docker container prune --force"
+          ssh -p 8022 -i TODO continuous-deployment@${{ secrets.SSH_HOST }} -C "docker volume prune --force"
+          ssh -p 8022 -i TODO continuous-deployment@${{ secrets.SSH_HOST }} -C "docker network prune --force"
+          ssh -p 8022 -i TODO continuous-deployment@${{ secrets.SSH_HOST }} -C "docker image prune --force --all"
 
       - name: Remove installation directory
-        run: ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "rm -rf ~/dist" # TODO: add sudo rule for root-owned files?
+        run: ssh -p 8022 -i TODO continuous-deployment@${{ secrets.SSH_HOST }} -C "rm -rf ~/dist" # TODO: add sudo rule for root-owned files?
 
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     environment: uat
+    needs: undeploy
     steps:
       - name: Adding Known Hosts
         run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
@@ -54,15 +55,16 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Recreate directories
-        run: ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "mkdir -p ~/pinanas ~/dist"
+        run: ssh -p 8022 -i TODO continuous-deployment@${{ secrets.SSH_HOST }} -C "mkdir -p ~/pinanas ~/dist"
 
       - name: Deploy to PiNanas UAT"
-        run: scp -P 8022 -i TODO -r * continuous-deployment@ssh.uat.home.scialom.org:~/pinanas/.
+        run: scp -P 8022 -i TODO -r * continuous-deployment@${{ secrets.SSH_HOST }}:~/pinanas/.
 
   configure:
     name: Configure
     runs-on: ubuntu-latest
     environment: uat
+    needs: deploy
     steps:
       - name: Adding Known Hosts
         run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
@@ -85,19 +87,20 @@ jobs:
           settings_pinanas_network_smtp_sender: "${{ secrets.settings_pinanas_network_smtp_sender }}"
           settings_pinanas_network_smtp_username: "${{ secrets.settings_pinanas_network_smtp_username }}"
         run: |
-          env | grep ^settings_pinanas_ | ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "cat >~/.ssh/environment"
-          ssh -p 8022 -i github continuous-deployment@ssh.uat.home.scialom.org -C "envsubst <~/pinanas/test/settings-cd.yml >~/dist/settings.yml"
+          env | grep ^settings_pinanas_ | ssh -p 8022 -i TODO continuous-deployment@${{ secrets.SSH_HOST }} -C "cat >~/.ssh/environment"
+          ssh -p 8022 -i github continuous-deployment@${{ secrets.SSH_HOST }} -C "envsubst <~/pinanas/test/settings-cd.yml >~/dist/settings.yml"
 
       - name: Configure
-        run: ssh -p 8022 -i github continuous-deployment@ssh.uat.home.scialom.org -C "cd ~/dist && ~/pinanas/src/configure.sh"
+        run: ssh -p 8022 -i github continuous-deployment@${{ secrets.SSH_HOST }} -C "cd ~/dist && ~/pinanas/src/configure.sh"
 
   start:
     name: Start
     runs-on: ubuntu-latest
     environment: uat
+    needs: configure
     steps:
       - name: Start
-        run: ssh -p 8022 -i github continuous-deployment@ssh.uat.home.scialom.org -C "cd ~/dist && docker-compose up -d"
+        run: ssh -p 8022 -i github continuous-deployment@${{ secrets.SSH_HOST }} -C "cd ~/dist && docker-compose up -d"
 
       - name: Distclean
-        run: ssh -p 8022 -i github continuous-deployment@ssh.uat.home.scialom.org -C "cd ~/dist && ./distclean.sh"
+        run: ssh -p 8022 -i github continuous-deployment@${{ secrets.SSH_HOST }} -C "cd ~/dist && ./distclean.sh"
