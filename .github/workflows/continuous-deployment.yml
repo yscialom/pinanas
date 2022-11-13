@@ -7,28 +7,74 @@ on:
 
 
 jobs:
-  build:
-    name: "Build & Test"
+  undeploy:
+    name: Undeploy
     runs-on: ubuntu-latest
-
+    environment: uat
     steps:
-      - name: "Prepare test environment: Disable DNS cache server to free 53/udp up"
-        run: |
-          sudo mkdir -p /etc/systemd/resolved.conf.d
-          echo -e '[Resolve]\nDNSStubListener=no' | sudo tee -a /etc/systemd/resolved.conf.d/disable-for-pinanas.conf
-          sudo systemctl force-reload systemd-resolved
-          sudo rm /etc/resolv.conf
-          sudo ln -s ../run/systemd/resolve/resolv.conf /etc/resolv.conf
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: unnecessary
 
-      - name: "Prepare test environment: download Let's Encrypt's staging root certificate"
-        run: curl -o /tmp/letsencrypt-stg-root-x1.pem 'https://letsencrypt.org/certs/staging/letsencrypt-stg-root-x1.pem'
+      - name: Clean workspace
+        run: ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "rm -rf ~/pinanas" # TODO: add to known_hosts
+
+      - name: Stop previous PiNanas
+        run: ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "[[ -d ~/dist ]] && cd dist && docker-compose down"
+
+      - name: Remove docker containers, volumes, networks and images
+        run: |
+          ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "docker container prune --force"
+          ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "docker volume prune --force"
+          ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "docker network prune --force"
+          ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "docker image prune --force --all"
+
+      - name: Remove installation directory
+        run: ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "rm -rf ~/dist" # TODO: add sudo rule for root-owned files?
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: uat
+    steps:
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: unnecessary
 
       - name: Clone
         uses: actions/checkout@v2
 
+      - name: Recreate directories
+        run: ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "mkdir -p ~/pinanas ~/dist"
+
+      - name: Deploy to PiNanas UAT"
+        run: scp -P 8022 -i TODO -r * continuous-deployment@ssh.uat.home.scialom.org:~/pinanas/.
+
+  configure:
+    name: Configure
+    runs-on: ubuntu-latest
+    environment: uat
+    steps:
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: unnecessary
+
       - name: Prepare settings from secrets
         env:
           settings_pinanas_master_secret: "${{ secrets.settings_pinanas_master_secret }}"
+          settings_pinanas_johndoe_password: "${{ secrets.settings_pinanas_johndoe_password }}"
           settings_pinanas_network_dns_provider_api: "${{ secrets.settings_pinanas_network_dns_provider_api }}"
           settings_pinanas_network_dns_provider_email: "${{ secrets.settings_pinanas_network_dns_provider_email }}"
           settings_pinanas_network_dns_provider_name: "${{ secrets.settings_pinanas_network_dns_provider_name }}"
@@ -38,20 +84,19 @@ jobs:
           settings_pinanas_network_smtp_sender: "${{ secrets.settings_pinanas_network_smtp_sender }}"
           settings_pinanas_network_smtp_username: "${{ secrets.settings_pinanas_network_smtp_username }}"
         run: |
-          mkdir dist
-          envsubst <test/settings-ci.yml >dist/settings.yml
+          env | grep ^settings_pinanas_ | ssh -p 8022 -i TODO continuous-deployment@ssh.uat.home.scialom.org -C "cat >~/.ssh/environment"
+          ssh -p 8022 -i github continuous-deployment@ssh.uat.home.scialom.org -C "envsubst <~/pinanas/test/settings-cd.yml >~/dist/settings.yml"
 
       - name: Configure
-        run: cd dist && ../src/configure.sh
+        run: ssh -p 8022 -i github continuous-deployment@ssh.uat.home.scialom.org -C "cd ~/dist && ~/pinanas/src/configure.sh"
 
+  start:
+    name: Start
+    runs-on: ubuntu-latest
+    environment: uat
+    steps:
       - name: Start
-        run: |
-          cd dist
-          docker-compose up -d
-          timeout 120 ../test/wait-for-containers.sh && sleep 120 # to be replaced by compose v2 --wait option
+        run: ssh -p 8022 -i github continuous-deployment@ssh.uat.home.scialom.org -C "cd ~/dist && docker-compose up -d"
 
-      - name: Test Traefik dashboard
-        run: test/traefik-dashboard.sh dist
-
-      - name: Test Nextcloud
-        run: test/nextcloud-install.sh dist
+      - name: Distclean
+        run: ssh -p 8022 -i github continuous-deployment@ssh.uat.home.scialom.org -C "cd ~/dist && ./distclean.sh"
