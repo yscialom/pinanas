@@ -22,20 +22,20 @@ jobs:
           known_hosts: unnecessary
 
       - name: Clean workspace
-        run: ssh -p ${{ secrets.SSH_PORT }} -i TODO ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "rm -rf ~/pinanas"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "rm -rf ~/pinanas"
 
       - name: Stop previous PiNanas
-        run: ssh -p ${{ secrets.SSH_PORT }} -i TODO ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "[[ -d ~/dist ]] && cd dist && docker-compose down"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "[[ -d ~/dist ]] && cd dist && docker-compose down"
 
       - name: Remove docker containers, volumes, networks and images
         run: |
-          ssh -p ${{ secrets.SSH_PORT }} -i TODO ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker container prune --force"
-          ssh -p ${{ secrets.SSH_PORT }} -i TODO ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker volume prune --force"
-          ssh -p ${{ secrets.SSH_PORT }} -i TODO ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker network prune --force"
-          ssh -p ${{ secrets.SSH_PORT }} -i TODO ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker image prune --force --all"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker container prune --force"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker volume prune --force"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker network prune --force"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker image prune --force --all"
 
       - name: Remove installation directory
-        run: ssh -p ${{ secrets.SSH_PORT }} -i TODO ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "rm -rf ~/dist" # TODO: add sudo rule for root-owned files?
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "rm -rf ~/dist" # TODO: add sudo rule for root-owned files?
 
   deploy:
     name: Deploy
@@ -55,10 +55,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Recreate directories
-        run: ssh -p ${{ secrets.SSH_PORT }} -i TODO ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "mkdir -p ~/pinanas ~/dist"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "mkdir -p ~/pinanas ~/dist"
 
       - name: Deploy to PiNanas UAT"
-        run: scp -P ${{ secrets.SSH_PORT }} -i TODO -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/pinanas/.
+        run: scp -P ${{ secrets.SSH_PORT }} -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/pinanas/.
 
   configure:
     name: Configure
@@ -87,11 +87,11 @@ jobs:
           settings_pinanas_network_smtp_sender: "${{ secrets.settings_pinanas_network_smtp_sender }}"
           settings_pinanas_network_smtp_username: "${{ secrets.settings_pinanas_network_smtp_username }}"
         run: |
-          env | grep ^settings_pinanas_ | ssh -p ${{ secrets.SSH_PORT }} -i TODO ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cat >~/.ssh/environment"
-          ssh -p ${{ secrets.SSH_PORT }} -i github ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "envsubst <~/pinanas/test/settings-cd.yml >~/dist/settings.yml"
+          env | grep ^settings_pinanas_ | ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cat >~/.ssh/environment"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "envsubst <~/pinanas/test/settings-cd.yml >~/dist/settings.yml"
 
       - name: Configure
-        run: ssh -p ${{ secrets.SSH_PORT }} -i github ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/dist && ~/pinanas/src/configure.sh"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/dist && ~/pinanas/src/configure.sh"
 
   start:
     name: Start
@@ -108,7 +108,7 @@ jobs:
           known_hosts: unnecessary
 
       - name: Start
-        run: ssh -p ${{ secrets.SSH_PORT }} -i github ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/dist && docker-compose up -d"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/dist && docker-compose up -d"
 
       - name: Distclean
-        run: ssh -p ${{ secrets.SSH_PORT }} -i github ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/dist && ./distclean.sh"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/dist && ./distclean.sh"
