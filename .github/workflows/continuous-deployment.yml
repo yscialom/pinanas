@@ -25,7 +25,7 @@ jobs:
         run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "rm -rf ~/pinanas"
 
       - name: Stop previous PiNanas
-        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "[[ -f ~/dist/docker-compose.yml ]] && cd dist && docker-compose down"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "[[ -f ~/dist/docker-compose.yml ]] && ( cd dist && docker-compose down )"
 
       - name: Remove docker containers, volumes, networks and images
         run: |
