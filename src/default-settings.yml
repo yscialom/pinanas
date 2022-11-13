@@ -1,4 +1,14 @@
 pinanas_default:
+  # Port numbers
+  ports:
+    # HTTP port. Type: integer. Default: 80.
+    # Exemple: 8080
+    http: 80
+
+    # HTTPS port. Type: integer. Default: 443.
+    # Exemple: 8443
+    https: 443
+
   network:
     # MAC address of PiNana's host network card. Type: string. Example: "01:02:03:04:05:06".
     hmac: "{{ ansible_default_ipv4.macaddress }}"

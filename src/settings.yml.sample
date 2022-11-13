@@ -11,6 +11,16 @@ pinanas:
   # Registered domain name. Type: string. Example: "home.example.com".
   domain:
 
+  # Port numbers
+  ports:
+    # HTTP port. Type: integer. Default: 80.
+    # Exemple: 8080
+    http:
+
+    # HTTPS port. Type: integer. Default: 443.
+    # Exemple: 8443
+    https:
+
   # Master password to encrypt/derive all PiNanas secrets. Type: string.
   # Example: "Randomly-generated-complex-string-with-mixed-case-digits-and-special-characters".
   master_secret:
