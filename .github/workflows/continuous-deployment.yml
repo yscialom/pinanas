@@ -35,7 +35,7 @@ jobs:
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker image prune --force --all"
 
       - name: Remove installation directory
-        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "rm -rf ~/dist" # TODO: add sudo rule for root-owned files?
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "sudo rm -rf -- ~/dist"
 
   deploy:
     name: Deploy
@@ -57,7 +57,7 @@ jobs:
       - name: Recreate directories
         run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "mkdir -p ~/pinanas ~/dist"
 
-      - name: Deploy to PiNanas UAT"
+      - name: Deploy to PiNanas UAT
         run: scp -P ${{ secrets.SSH_PORT }} -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/pinanas/.
 
   configure:
