@@ -320,3 +320,25 @@ services:
       - ./nextcloud/data/generated-config:/config/www/nextcloud/config
       - ./nextcloud/data/files:/data
     restart: unless-stopped
+
+  #
+  ## === FAIL2BAN ===
+  #
+  # Fail2ban ban hosts that cause multiple authentication errors
+  ##
+    fail2ban:
+    image: lscr.io/linuxserver/fail2ban:latest
+    container_name: fail2ban
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    network_mode: host
+    environment:
+      - TZ={{ pinanas.timezone }}
+      - PUID={{ PUID }}
+      - PGID={{ PGID }}
+    volumes:
+      - /fail2ban/config:/config
+      - /var/log:/var/log:ro
+      - /:/logs:ro
+    restart: unless-stopped
