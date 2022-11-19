@@ -23,10 +23,10 @@ jobs:
           known_hosts: unnecessary
 
       - name: Clean workspace
-        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "rm -rf ~/pinanas"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "rm -rf ~/pinanas-src"
 
       - name: Stop previous PiNanas
-        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "if [[ -f ~/dist/docker-compose.yml ]] ; then cd dist && docker-compose down ; fi"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "if [[ -f ~/pinanas/docker-compose.yml ]] ; then cd ~/pinanas && docker-compose down ; fi"
 
       - name: Remove docker containers, volumes, networks and images
         run: |
@@ -36,7 +36,7 @@ jobs:
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker image prune --force --all"
 
       - name: Remove installation directory
-        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "sudo rm -rf -- ~/dist/"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "sudo rm -rf -- ~/pinanas/"
 
   deploy:
     name: Deploy
@@ -56,10 +56,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Recreate directories
-        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "mkdir -p ~/pinanas ~/dist"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "mkdir -p ~/pinanas-src ~/pinanas"
 
       - name: Deploy to PiNanas UAT
-        run: scp -P ${{ secrets.SSH_PORT }} -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/pinanas/.
+        run: scp -P ${{ secrets.SSH_PORT }} -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/pinanas-src/.
 
   configure:
     name: Configure
@@ -89,10 +89,10 @@ jobs:
           settings_pinanas_network_smtp_username: "${{ secrets.settings_pinanas_network_smtp_username }}"
         run: |
           env | grep ^settings_pinanas_ | ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cat >~/.ssh/environment"
-          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "envsubst <~/pinanas/test/settings-cd.yml >~/dist/settings.yml"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "envsubst <~/pinanas-src/test/settings-cd.yml >~/pinanas/settings.yml"
 
       - name: Configure
-        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/dist && ~/pinanas/src/configure.sh"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && ~/pinanas-src/src/configure.sh"
 
   start:
     name: Start
@@ -109,13 +109,13 @@ jobs:
           known_hosts: unnecessary
 
       - name: Start
-        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/dist && docker-compose up -d"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && docker-compose up -d"
 
       - name: Import Let's Encrypt stagging root CA certificate
         run: |
-          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "curl -o ~/dist/nextcloud/data/files/letsencrypt-stg-root-x1.crt https://letsencrypt.org/certs/staging/letsencrypt-stg-root-x1.pem"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "curl -o ~/pinanas/nextcloud/data/files/letsencrypt-stg-root-x1.crt https://letsencrypt.org/certs/staging/letsencrypt-stg-root-x1.pem"
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec nextcloud occ security:certificates:import /data/letsencrypt-stg-root-x1.crt"
-          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "rm -f ~/dist/nextcloud/data/files/letsencrypt-stg-root-x1.crt"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "rm -f ~/pinanas/nextcloud/data/files/letsencrypt-stg-root-x1.crt"
 
       - name: Distclean
-        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/dist && ./distclean.sh"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && ./distclean.sh"
