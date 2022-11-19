@@ -111,5 +111,10 @@ jobs:
       - name: Start
         run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/dist && docker-compose up -d"
 
+      - name: Import Let's Encrypt stagging root CA certificate
+        run: |
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "curl -o /tmp/letsencrypt-stg-root-x1.crt https://letsencrypt.org/certs/staging/letsencrypt-stg-root-x1.pem"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec nextcloud occ security:certificates:import /tmp/letsencrypt-stg-root-x1.crt"
+
       - name: Distclean
         run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/dist && ./distclean.sh"
