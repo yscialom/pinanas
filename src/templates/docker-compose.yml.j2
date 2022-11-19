@@ -326,7 +326,7 @@ services:
   #
   # Fail2ban ban hosts that cause multiple authentication errors
   ##
-    fail2ban:
+  fail2ban:
     image: lscr.io/linuxserver/fail2ban:latest
     container_name: fail2ban
     cap_add:
@@ -337,8 +337,16 @@ services:
       - TZ={{ pinanas.timezone }}
       - PUID={{ PUID }}
       - PGID={{ PGID }}
+      - SSMTP_HOST={{ pinanas.network.smtp.host }}
+      - SSMTP_PORT={{ pinanas.network.smtp.port }}
+      - SSMTP_USER={{ pinanas.network.smtp.username }}
+      - SSMTP_PASSWORD={{ pinanas.network.smtp.password }}
+      - SSMTP_TLS=YES
+      - SSMTP_STARTTLS=YES
     volumes:
-      - /fail2ban/config:/config
+      - ./fail2ban/config:/config/fail2ban
+      - ./fail2ban:/config/log/fail2ban
       - /var/log:/var/log:ro
-      - /:/logs:ro
+      - ./authelia/config/logs:/remotelogs/authelia:ro
+      - ./nextcloud/data/files:/remotelogs/nextcloud:ro
     restart: unless-stopped

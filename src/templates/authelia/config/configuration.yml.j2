@@ -19,8 +19,9 @@ default_redirection_url: "https://apps.{{ pinanas.domain }}/"
 ## system
 #
 log:
-  level: debug
-
+  level: info
+  file_path: /config/logs/authelia.log
+  keep_stout: true
 #
 ## userland
 #
