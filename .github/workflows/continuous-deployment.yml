@@ -114,7 +114,7 @@ jobs:
       - name: Import Let's Encrypt stagging root CA certificate
         run: |
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "curl -o ~/pinanas/nextcloud/data/files/letsencrypt-stg-root-x1.crt https://letsencrypt.org/certs/staging/letsencrypt-stg-root-x1.pem"
-          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec nextcloud /config/www/nextcloud/occ security:certificates:import /data/letsencrypt-stg-root-x1.crt"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec -u $(id -n) nextcloud /bin/sh -c /config/www/nextcloud/occ security:certificates:import /data/letsencrypt-stg-root-x1.crt"
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "rm -f ~/pinanas/nextcloud/data/files/letsencrypt-stg-root-x1.crt"
 
       - name: Distclean
