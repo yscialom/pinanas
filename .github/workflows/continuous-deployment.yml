@@ -92,7 +92,7 @@ jobs:
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "envsubst <~/pinanas-src/test/settings-cd.yml >~/pinanas/settings.yml"
 
       - name: Configure
-        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && ~/pinanas-src/src/configure.sh"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && ~/pinanas-src/src/configure.sh && rm ~/.ssh/environment"
 
   start:
     name: Start
@@ -109,12 +109,12 @@ jobs:
           known_hosts: unnecessary
 
       - name: Start
-        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && docker-compose up -d"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && docker-compose up -d && ~/pinanas-src/test/wait-for-containers.sh ."
 
       - name: Import Let's Encrypt stagging root CA certificate
         run: |
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "curl -o ~/pinanas/nextcloud/data/files/letsencrypt-stg-root-x1.crt https://letsencrypt.org/certs/staging/letsencrypt-stg-root-x1.pem"
-          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec nextcloud /bin/sh -c '/usr/bin/occ security:certificates:import /data/letsencrypt-stg-root-x1.crt'"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec nextcloud occ security:certificates:import /data/letsencrypt-stg-root-x1.crt"
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "rm -f ~/pinanas/nextcloud/data/files/letsencrypt-stg-root-x1.crt"
 
       - name: Distclean
