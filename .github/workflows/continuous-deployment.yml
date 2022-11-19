@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - develop
-      - feature/continuous-deployment
 
 
 jobs:
@@ -111,7 +110,7 @@ jobs:
       - name: Start
         run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && docker-compose up -d && ~/pinanas-src/test/wait-for-containers.sh ."
 
-      - name: Import Let's Encrypt stagging root CA certificate
+      - name: Import Let's Encrypt stagging root CA
         run: |
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "curl -o ~/pinanas/nextcloud/data/files/letsencrypt-stg-root-x1.crt https://letsencrypt.org/certs/staging/letsencrypt-stg-root-x1.pem"
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec nextcloud occ security:certificates:import /data/letsencrypt-stg-root-x1.crt"

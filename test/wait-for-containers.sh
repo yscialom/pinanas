@@ -31,8 +31,6 @@ function wait_for_container {
 }
 
 for service in $(docker-compose ps --services) ; do
-    if [[ -x "${TEST_DIR}/wait-for-${service}.sh" ]]
-    then "${TEST_DIR}/wait-for-${service}.sh"
-    else wait_for_container "${service}"
-    fi
+    wait_for_container "${service}"
+    [[ -x "${TEST_DIR}/wait-for-${service}.sh" ]] && "${TEST_DIR}/wait-for-${service}.sh"
 done
