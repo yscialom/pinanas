@@ -15,6 +15,8 @@ bantime.factor = 4
 bantime.formula = ban.Time * (1<<(ban.Count if ban.Count<20 else 20)) * banFactor
 bantime.overalljails = true
 
+banaction = %(banaction_allports)s
+
 # --------------------
 # NOTIFICATION BY EMAIL
 #      Notification by email only work if sendmail or mail app like postgres running on the system
@@ -41,20 +43,20 @@ protocol = tcp
 #
 
 [sshd]
-
-enabled=true
-port    = ssh
-logpath = %(sshd_log)s
-backend = %(sshd_backend)s
+enabled = true
+chain = INPUT
 
 [authelia-auth]
-
-enabled=true
-port     = http,https,9091
-logpath  = %(remote_logs_path)s/authelia/authelia.log
+enabled = true
+chain = DOCKER-USER
 
 [nextcloud-auth]
+enabled = true
+chain = DOCKER-USER
 
-enabled=true
-port     = http,https
-logpath  = %(remote_logs_path)s/nextcloud/nextcloud.log
+[traefik-auth]
+enabled = true
+chain = DOCKER-USER
+
+
+
