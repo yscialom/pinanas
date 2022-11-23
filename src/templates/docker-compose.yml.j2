@@ -49,7 +49,7 @@ services:
       - ./traefik/config/config.yml:/config.yml:ro
       - ./traefik/config/traefik.yml:/traefik.yml:ro
       - ./traefik/data/acme.json:/acme.json
-      - ./traefik/log/access.log:/opt/traefik/access.log:ro
+      - ./traefik/log:/opt/traefik:ro
     hostname: traefik
     networks:
       default:
@@ -330,6 +330,8 @@ services:
   fail2ban:
     image: lscr.io/linuxserver/fail2ban:latest
     container_name: fail2ban
+    depends_on:
+      - traefik
     cap_add:
       - NET_ADMIN
       - NET_RAW
@@ -349,6 +351,6 @@ services:
       - ./fail2ban:/config/log/fail2ban
       - /var/log:/var/log:ro
       - ./authelia/config/logs:/remotelogs/authelia:ro
-      - ./nextcloud/data/files/nextcloud.log:/remotelogs/nextcloud/nextcloud.log
-      - ./traefik/log/access.log:/remotelogs/traefik/access.log
+      - ./nextcloud/data/files:/remotelogs/nextcloud:ro
+      - ./traefik/log:/remotelogs/traefik:ro
     restart: unless-stopped
