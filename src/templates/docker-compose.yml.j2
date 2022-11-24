@@ -105,7 +105,8 @@ services:
       - PGID={{ PGID }}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=https://auth.{{ pinanas.domain }}"
+      {% set portnumber_=":" ~ pinanas.ports.https if pinanas.ports.https != 443 else "" -%}
+      - "traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=https://auth.{{ pinanas.domain }}{{ portnumber_ }}"
       - "traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email"
       - "traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true"
       - "traefik.http.routers.authelia.entrypoints=https"
