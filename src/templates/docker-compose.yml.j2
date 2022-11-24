@@ -49,7 +49,7 @@ services:
       - ./traefik/config/config.yml:/config.yml:ro
       - ./traefik/config/traefik.yml:/traefik.yml:ro
       - ./traefik/data/acme.json:/acme.json
-      - ./traefik/log:/opt/traefik:ro
+      - ./traefik/log:/opt/traefik
     hostname: traefik
     networks:
       default:
