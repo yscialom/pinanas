@@ -329,7 +329,7 @@ services:
   # Fail2ban ban hosts that cause multiple authentication errors
   ##
   fail2ban:
-    image: lscr.io/linuxserver/fail2ban:latest
+    image: lscr.io/linuxserver/fail2ban:0.11.2
     container_name: fail2ban
     depends_on:
       - traefik
@@ -355,3 +355,4 @@ services:
       - ./nextcloud/data/files:/remotelogs/nextcloud:ro
       - ./traefik/log:/remotelogs/traefik:ro
     restart: unless-stopped
+
