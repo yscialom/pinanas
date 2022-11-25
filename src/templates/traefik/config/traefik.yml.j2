@@ -35,3 +35,15 @@ certificatesResolvers:
       dnsChallenge:
         provider: {{ pinanas.network.dns.provider.name }}
         delayBeforeCHeck: 0
+accessLog:
+  filePath: "/opt/traefik/access.log"
+  fields:
+    defaultMode: keep
+    names:
+      ClientUsername: drop
+    headers:
+      defaultMode: keep
+      names:
+          User-Agent: redact
+          Authorization: drop
+          Content-Type: keep

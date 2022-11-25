@@ -49,6 +49,7 @@ services:
       - ./traefik/config/config.yml:/config.yml:ro
       - ./traefik/config/traefik.yml:/traefik.yml:ro
       - ./traefik/data/acme.json:/acme.json
+      - ./traefik/log:/opt/traefik
     hostname: traefik
     networks:
       default:
@@ -321,3 +322,37 @@ services:
       - ./nextcloud/data/generated-config:/config/www/nextcloud/config
       - ./nextcloud/data/files:/data
     restart: unless-stopped
+
+  #
+  ## === FAIL2BAN ===
+  #
+  # Fail2ban ban hosts that cause multiple authentication errors
+  ##
+  fail2ban:
+    image: lscr.io/linuxserver/fail2ban:0.11.2
+    container_name: fail2ban
+    depends_on:
+      - traefik
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    network_mode: host
+    environment:
+      - TZ={{ pinanas.timezone }}
+      - PUID={{ PUID }}
+      - PGID={{ PGID }}
+      - SSMTP_HOST={{ pinanas.network.smtp.host }}
+      - SSMTP_PORT={{ pinanas.network.smtp.port }}
+      - SSMTP_USER={{ pinanas.network.smtp.username }}
+      - SSMTP_PASSWORD={{ pinanas.network.smtp.password }}
+      - SSMTP_TLS=YES
+      - SSMTP_STARTTLS=YES
+    volumes:
+      - ./fail2ban/config:/config/fail2ban
+      - ./fail2ban:/config/log/fail2ban
+      - /var/log:/var/log:ro
+      - ./authelia/config/logs:/remotelogs/authelia:ro
+      - ./nextcloud/data/files:/remotelogs/nextcloud:ro
+      - ./traefik/log:/remotelogs/traefik:ro
+    restart: unless-stopped
+
