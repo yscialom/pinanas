@@ -19,8 +19,8 @@
     file:
       path: "/pinanas/dist/jellyfin/data/misc/{{ item }}"
       state: directory
-      group: {{ PGID }}
-      owner: {{ PUID }}
+      owner: "{{ PUID }}"
+      group: "{{ PGID }}"
     loop:
       - metadata
       - cache
