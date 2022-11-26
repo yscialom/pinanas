@@ -399,4 +399,6 @@ services:
       - ./jellyfin/data/log:/config/log
       - ./jellyfin/data/movies:/data/movies
       - ./jellyfin/data/tvshows:/data/tvshows
+      - ./jellyfin/data/misc/metadata:/data/metadata
+      - ./jellyfin/data/misc/cache:/data/cache
     restart: unless-stopped
