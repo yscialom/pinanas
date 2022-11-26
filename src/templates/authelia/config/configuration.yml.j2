@@ -175,7 +175,7 @@ identity_providers:
           - email
           - profile
         redirect_uris:
-          - "https://media.{{ pinanas.domain }}/sso/OID/r/Authelia"
+          - "https://media.{{ pinanas.domain }}:{{ pinanas.ports.https }}/sso/OID/r/Authelia"
         grant_types:
           - refresh_token
           - authorization_code
