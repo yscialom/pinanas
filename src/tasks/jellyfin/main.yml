@@ -19,6 +19,8 @@
     file:
       path: "jellyfin/data/misc/{{ item }}"
       state: directory
+      group: {{ PGID }}
+      owner: {{ PUID }}
     loop:
       - metadata
       - cache
