@@ -374,6 +374,10 @@ services:
         aliases:
           - jellyfin
           - media
+    environment:
+      - TZ={{ pinanas.timezone }}
+      - PUID={{ PUID }}
+      - PGID={{ PGID }}
     labels:
       - "traefik.enable=true"
       - "traefik.http.middlewares.jellyfin-https-redirect.redirectscheme.scheme=https"
