@@ -9,7 +9,7 @@
       </key>
       <value>
         <PluginConfiguration>
-          <OidEndpoint>https://auth.{{ pinanas.domain }}/.well-known/openid-configuration</OidEndpoint>
+          <OidEndpoint>https://auth.{{ pinanas.domain }}:{{ pinanas.ports.https }}/.well-known/openid-configuration</OidEndpoint>
           <OidClientId>jellyfin</OidClientId>
           <OidSecret>{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[jellyfin].secret') }}</OidSecret>
           <Enabled>true</Enabled>
