@@ -119,7 +119,7 @@ jobs:
           echo "OK"
           echo -n "Jellyfin... "
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec jellyfin mkdir -p /usr/share/ca-certificates/misc"
-          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec jellyfin curl -o /usr/share/ca-certificates/misc https://letsencrypt.org/certs/staging/letsencrypt-stg-root-x1.pem"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec jellyfin curl -o /usr/share/ca-certificates/misc/letsencrypt-stg-root-x1.crt https://letsencrypt.org/certs/staging/letsencrypt-stg-root-x1.pem"
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec jellyfin bash -c 'echo misc/letsencrypt-stg-root-x1.crt >> /etc/ca-certificates.conf'"
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec jellyfin update-ca-certificates"
           echo "OK"
