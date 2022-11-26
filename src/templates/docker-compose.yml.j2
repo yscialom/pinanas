@@ -391,7 +391,7 @@ services:
       - "traefik.http.routers.jellyfin.rule=Host(`media.{{ pinanas.domain }}`)"
       - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
     volumes:
-      {% for configfile in [branding.xml, encoding.xml, migrations.xml, network.xml, system.xml] -%}
+      {% for configfile in ['branding.xml', 'network.xml', 'system.xml'] -%}
       - ./jellyfin/config/{{ configfile }}:/config/{{ configfile }}
       {% endfor -%}
       - ./jellyfin/config/plugins:/config/data/plugins
