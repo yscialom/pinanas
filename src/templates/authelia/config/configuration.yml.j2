@@ -61,7 +61,12 @@ access_control:
     - domain: "cloud.{{ pinanas.domain }}"
       policy: bypass
 
+    # Media: Jellyfin
+    - domain: "media.{{ pinanas.domain }}"
+      policy: bypass
+
     # Web IDE: VS Code
+    #TODO: remove
     - domain: "code.{{ pinanas.domain }}"
       policy: two_factor
       subject:
@@ -140,7 +145,6 @@ identity_providers:
       - id: nextcloud
         description: Nextcloud
         secret: "{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[nextcloud].secret')[:16] }}"
-        public: false
         authorization_policy: one_factor
         audience: []
         scopes:
@@ -150,6 +154,28 @@ identity_providers:
           - profile
         redirect_uris:
           - "https://cloud.{{ pinanas.domain }}:{{ pinanas.ports.https }}/apps/user_oidc/code"
+        grant_types:
+          - refresh_token
+          - authorization_code
+        response_types:
+          - code
+        response_modes:
+          - form_post
+          - query
+          - fragment
+        userinfo_signing_algorithm: none
+      - id: jellyfin
+        description: Jellyfin
+        secret: "{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[jellyfin].secret') }}"
+        authorization_policy: one_factor
+        audience: []
+        scopes:
+          - openid
+          - groups
+          - email
+          - profile
+        redirect_uris:
+          - "https://media.{{ pinanas.domain }}:{{ pinanas.ports.https }}/sso/OID/r/Authelia"
         grant_types:
           - refresh_token
           - authorization_code

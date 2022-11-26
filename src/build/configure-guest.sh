@@ -76,7 +76,7 @@ prepare () {
       path: "/pinanas/dist/{{ item[0] }}/{{ item[1] }}"
       state: directory
       mode: 0755
-    loop: "{{ ['dhcpd', 'traefik', 'authelia', 'adguardhome', 'netdata', 'heimdall', 'database', 'nextcloud'] | product(['config', 'data']) | list }}"
+    loop: "{{ ['dhcpd', 'traefik', 'authelia', 'adguardhome', 'netdata', 'heimdall', 'database', 'nextcloud', 'jellyfin'] | product(['config', 'data']) | list }}"
   - name: ensure traefik/acme.json exists
     file:
       path: "/pinanas/dist/traefik/data/acme.json"
@@ -103,6 +103,12 @@ EOH
 EOT
     done
 
+    # Specific playbooks
+    find /pinanas/src/tasks -type f -name "main.y*ml" | while read -r taskfile ; do
+      echo "  - name: \"include task file '${taskfile}'\"" >> ${playbook}
+      echo "    include_tasks: \"${taskfile}\"" >> ${playbook}
+    done
+
     # Make Jinja find secrets.j2
     ln -fs /pinanas/src/utils/secrets.j2 ${playbook_dir}/.
 }
@@ -122,7 +128,7 @@ install () {
     ansible-playbook \
         --inventory /dev/null \
         --extra-vars "${EXTRA_VARS}" \
-        ${playbook} \
+        "${playbook}" \
         "$@"
 
     ansible_status=$?
