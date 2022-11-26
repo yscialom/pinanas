@@ -2,7 +2,7 @@
 ---
 version: "3"
 networks:
-  default:
+  pinanas:
   database:
 
 
@@ -52,15 +52,15 @@ services:
       - ./traefik/log:/opt/traefik
     hostname: traefik
     networks:
-      default:
+      pinanas:
         aliases:
           - traefik
           - traefik-dashboard
     environment:
       - TZ={{ pinanas.timezone }}
-{% for var in pinanas.network.dns.provider.api %}
+      {% for var in pinanas.network.dns.provider.api -%}
       - {{ var.name }}={{ var.value }}
-{% endfor %}
+      {% endfor -%}
     labels:
       - "traefik.enable=true"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
@@ -95,7 +95,7 @@ services:
       - ./authelia/config:/config
     hostname: authelia
     networks:
-      default:
+      pinanas:
         aliases:
           - authelia
           - auth
@@ -132,7 +132,7 @@ services:
       - ./adguardhome/data:/opt/adguardhome/work/data
     hostname: adguardhome
     networks:
-      default:
+      pinanas:
         aliases:
           - adguardhome
           - dns
@@ -185,9 +185,8 @@ services:
       - /var/log/fail2ban.log:/var/log/fail2ban.log:ro
       - ./dhcpd/data:/var/lib/dhcp:ro
       - ./netdata/data:/etc/netdata
-    hostname: netdata
     networks:
-      default:
+      pinanas:
         aliases:
           - netdata
           - resources
@@ -221,7 +220,7 @@ services:
     depends_on:
       - dhcpd
     networks:
-      default:
+      pinanas:
         aliases:
           - heimdall
           - apps
@@ -287,7 +286,7 @@ services:
     links:
       - database
     networks:
-      default:
+      pinanas:
         aliases:
           - nextcloud
           - cloud
@@ -301,7 +300,7 @@ services:
       - PGID={{ PGID }}
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=pinanas_default"
+      - "traefik.docker.network=pinanas"
       - "traefik.http.routers.nextcloud-secure.entrypoints=https"
       - "traefik.http.routers.nextcloud-secure.middlewares=authelia@docker"
       - "traefik.http.routers.nextcloud-secure.rule=Host(`cloud.{{ pinanas.domain }}`)"
@@ -370,7 +369,7 @@ services:
     image: lscr.io/linuxserver/jellyfin:10.8.7
     container_name: jellyfin
     networks:
-      default:
+      pinanas:
         aliases:
           - jellyfin
           - media
