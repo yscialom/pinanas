@@ -1,7 +1,7 @@
 ---
   - name: Ensure SSO Authentification installation dir exists
     file:
-      path: "/pinanas/dist/jellyfin/data/plugins/SSO Authentication_3.4.0.0"
+      path: "/pinanas/dist/jellyfin/config/plugins/SSO Authentication_3.4.0.0"
       state: directory
   - name: Download SSO Authentification 3.4.0.0
     unarchive:
