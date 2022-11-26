@@ -13,14 +13,14 @@ server:
   path: ""
 
 
-default_redirection_url: "https://apps.{{ pinanas.domain }}/"
+default_redirection_url: "https://apps.{{ pinanas.domain }}:{{ pinanas.ports.https }}/"
 
 #
 ## system
 #
 log:
-  level: debug
-
+  level: info
+  file_path: /config/logs/authelia.log
 #
 ## userland
 #
@@ -153,7 +153,7 @@ identity_providers:
           - email
           - profile
         redirect_uris:
-          - "https://cloud.{{ pinanas.domain }}/apps/user_oidc/code"
+          - "https://cloud.{{ pinanas.domain }}:{{ pinanas.ports.https }}/apps/user_oidc/code"
         grant_types:
           - refresh_token
           - authorization_code
