@@ -391,9 +391,14 @@ services:
       - "traefik.http.routers.jellyfin.rule=Host(`media.{{ pinanas.domain }}`)"
       - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
     volumes:
-      - ./jellyfin/config/libraries:/config/data/root
-      - ./jellyfin/data:/config/data
-      - ./jellyfin/config:/config
-      - ./jellyfin/data/tvshows:/data/tvshows
+      {% for configfile in [branding.xml, encoding.xml, migrations.xml, network.xml, system.xml] -%}
+      - ./jellyfin/config/{{ configfile }}:/config/{{ configfile }}
+      {% endfor -%}
+      - ./jellyfin/config/plugins:/config/data/plugins
+      - ./jellyfin/config/libvraries:/config/data/root/default
+      - ./jellyfin/data/log:/config/log
+      - ./jellyfin/data/databases:/config/data/data
       - ./jellyfin/data/movies:/data/movies
+      - ./jellyfin/data/tvshows:/data/tvshows
+      - ./jellyfin/data:/data
     restart: unless-stopped
