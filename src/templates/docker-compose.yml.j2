@@ -395,7 +395,7 @@ services:
       - ./jellyfin/config/{{ configfile }}:/config/{{ configfile }}
       {% endfor -%}
       - ./jellyfin/config/plugins:/config/data/plugins
-      - ./jellyfin/config/libvraries:/config/data/root/default
+      - ./jellyfin/config/libraries:/config/data/root/default
       - ./jellyfin/data/log:/config/log
       - ./jellyfin/data/databases:/config/data/data
       - ./jellyfin/data/movies:/data/movies
