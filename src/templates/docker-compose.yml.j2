@@ -28,6 +28,40 @@ services:
 
 
   #
+  ## === FAIL2BAN ===
+  #
+  # Fail2ban ban hosts that cause multiple authentication errors.
+  ##
+  fail2ban:
+    image: lscr.io/linuxserver/fail2ban:0.11.2
+    container_name: fail2ban
+    depends_on:
+      - traefik
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    network_mode: host
+    environment:
+      - TZ={{ pinanas.timezone }}
+      - PUID={{ PUID }}
+      - PGID={{ PGID }}
+      - SSMTP_HOST={{ pinanas.network.smtp.host }}
+      - SSMTP_PORT={{ pinanas.network.smtp.port }}
+      - SSMTP_USER={{ pinanas.network.smtp.username }}
+      - SSMTP_PASSWORD={{ pinanas.network.smtp.password }}
+      - SSMTP_TLS=YES
+      - SSMTP_STARTTLS=YES
+    volumes:
+      - ./fail2ban/config:/config/fail2ban
+      - ./fail2ban:/config/log/fail2ban
+      - /var/log:/var/log:ro
+      - ./authelia/config/logs:/remotelogs/authelia:ro
+      - ./nextcloud/data/files:/remotelogs/nextcloud:ro
+      - ./traefik/log:/remotelogs/traefik:ro
+    restart: unless-stopped
+
+
+  #
   ## === TRAEFIK ===
   # Reverse proxy (HTTP, TCP, UDP): route requests to
   # services hosted or not on the same host. This is
@@ -90,10 +124,6 @@ services:
     container_name: authelia
     depends_on:
       - traefik
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./authelia/config:/config
-    hostname: authelia
     networks:
       pinanas:
         aliases:
@@ -112,6 +142,9 @@ services:
       - "traefik.http.routers.authelia.entrypoints=https"
       - "traefik.http.routers.authelia.rule=Host(`auth.{{ pinanas.domain }}`)"
       - "traefik.http.routers.authelia.tls=true"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./authelia/config:/config
     restart: unless-stopped
 
 
@@ -127,10 +160,6 @@ services:
     depends_on:
       - dhcpd
       - traefik
-    volumes:
-      - ./adguardhome/config:/opt/adguardhome/conf
-      - ./adguardhome/data:/opt/adguardhome/work/data
-    hostname: adguardhome
     networks:
       pinanas:
         aliases:
@@ -158,6 +187,9 @@ services:
       - "traefik.udp.routers.adblockhome-dns.entrypoints=dns-udp"
       - "traefik.udp.routers.adblockhome-dns.service=adblockhome-dns"
       - "traefik.udp.services.adblockhome-dns.loadBalancer.server.port=53"
+    volumes:
+      - ./adguardhome/config:/opt/adguardhome/conf
+      - ./adguardhome/data:/opt/adguardhome/work/data
     restart: unless-stopped
 
 
@@ -175,16 +207,6 @@ services:
       - SYS_PTRACE
     security_opt:
       - apparmor:unconfined
-    volumes:
-      - /etc/passwd:/host/etc/passwd:ro
-      - /etc/group:/host/etc/group:ro
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /etc/os-release:/host/etc/os-release:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /var/log/fail2ban.log:/var/log/fail2ban.log:ro
-      - ./dhcpd/data:/var/lib/dhcp:ro
-      - ./netdata/data:/etc/netdata
     networks:
       pinanas:
         aliases:
@@ -207,6 +229,16 @@ services:
       - "traefik.http.routers.netdata.rule=Host(`resources.{{ pinanas.domain }}`)"
       - "traefik.http.services.netdata.loadbalancer.server.port=19999"
     restart: unless-stopped
+    volumes:
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/log/fail2ban.log:/var/log/fail2ban.log:ro
+      - ./dhcpd/data:/var/lib/dhcp:ro
+      - ./netdata/data:/etc/netdata
 
 
   #
@@ -320,40 +352,6 @@ services:
       - ./nextcloud/data/crontabs:/config/crontabs
       - ./nextcloud/data/generated-config:/config/www/nextcloud/config
       - ./nextcloud/data/files:/data
-    restart: unless-stopped
-
-
-  #
-  ## === FAIL2BAN ===
-  #
-  # Fail2ban ban hosts that cause multiple authentication errors
-  ##
-  fail2ban:
-    image: lscr.io/linuxserver/fail2ban:0.11.2
-    container_name: fail2ban
-    depends_on:
-      - traefik
-    cap_add:
-      - NET_ADMIN
-      - NET_RAW
-    network_mode: host
-    environment:
-      - TZ={{ pinanas.timezone }}
-      - PUID={{ PUID }}
-      - PGID={{ PGID }}
-      - SSMTP_HOST={{ pinanas.network.smtp.host }}
-      - SSMTP_PORT={{ pinanas.network.smtp.port }}
-      - SSMTP_USER={{ pinanas.network.smtp.username }}
-      - SSMTP_PASSWORD={{ pinanas.network.smtp.password }}
-      - SSMTP_TLS=YES
-      - SSMTP_STARTTLS=YES
-    volumes:
-      - ./fail2ban/config:/config/fail2ban
-      - ./fail2ban:/config/log/fail2ban
-      - /var/log:/var/log:ro
-      - ./authelia/config/logs:/remotelogs/authelia:ro
-      - ./nextcloud/data/files:/remotelogs/nextcloud:ro
-      - ./traefik/log:/remotelogs/traefik:ro
     restart: unless-stopped
 
 
