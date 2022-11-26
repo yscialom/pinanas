@@ -15,3 +15,10 @@
     loop:
       - movies
       - tvshows
+  - name: Ensure custom directories exists and are owned by operator
+    file:
+      path: "jellyfin/data/misc/{{ item }}"
+      state: directory
+    loop:
+      - metadata
+      - cache
