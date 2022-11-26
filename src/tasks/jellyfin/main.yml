@@ -17,7 +17,7 @@
       - tvshows
   - name: Ensure custom directories exists and are owned by operator
     file:
-      path: "jellyfin/data/misc/{{ item }}"
+      path: "/pinanas/dist/jellyfin/data/misc/{{ item }}"
       state: directory
       group: {{ PGID }}
       owner: {{ PUID }}
