@@ -76,7 +76,7 @@ Who are we?
 PiNanas was born in 2020 during the Covid Pandemic when two friends discussed their frustrations
 around tentatives to setup Plex in a controlled environment, on low-cost hardware (Raspberry Pi 3).
 
-It is about this time that [Techno Tim "Techno Tim homepage"](https://www.technotim.live) published [a
+It is about this time that [Techno Tim](https://www.technotim.live "Techno Tim homepage") published [a
 video on Youtube](https://youtu.be/pAM2GBCDGTo "Self-Hosting Your Homelab Services with SSL -- Let's
 Encrypt, MetalLB, Traefik, Rancher, Kubernetes") on how to setup Traefik on a homelab, first of a series
 on homelab services. These videos have been a continuing source of inspiration for us. What we tinkered
@@ -85,4 +85,5 @@ with became its own thing, and The Wife named it PiNanas: a
 [Pi](https://www.raspberrypi.org/ "Raspberry Pi")!
 
 We'd be sincerly pleased to see you find interest in our toy project.
-[Yankel Scialom](https://github.com/yscialom "YSC on Github") and GLE.
+
+--- [Yankel Scialom](https://github.com/yscialom "YSC on Github") and GLE.
