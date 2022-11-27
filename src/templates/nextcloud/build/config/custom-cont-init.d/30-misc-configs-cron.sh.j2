@@ -9,7 +9,7 @@ function add_to_crontab () {
     local command="${@}"
 
     local cronline="$(echo -e "${period}\t${command}")"
-    ( crontab -u${user} -l ; echo "${cronline}" ) | crontab -u${user} -
+    ( crontab -u${user} -l 2>/dev/null ; echo "${cronline}" ) | crontab -u${user} -
 }
 
 function daily () { echo -e "0\t${1:-0}\t*\t*\t*" ; }
