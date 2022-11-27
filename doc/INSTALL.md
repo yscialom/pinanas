@@ -61,6 +61,7 @@ You are free to run PiNanas with any user with:
 For instance, create a `pinanas` user:
 ```bash
 sudo useradd --groups docker --system pinanas
+```
 
 
 PiNanas installation directory
@@ -77,7 +78,7 @@ Settings
 --------
 
 ### Define your settings
-In the instalation directory, create a file `settings.yml` from [`src/settings.yml.sample`](src/settings.yml.sample)
+In the instalation directory, create a file `settings.yml` from [`src/settings.yml.sample`](/src/settings.yml.sample)
 and fill in all mandatory values:
 ```bash
 cd /opt/pinanas
