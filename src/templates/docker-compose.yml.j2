@@ -1,8 +1,9 @@
+#jinja2:lstrip_blocks: True
 {%- import 'secrets.j2' as secrets with context -%}
 ---
 version: "3"
 networks:
-  default:
+  pinanas:
   database:
 
 
@@ -16,14 +17,49 @@ services:
   dhcpd:
     image: networkboot/dhcpd:1.3.0
     container_name: dhcpd
+    network_mode: host
+    hostname: dhcpd
+    environment:
+      - TZ={{ pinanas.timezone }}
     volumes:
       - ./dhcpd/config/dhcpd.conf:/data/dhcpd.conf:ro
       - ./dhcpd/data:/data
       - ./dhcpd/cgroup:/sys/fs/cgroup
-    hostname: dhcpd
+    restart: unless-stopped
+
+
+  #
+  ## === FAIL2BAN ===
+  #
+  # Fail2ban ban hosts that cause multiple authentication errors.
+  ##
+  fail2ban:
+    image: lscr.io/linuxserver/fail2ban:0.11.2
+    container_name: fail2ban
+    depends_on:
+      - traefik
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
     network_mode: host
+    hostname: fail2ban
     environment:
       - TZ={{ pinanas.timezone }}
+      - PUID={{ PUID }}
+      - PGID={{ PGID }}
+      - SSMTP_HOST={{ pinanas.network.smtp.host }}
+      - SSMTP_PORT={{ pinanas.network.smtp.port }}
+      - SSMTP_USER={{ pinanas.network.smtp.username }}
+      - SSMTP_PASSWORD={{ pinanas.network.smtp.password }}
+      - SSMTP_TLS=YES
+      - SSMTP_STARTTLS=YES
+    volumes:
+      - ./fail2ban/config:/config/fail2ban
+      - ./fail2ban:/config/log/fail2ban
+      - /var/log:/var/log:ro
+      - ./authelia/config/logs:/remotelogs/authelia:ro
+      - ./nextcloud/data/files:/remotelogs/nextcloud:ro
+      - ./traefik/log:/remotelogs/traefik:ro
     restart: unless-stopped
 
 
@@ -43,24 +79,16 @@ services:
       - 80:80
       - 443:443
       - 53:53/udp
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik/config/config.yml:/config.yml:ro
-      - ./traefik/config/traefik.yml:/traefik.yml:ro
-      - ./traefik/data/acme.json:/acme.json
-      - ./traefik/log:/opt/traefik
-    hostname: traefik
     networks:
-      default:
+      pinanas:
         aliases:
           - traefik
           - traefik-dashboard
     environment:
       - TZ={{ pinanas.timezone }}
-{% for var in pinanas.network.dns.provider.api %}
+      {% for var in pinanas.network.dns.provider.api %}
       - {{ var.name }}={{ var.value }}
-{% endfor %}
+      {% endfor %}
     labels:
       - "traefik.enable=true"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
@@ -75,6 +103,13 @@ services:
       - "traefik.http.routers.traefik.entrypoints=http"
       - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
       - "traefik.http.routers.traefik.rule=Host(`traefik-dashboard.{{ pinanas.domain }}`)"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/config/config.yml:/config.yml:ro
+      - ./traefik/config/traefik.yml:/traefik.yml:ro
+      - ./traefik/data/acme.json:/acme.json
+      - ./traefik/log:/opt/traefik
     healthcheck:
       test: traefik healthcheck --ping
     restart: unless-stopped
@@ -90,12 +125,8 @@ services:
     container_name: authelia
     depends_on:
       - traefik
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./authelia/config:/config
-    hostname: authelia
     networks:
-      default:
+      pinanas:
         aliases:
           - authelia
           - auth
@@ -105,13 +136,16 @@ services:
       - PGID={{ PGID }}
     labels:
       - "traefik.enable=true"
-      {% set portnumber_=":" ~ pinanas.ports.https if pinanas.ports.https != 443 else "" -%}
+      {% set portnumber_=":" ~ pinanas.ports.https if pinanas.ports.https != 443 else "" %}
       - "traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=https://auth.{{ pinanas.domain }}{{ portnumber_ }}"
       - "traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email"
       - "traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true"
       - "traefik.http.routers.authelia.entrypoints=https"
       - "traefik.http.routers.authelia.rule=Host(`auth.{{ pinanas.domain }}`)"
       - "traefik.http.routers.authelia.tls=true"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./authelia/config:/config
     restart: unless-stopped
 
 
@@ -127,12 +161,8 @@ services:
     depends_on:
       - dhcpd
       - traefik
-    volumes:
-      - ./adguardhome/config:/opt/adguardhome/conf
-      - ./adguardhome/data:/opt/adguardhome/work/data
-    hostname: adguardhome
     networks:
-      default:
+      pinanas:
         aliases:
           - adguardhome
           - dns
@@ -158,6 +188,9 @@ services:
       - "traefik.udp.routers.adblockhome-dns.entrypoints=dns-udp"
       - "traefik.udp.routers.adblockhome-dns.service=adblockhome-dns"
       - "traefik.udp.services.adblockhome-dns.loadBalancer.server.port=53"
+    volumes:
+      - ./adguardhome/config:/opt/adguardhome/conf
+      - ./adguardhome/data:/opt/adguardhome/work/data
     restart: unless-stopped
 
 
@@ -175,19 +208,8 @@ services:
       - SYS_PTRACE
     security_opt:
       - apparmor:unconfined
-    volumes:
-      - /etc/passwd:/host/etc/passwd:ro
-      - /etc/group:/host/etc/group:ro
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /etc/os-release:/host/etc/os-release:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /var/log/fail2ban.log:/var/log/fail2ban.log:ro
-      - ./dhcpd/data:/var/lib/dhcp:ro
-      - ./netdata/data:/etc/netdata
-    hostname: netdata
     networks:
-      default:
+      pinanas:
         aliases:
           - netdata
           - resources
@@ -207,6 +229,16 @@ services:
       - "traefik.http.routers.netdata.middlewares=netdata-https-redirect"
       - "traefik.http.routers.netdata.rule=Host(`resources.{{ pinanas.domain }}`)"
       - "traefik.http.services.netdata.loadbalancer.server.port=19999"
+    volumes:
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/log/fail2ban.log:/var/log/fail2ban.log:ro
+      - ./dhcpd/data:/var/lib/dhcp:ro
+      - ./netdata/data:/etc/netdata
     restart: unless-stopped
 
 
@@ -221,7 +253,7 @@ services:
     depends_on:
       - dhcpd
     networks:
-      default:
+      pinanas:
         aliases:
           - heimdall
           - apps
@@ -287,7 +319,7 @@ services:
     links:
       - database
     networks:
-      default:
+      pinanas:
         aliases:
           - nextcloud
           - cloud
@@ -301,7 +333,7 @@ services:
       - PGID={{ PGID }}
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=pinanas_default"
+      - "traefik.docker.network=pinanas"
       - "traefik.http.routers.nextcloud-secure.entrypoints=https"
       - "traefik.http.routers.nextcloud-secure.middlewares=authelia@docker"
       - "traefik.http.routers.nextcloud-secure.rule=Host(`cloud.{{ pinanas.domain }}`)"
@@ -325,40 +357,6 @@ services:
 
 
   #
-  ## === FAIL2BAN ===
-  #
-  # Fail2ban ban hosts that cause multiple authentication errors
-  ##
-  fail2ban:
-    image: lscr.io/linuxserver/fail2ban:0.11.2
-    container_name: fail2ban
-    depends_on:
-      - traefik
-    cap_add:
-      - NET_ADMIN
-      - NET_RAW
-    network_mode: host
-    environment:
-      - TZ={{ pinanas.timezone }}
-      - PUID={{ PUID }}
-      - PGID={{ PGID }}
-      - SSMTP_HOST={{ pinanas.network.smtp.host }}
-      - SSMTP_PORT={{ pinanas.network.smtp.port }}
-      - SSMTP_USER={{ pinanas.network.smtp.username }}
-      - SSMTP_PASSWORD={{ pinanas.network.smtp.password }}
-      - SSMTP_TLS=YES
-      - SSMTP_STARTTLS=YES
-    volumes:
-      - ./fail2ban/config:/config/fail2ban
-      - ./fail2ban:/config/log/fail2ban
-      - /var/log:/var/log:ro
-      - ./authelia/config/logs:/remotelogs/authelia:ro
-      - ./nextcloud/data/files:/remotelogs/nextcloud:ro
-      - ./traefik/log:/remotelogs/traefik:ro
-    restart: unless-stopped
-
-
-  #
   ## === JELLYFIN ===
   #
   # Jellyfin is a Free Software Media System that puts you in control of
@@ -370,7 +368,7 @@ services:
     image: lscr.io/linuxserver/jellyfin:10.8.7
     container_name: jellyfin
     networks:
-      default:
+      pinanas:
         aliases:
           - jellyfin
           - media
@@ -391,9 +389,9 @@ services:
       - "traefik.http.routers.jellyfin.rule=Host(`media.{{ pinanas.domain }}`)"
       - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
     volumes:
-      {% for configfile in ['branding.xml', 'network.xml', 'system.xml'] -%}
+      {% for configfile in ['branding.xml', 'network.xml', 'system.xml'] %}
       - ./jellyfin/config/{{ configfile }}:/config/{{ configfile }}
-      {% endfor -%}
+      {% endfor %}
       - ./jellyfin/config/plugins:/config/data/plugins
       - ./jellyfin/config/libraries/default:/config/data/root/default
       - ./jellyfin/data/log:/config/log
