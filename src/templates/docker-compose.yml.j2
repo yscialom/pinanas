@@ -1,3 +1,4 @@
+#jinja2:lstrip_blocks: True
 {%- import 'secrets.j2' as secrets with context -%}
 ---
 version: "3"
@@ -15,7 +16,7 @@ services:
   ##
   dhcpd:
     image: networkboot/dhcpd:1.3.0
-    container_name: dhcpd
+    container_name: dhcpdtu veux
     volumes:
       - ./dhcpd/config/dhcpd.conf:/data/dhcpd.conf:ro
       - ./dhcpd/data:/data
@@ -84,7 +85,6 @@ services:
       - ./traefik/config/traefik.yml:/traefik.yml:ro
       - ./traefik/data/acme.json:/acme.json
       - ./traefik/log:/opt/traefik
-    hostname: traefik
     networks:
       pinanas:
         aliases:
@@ -92,9 +92,9 @@ services:
           - traefik-dashboard
     environment:
       - TZ={{ pinanas.timezone }}
-      {% for var in pinanas.network.dns.provider.api -%}
+      {% for var in pinanas.network.dns.provider.api %}
       - {{ var.name }}={{ var.value }}
-      {% endfor -%}
+      {% endfor %}
     labels:
       - "traefik.enable=true"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
@@ -135,7 +135,7 @@ services:
       - PGID={{ PGID }}
     labels:
       - "traefik.enable=true"
-      {% set portnumber_=":" ~ pinanas.ports.https if pinanas.ports.https != 443 else "" -%}
+      {% set portnumber_=":" ~ pinanas.ports.https if pinanas.ports.https != 443 else "" %}
       - "traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=https://auth.{{ pinanas.domain }}{{ portnumber_ }}"
       - "traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email"
       - "traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true"
@@ -388,9 +388,9 @@ services:
       - "traefik.http.routers.jellyfin.rule=Host(`media.{{ pinanas.domain }}`)"
       - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
     volumes:
-      {% for configfile in ['branding.xml', 'network.xml', 'system.xml'] -%}
+      {% for configfile in ['branding.xml', 'network.xml', 'system.xml'] %}
       - ./jellyfin/config/{{ configfile }}:/config/{{ configfile }}
-      {% endfor -%}
+      {% endfor %}
       - ./jellyfin/config/plugins:/config/data/plugins
       - ./jellyfin/config/libraries/default:/config/data/root/default
       - ./jellyfin/data/log:/config/log
