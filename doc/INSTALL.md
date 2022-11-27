@@ -19,7 +19,7 @@ During installation or operation, PiNanas requires:
 - python3 and pip
 - docker and docker-compose
 - a wildcard (sub)domain name (e.g. `*.home.example.com`); read
-[How to get a domain name?](doc/get-a-domain-name.md "doc/get-a-domain-name.md") for more information.
+[How to get a domain name?](get-a-domain-name.md "doc/get-a-domain-name.md") for more information.
 
 ### Operating Systems
 
@@ -90,7 +90,7 @@ Save and exit.
 
 ### DNS Provider
 PiNanas needs delegation on your domain name. To this end, you must create and fill in the appropriate variables to
-PiNanas. Read [DNS Provider Variables](doc/dns-provider-variables.md "doc/dns-provider-variables.md") for a complete
+PiNanas. Read [DNS Provider Variables](dns-provider-variables.md "doc/dns-provider-variables.md") for a complete
 guide.
 
 ### Special care needed on `settings.yml`
@@ -142,7 +142,7 @@ monitoring tool will help you follow hardware and software resources consumption
 
 Heimdall has been selected as PiNanas dashboard. It is a simple and great page to access and quicky check the status
 of all of PiNanas services. Go to `https://apps.home.example.com` (replace `home.example.com` with your actual domain)
-and click the ![Haimdall Application List button](doc/res/heimdall-application-list.png) button and add your applications. You can find their urls on Traefik dashboard (`https://traefik-dashboard.home.example.com`).
+and click the ![Haimdall Application List button](res/heimdall-application-list.png) button and add your applications. You can find their urls on Traefik dashboard (`https://traefik-dashboard.home.example.com`).
 
 ### Sign in with Authelia
 
