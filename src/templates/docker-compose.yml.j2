@@ -18,10 +18,7 @@ services:
     image: networkboot/dhcpd:1.3.0
     container_name: dhcpd
     network_mode: host
-    networks:
-      pinanas:
-        aliases:
-          - dhcpd
+    hostname: dhcpd
     environment:
       - TZ={{ pinanas.timezone }}
     volumes:
@@ -45,10 +42,7 @@ services:
       - NET_ADMIN
       - NET_RAW
     network_mode: host
-    networks:
-      pinanas:
-        aliases:
-          - fail2ban
+    hostname: fail2ban
     environment:
       - TZ={{ pinanas.timezone }}
       - PUID={{ PUID }}
