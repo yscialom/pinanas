@@ -3,7 +3,7 @@ PiNanas
 
 **Cloud services, safely hosted at home.**
 
-![Heimdall application dashboard: PiNanas homepage](doc/pinanas-apps.png)
+![Heimdall application dashboard: PiNanas homepage](doc/res/pinanas-apps.png)
 
 
 Description
@@ -12,7 +12,7 @@ PiNanas is a private cloud platform including a wild range of services, safely h
 infrastructure. It is modular, flexible and open to extensions. Built with security and ease of use in mind, PiNanas
 will empower you to transform any hardware (old computer, Raspberry Pi, ...) into a homelab and private cloud.
 
-Access your files from anywhere on the world. Never lose a photo. Wonder no more how to play videos on your TV.
+Access your files from anywhere around the world. Never lose a photo. Wonder no more how to play videos on your TV.
 
 ### What can I do with PiNanas?
 
@@ -88,5 +88,5 @@ PiNanas: a [NAS](https://en.wikipedia.org/wiki/Network-attached_storage "Network
 
 We'd be sincerly pleased to see you find interest in our toy project.
 
---- [Yankel Scialom](https://github.com/yscialom "YSC on Github") and
+— [Yankel Scialom](https://github.com/yscialom "YSC on Github") and
 [glevil](https://github.com/glevil "glevil on Github").
