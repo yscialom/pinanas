@@ -8,11 +8,13 @@ PiNanas
 
 Description
 -----------
-PiNanas is a private cloud platform including a wild range of services, safely hosted at home or on privately managed
-infrastructure. It is modular, flexible and open to extensions. Built with security and ease of use in mind, PiNanas
-will empower you to transform any hardware (old computer, Raspberry Pi, ...) into a homelab and private cloud.
+PiNanas is a private cloud platform with a wild range of services included. It can be safely hosted at home or on any
+privately-managed infrastructure. It is modular, flexible and open to extensions. Built with security and ease of use
+in mind, PiNanas will empower you to transform any hardware (old computer, Raspberry Pi, ...) into a homelab and
+private cloud.
 
-Access your files from anywhere around the world. Never lose a photo. Wonder no more how to play videos on your TV.
+Access your files from anywhere around the world. Never lose a photo anymore. Wonder no more how to play videos on
+your TV.
 
 ### What can I do with PiNanas?
 
@@ -76,17 +78,17 @@ report, pull request...
 Who are we?
 -----------
 
-PiNanas was born in 2020 during the Covid Pandemic when two friends discussed their frustrations around tentatives to
+PiNanas was born in 2020 during the Covid Pandemic when two friends discussed their frustrations around attempts to
 setup Plex in a controlled environment, on low-cost hardware (Raspberry Pi 3).
 
-It is about this time that [Techno Tim](https://www.technotim.live "Techno Tim homepage") published [a video on
+It is around this time that [Techno Tim](https://www.technotim.live "Techno Tim homepage") published [a video on
 Youtube](https://youtu.be/pAM2GBCDGTo "Self-Hosting Your Homelab Services with SSL -- Let's Encrypt, MetalLB, Traefik,
-Rancher, Kubernetes") on how to setup Traefik on a homelab, first of a series on homelab services. These videos have
-been a continuing source of inspiration for us. What we tinkered with became its own thing, and The Wife named it
+Rancher, Kubernetes") on how to setup Traefik on a homelab, the first of a series on homelab services. These videos
+have been a continuing source of inspiration for us. What we tinkered with became its own thing, and The Wife named it
 PiNanas: a [NAS](https://en.wikipedia.org/wiki/Network-attached_storage "Network-attached storage") on a
 [Pi](https://www.raspberrypi.org/ "Raspberry Pi")!
 
-We'd be sincerly pleased to see you find interest in our toy project.
+We'd be sincerly pleased to see you finding interest in our toy project.
 
 — [Yankel Scialom](https://github.com/yscialom "YSC on Github") and
 [glevil](https://github.com/glevil "glevil on Github").
