@@ -68,11 +68,10 @@ Contributing
 ------------
 
 PiNanas is highly modular and can be extended. You can:
-- [Link a service external to PiNanas](doc/external-services.md "doc/external-services.md") into it's perimeter, to
-enhance interoperability,
-security and visibility of an application.
+- [Link an external service to PiNanas](doc/external-services.md "doc/external-services.md") into its perimeter,
+  enhancing interoperability, security and visibility of applications.
 - [Contribute](doc/CONTRIBUTE.md "doc/CONTRIBUTE.md") to this repository: feature request, bug
-report, pull request...
+  report, pull request...
 
 
 Who are we?
