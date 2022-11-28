@@ -81,7 +81,7 @@ Who are we?
 PiNanas was born in 2020 during the Covid Pandemic when two friends discussed their frustrations around attempts to
 setup Plex in a controlled environment, on low-cost hardware (Raspberry Pi 3).
 
-It is around this time that [Techno Tim](https://www.technotim.live "Techno Tim homepage") published [a video on
+It was around this time that [Techno Tim](https://www.technotim.live "Techno Tim homepage") published [a video on
 Youtube](https://youtu.be/pAM2GBCDGTo "Self-Hosting Your Homelab Services with SSL -- Let's Encrypt, MetalLB, Traefik,
 Rancher, Kubernetes") on how to setup Traefik on a homelab, the first of a series on homelab services. These videos
 have been a continuing source of inspiration for us. What we tinkered with became its own thing, and The Wife named it
