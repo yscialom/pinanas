@@ -84,7 +84,7 @@ setup Plex in a controlled environment, on low-cost hardware (Raspberry Pi 3).
 It was around this time that [Techno Tim](https://www.technotim.live "Techno Tim homepage") published [a video on
 Youtube](https://youtu.be/pAM2GBCDGTo "Self-Hosting Your Homelab Services with SSL -- Let's Encrypt, MetalLB, Traefik,
 Rancher, Kubernetes") on how to setup Traefik on a homelab, the first of a series on homelab services. These videos
-have been a continuing source of inspiration for us. What we tinkered with became its own thing, and The Wife named it
+have been a continuous source of inspiration for us. What we tinkered with became its own thing, and The Wife named it
 PiNanas: a [NAS](https://en.wikipedia.org/wiki/Network-attached_storage "Network-attached storage") on a
 [Pi](https://www.raspberrypi.org/ "Raspberry Pi")!
 
