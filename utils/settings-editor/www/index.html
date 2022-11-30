@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>PiNanas Settings UI</title>
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/css/jsoneditor.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
+    <script src="./schema.js"></script>
+    <style>
+      body {
+		margin:0;
+		padding:0;
+		font: normal .9em/1.2 Arial;
+		background-color:#02577a !important;
+	  }
+      .inner-row {
+	    height: 100vh;
+		background-color: #fff;
+		position: relative;
+		max-width: 1200px;
+		left:50%;
+		transform: translate(-50%,0);
+		padding: 1rem 2rem;
+		box-shadow: 2px 0 5px rgba(0,0,0,.2);
+	  }
+    </style>
+  </head>
+  <body>
+	<div class="inner-row">
+      <h1>PiNanas Settings UI</h1>
+      <p>Use this editor to fill in your PiNanas settings. Once all relevant settings have been set, click the "Download" button.</p>
+      <p>Click the "Properties" button to display optional settings.</p>
+      <p><button id='download'>Download</button></p>
+      <div id='jsoneditor'></div>
+    </div>
+
+    <script>
+	  // Editor
+      var editor = new JSONEditor(document.getElementById('jsoneditor'),{
+		  theme: "spectre",
+		  iconlib: "spectre",
+		  disable_edit_json: true,
+		  no_additional_properties: true,
+		  display_required_only: true,
+		  show_opt_in: true,
+		  schema: schema,
+		});
+
+		// Download action
+		document.getElementById('download').addEventListener('click', function() {
+			const doc = jsyaml.dump(editor.getValue());
+			const filename = "settings.yml";
+			var anchor = document.createElement('a');
+			anchor.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(doc));
+			anchor.setAttribute('download', filename);
+			anchor.style.display = 'none';
+			document.body.appendChild(anchor);
+			anchor.click();
+			document.body.removeChild(anchor);
+		});
+    </script>
+  </body>
+</html>
