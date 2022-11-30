@@ -118,26 +118,28 @@ pinanas:
       # Send emails as. Type: string. Example: "contact@{{ pinanas.domain }}".
       sender:
 
-# === SELECT YOUR APPS === #
-#
-# PiNANAS includes following apps by default:
-# - DHCPD
-# - Traefik
-# - Fail2ban
-# - Authelia
-#
-# Optional applications can also be activated according to your needs. For a brief description of theses apps, go read the chapter "APPS DESCRIPTION" at the end of this file.
-# To activate one, please note "YES" in front of the desired application.
-# (by default, optionnal apps are not activated)
-# Example:
-# Adguardhome: YES
-#
-applications:
-  Adguardhome:
-  Heimdall:
-  Jellyfin:
-  Netdata:
-  Nextcloud:
+
+  applications:
+    #
+    # === SELECT YOUR APPS === #
+    #
+    # PiNANAS includes following apps by default:
+    # - DHCPD
+    # - Traefik
+    # - Fail2ban
+    # - Authelia
+    #
+    # Optional applications can also be activated according to your needs. For a brief description of theses apps, go read the chapter "APPS DESCRIPTION" at the end of this file.
+    # To activate one, please select with "OK" wanted application.
+    # (by default, optionnal apps are not activated)
+    # Example:
+    #   adguardhome: OK
+    #
+    adguardhome: 
+    heimdall: 
+    jellyfin: 
+    netdata: 
+    nextcloud: 
 
 #
 # === APPS DESCRIPTION === #
@@ -170,7 +172,7 @@ applications:
 
   ## === HEIMDALL ===
   #
-  Heimdall Application Dashboard is a dashboard for all your web applications.
+  # Heimdall Application Dashboard is a dashboard for all your web applications.
 
 
   ## === JELLYFIN ===
