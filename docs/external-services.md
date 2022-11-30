@@ -35,4 +35,4 @@ pinanas:
       url: "https://www.example.net/application"
     - ...
 ```
-This configuration will make both `servicecode1.example.com` and `servicecode2.example.com` available, protected by a valid TLS certificate and proxied and monitored by PiNanas.
+This configuration will make both `https://servicecode1.example.com/` and `https://servicecode2.example.com/` available, protected by a valid TLS certificate and proxied and monitored by PiNanas.
