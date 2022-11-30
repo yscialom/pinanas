@@ -22,7 +22,7 @@ How to?
 -------
 
 In your `settings.yml` file (see [INSTALL](INSTALL.md#settings "docs/INSTALL.md") for more information), you will find
-the variable `services`. You need to fill in the details for your provider. It is composed of two fields:
+the variable `services`. This is where you can list your external services. It is composed of two fields:
 - The `name` (or code) of your service: this will be the subdomain your service will be available at;
 - The internal `url` of your service: this is the url used locally (from the PiNanas server point of view) to access
   the service. It can be part of your own infrastructure of completely external.
