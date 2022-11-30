@@ -11,7 +11,8 @@ open an issue as if it was a "bug" of documentation. See [Report issues](#report
 
 Report issues, bug, request features, ...
 -----------------------------------------
-TODO
+
+Please report issues and bug, suggest new features, share success when testing new hardware or OSes, by [opening an _Issue_](https://github.com/yscialom/pinanas/issues/new/choose) on PiNanas Github repository.
 
 
 Improve PiNanas
