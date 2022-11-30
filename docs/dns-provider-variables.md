@@ -35,7 +35,7 @@ Encrypt") can be found on Traefik documentation website. Make sure your provider
 How to provide API Keys to PiNanas?
 ----------------------------------
 
-In your `settings.yml` file (see [INSTALL](INSTALL.md#settings "doc/INSTALL.md") for more information), you will find
+In your `settings.yml` file (see [INSTALL](INSTALL.md#settings "docs/INSTALL.md") for more information), you will find
 the variable `provider`. You need to fill in the details for your provider. It is composed of three fields:
 - The `name` (or code) of your provider as defined by
   [ACME](https://en.wikipedia.org/wiki/Automatic_Certificate_Management_Environment "Wikipedia —

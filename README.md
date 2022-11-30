@@ -3,7 +3,7 @@ PiNanas
 
 **Cloud services, safely hosted at home.**
 
-![Heimdall application dashboard: PiNanas homepage](doc/res/pinanas-apps.png)
+![Heimdall application dashboard: PiNanas homepage](docs/res/pinanas-apps.png)
 
 
 Description
@@ -59,18 +59,18 @@ During installation or operation, PiNanas requires:
 - python3 and pip
 - docker and docker-compose
 - a wildcard (sub)domain name (e.g. `*.home.example.com`); read
-[How to get a domain name?](doc/get-a-domain-name.md "doc/get-a-domain-name.md") for more information.
+[How to get a domain name?](docs/get-a-domain-name.md "docs/get-a-domain-name.md") for more information.
 
-Read [INSTALL](doc/INSTALL.md "doc/INSTALL.md") for a step-by-step guide on how to install PiNanas at home.
+Read [INSTALL](docs/INSTALL.md "docs/INSTALL.md") for a step-by-step guide on how to install PiNanas at home.
 
 
 Contributing
 ------------
 
 PiNanas is highly modular and can be extended. You can:
-- [Link an external service to PiNanas](doc/external-services.md "doc/external-services.md") into its perimeter,
+- [Link an external service to PiNanas](docs/external-services.md "docs/external-services.md") into its perimeter,
   enhancing interoperability, security and visibility of applications.
-- [Contribute](doc/CONTRIBUTE.md "doc/CONTRIBUTE.md") to this repository: feature request, bug
+- [Contribute](docs/CONTRIBUTING.md "docs/CONTRIBUTING.md") to this repository: feature request, bug
   report, pull request...
 
 
