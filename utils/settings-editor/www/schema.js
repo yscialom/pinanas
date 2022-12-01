@@ -204,7 +204,7 @@ var schema = {
                                 email: {
                                     type: "string",
                                     description: "Email address used for registration",
-                                    pattern: "^[A-Za-z0-9]+@[A-Za-z0-9]+$",
+                                    pattern: "^[A-Za-z0-9._-]+@[A-Za-z0-9._-]+$",
                                 },
                                 api: {
                                     type: "array",
