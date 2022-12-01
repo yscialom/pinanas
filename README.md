@@ -118,4 +118,4 @@ Your installation is now complete.
 Start
 =====
 
-From your installation directory, run `docker-compose --profile OK up -d`.
+From your installation directory, run `docker-compose up -d`.
