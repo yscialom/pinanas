@@ -8,7 +8,7 @@ var schema = {
         domain: {
             type: "string",
             description: "Registered domain name",
-            pattern: "^(([A-Za-z0-9])+\\.?)+$",
+            pattern: "^(([A-Za-z0-9_-])+\\.?)+$",
         },
         ports: {
             type: "object",
