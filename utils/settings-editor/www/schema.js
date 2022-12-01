@@ -244,6 +244,7 @@ var schema = {
                             description: "Server port number",
                             minimum: 1,
                             maximum: 65535,
+                            default: 587,
                         },
                         username: {
                             type: "string",
