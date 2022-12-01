@@ -4,6 +4,6 @@ RUN apk update \
     && apk add lighttpd \
     && rm -rf /var/cache/apk/*
 
-ADD www /var/www/localhost/www
+ADD www /var/www/localhost/htdocs
 
 CMD ["lighttpd", "-D", "-f", "/etc/lighttpd/lighttpd.conf"]
