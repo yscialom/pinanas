@@ -130,16 +130,14 @@ pinanas:
     # - Authelia
     #
     # Optional applications can also be activated according to your needs. For a brief description of theses apps, go read the chapter "APPS DESCRIPTION" at the end of this file.
-    # To activate one, please select with "OK" wanted application.
+    # To activate one, please uncomment wanted application bellow.
     # (by default, optionnal apps are not activated)
-    # Example:
-    #   adguardhome: OK
     #
-    adguardhome: 
-    heimdall: 
-    jellyfin: 
-    netdata: 
-    nextcloud: 
+  #  - adguardhome
+  #  - heimdall
+  #  - jellyfin
+  #  - netdata
+  #  - nextcloud
 
 #
 # === APPS DESCRIPTION === #

@@ -34,7 +34,7 @@ configure () {
 report () {
     info "Configuration successful."
     cont "You can clean work files with ./distclean.sh"
-    cont "Start your services with docker-compose --profile OK up -d"
+    cont "Start your services with docker-compose up -d"
 
     command -v netstat >/dev/null || return
     if netstat -lan | grep -qE ':53\W' ; then
@@ -49,4 +49,7 @@ report () {
 }
 
 configure "$@"|| exit $?
+
+. ${PINANAS_SRC}/build/configure-dc.sh
+
 report
