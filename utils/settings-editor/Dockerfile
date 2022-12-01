@@ -11,6 +11,7 @@ ADD https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/css/jsoned
 ADD https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js /var/www/localhost/htdocs/jsoneditor.min.js
 ADD https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js /var/www/localhost/htdocs/js-yaml.min.js
 
-COPY www /var/www/localhost/htdocs
+COPY www/index.html /var/www/localhost/htdocs/index.html
+COPY www/schema.js /var/www/localhost/htdocs/schema.js
 
 CMD ["lighttpd", "-D", "-f", "/etc/lighttpd/lighttpd.conf"]
