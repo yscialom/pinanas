@@ -1,0 +1,46 @@
+#jinja2:lstrip_blocks: True
+{%- import 'secrets.j2' as secrets with context -%}
+
+
+  #
+  ## === JELLYFIN ===
+  #
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:10.8.7
+    container_name: jellyfin
+    profiles:
+      - {{ pinanas.applications.jellyfin|default("not_activated",true) }}
+    networks:
+      pinanas:
+        aliases:
+          - jellyfin
+          - media
+    environment:
+      - TZ={{ pinanas.timezone }}
+      - PUID={{ PUID }}
+      - PGID={{ PGID }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.jellyfin-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.jellyfin-secure.entrypoints=https"
+      - "traefik.http.routers.jellyfin-secure.middlewares=authelia@docker"
+      - "traefik.http.routers.jellyfin-secure.rule=Host(`media.{{ pinanas.domain }}`)"
+      - "traefik.http.routers.jellyfin-secure.service=jellyfin"
+      - "traefik.http.routers.jellyfin-secure.tls=true"
+      - "traefik.http.routers.jellyfin.entrypoints=http"
+      - "traefik.http.routers.jellyfin.middlewares=jellyfin-https-redirect"
+      - "traefik.http.routers.jellyfin.rule=Host(`media.{{ pinanas.domain }}`)"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+    volumes:
+      {% for configfile in ['branding.xml', 'network.xml', 'system.xml'] %}
+      - ./jellyfin/config/{{ configfile }}:/config/{{ configfile }}
+      {% endfor %}
+      - ./jellyfin/config/plugins:/config/data/plugins
+      - ./jellyfin/config/libraries/default:/config/data/root/default
+      - ./jellyfin/data/log:/config/log
+      - ./jellyfin/data/movies:/data/movies
+      - ./jellyfin/data/tvshows:/data/tvshows
+      - ./jellyfin/data/misc/metadata:/data/metadata
+      - ./jellyfin/data/misc/cache:/data/cache
+      - ./jellyfin/data/misc/databases:/config/data/data
+    restart: unless-stopped
