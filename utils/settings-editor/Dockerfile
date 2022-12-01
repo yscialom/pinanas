@@ -14,4 +14,6 @@ ADD https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js /var/www/localhos
 COPY www/index.html /var/www/localhost/htdocs/index.html
 COPY www/schema.js /var/www/localhost/htdocs/schema.js
 
+RUN chmod -r 644 /var/www/localhost/htdocs
+
 CMD ["lighttpd", "-D", "-f", "/etc/lighttpd/lighttpd.conf"]
