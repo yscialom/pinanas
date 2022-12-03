@@ -1,29 +1,50 @@
 PiNanas
 ========
 
-Description
-===========
-PiNanas is a [NAS](https://en.wikipedia.org/wiki/Network-attached_storage "Network-attached storage"),
-[media center](https://en.wikipedia.org/wiki/Home_theater_PC) and home-hosted set of services
-designed to run on a small computer like a Raspberry PI. Its features include:
+**Cloud services, safely hosted at home.**
 
-- Share files in your private network
-- Host files outside of your private network
-- (Dis)play photos, music, videos from your NAS on any screen
-- Scan, search & manage scans
-- Protect home network of ads and malwares
-- ...
+![Heimdall application dashboard: PiNanas homepage](docs/res/pinanas-apps.png)
+
+
+Description
+-----------
+PiNanas is a private cloud platform with a wild range of services included. It can be safely hosted at home or on any
+privately-managed infrastructure. It is modular, flexible and open to extensions. Built with security and ease of use
+in mind, PiNanas will empower you to transform any hardware (old computer, Raspberry Pi, ...) into a homelab and
+private cloud.
+
+Access your files from anywhere around the world. Never lose a photo anymore. Wonder no more how to play videos on
+your TV.
+
+### What can I do with PiNanas?
+
+PiNanas includes:
+- A private cloud platform:
+  - [Nextcloud](https://nextcloud.com "Nextcloud homepage"):
+    store, access and share your files, and more...
+  - [Jellyfin](https://jellyfin.org  "Jellyfin homepage"):
+    manage and stream your films and tv shows.
+- Network management:
+  - [AdGuard Home](https://adguard.com/en/adguard-home/overview.html "AdGuard Home homepage"):
+    protect your privacy and filter out advertising on all devices.
+- Security and monitoring tools:
+  - [Traefik](https://traefik.io/traefik "Traefik homepage"):
+    simplify networking complexity while designing, deploying, and operating applications.
+  - [Authelia](https://www.authelia.com "Authelia homepage"):
+    rely on the Single Sign-On Multi-Factor portal for all PiNanas apps.
+  - [Netdata](https://www.netdata.cloud "Netdata homepage"):
+    monitor your infrastructure resources.
 
 [![Continuous Integration](https://github.com/yscialom/pinanas/actions/workflows/continuous-integration.yml/badge.svg?branch=develop)](https://github.com/yscialom/pinanas/actions/workflows/continuous-integration.yml)
 [![Continuous Deplyment](https://github.com/yscialom/pinanas/actions/workflows/continuous-deployment.yml/badge.svg?branch=develop)](https://github.com/yscialom/pinanas/actions/workflows/continuous-deployment.yml)
 
-Installation
-============
 
-Requirements
+Installation
 ------------
 
-### Hardware
+### Requirements
+
+#### Hardware
 
 PiNanas will need a linux-based host, with:
 - 10GB free disk space
@@ -31,91 +52,42 @@ PiNanas will need a linux-based host, with:
 - An access to Internet
 - Optionnally: a GPU suited to your needs (video transcoding & playing)
 
-### Software
+#### Software
 
 During installation or operation, PiNanas requires:
 - GNU utils
 - python3 and pip
 - docker and docker-compose
-- a wildcard (sub)domain name (e.g. `*.home.example.com`)
+- a wildcard (sub)domain name (e.g. `*.home.example.com`); read
+[How to get a domain name?](docs/get-a-domain-name.md "docs/get-a-domain-name.md") for more information.
+
+Read [INSTALL](docs/INSTALL.md "docs/INSTALL.md") for a step-by-step guide on how to install PiNanas at home.
 
 
-Download
---------
+Contributing
+------------
 
-### Direct download
-Go and donwload our [latest release](https://github.com/yscialom/pinanas/releases) Source code.
-Unzip it anywhere.
-
-### Via git
-From your PiNanas host, anywhere:
-```bash
-git clone --depth 1 --branch master https://github.com/yscialom/pinanas.git
-```
+PiNanas is highly modular and can be extended. You can:
+- [Link an external service to PiNanas](docs/external-services.md "docs/external-services.md") into its perimeter,
+  enhancing interoperability, security and visibility of applications.
+- [Contribute](docs/CONTRIBUTING.md "docs/CONTRIBUTING.md") to this repository: feature request, bug
+  report, pull request...
 
 
-Settings
---------
+Who are we?
+-----------
 
-Create the installation directory for PiNanas, e.g. in `/opt/pinanas` and go there:
-```bash
-sudo mkdir -p /opt/pinanas
-sudo chown $(id -un):$(id -gn)
-cd /opt/pinanas
-```
+PiNanas was born in 2020 during the Covid Pandemic when two friends discussed their frustrations around attempts to
+setup Plex and their own private-cloud in a controlled environment, on low-cost hardware (Raspberry Pi 4).
 
-### Define your settings
-Create a file `settings.yml` from [`src/settings.yml.sample`](src/settings.yml.sample) and fill in all values:
-```bash
-cp /path/to/pinanas/src/settings.yml.sample settings.yml
-chmod 600 settings.yml # contains passwords
-nano settings.yml
-```
-See [Get your DNS API keys](#get-your-dns-api-keys) below for how to set `PINANAS_DNS_PROVIDER_VARS`.
+It was around this time that [Techno Tim](https://www.technotim.live "Techno Tim homepage") published [a video on
+Youtube](https://youtu.be/liV3c9m_OX8 "Put Wildcard Certificates and SSL on EVERYTHING - Traefik Tutorial") on how to
+setup Traefik on a homelab, the first of a series on homelab services. These videos have been a continuous source of
+inspiration for us. What we tinkered with became its own thing, and The Wife named it PiNanas: a
+[NAS](https://en.wikipedia.org/wiki/Network-attached_storage "Network-attached storage") on a
+[Pi](https://www.raspberrypi.org/ "Raspberry Pi")!
 
---- Remember to save and keep your settings.yml file on an external medium, it will allow you to quickly reconfigure your PINANAS ---
+We'd be sincerly pleased to see you finding interest in our toy project.
 
-### Get your DNS API keys
-
-#### OVH
-
-Go to [OVH's API Key creation page](https://eu.api.ovh.com/createToken/) and fill in:
-- `Account ID or email address`: your OVH account name
-- `Password`: your OVH account password
-- `Script Name`: a title for your usage, e.g. "PiNanas"
-- `Script Description`: a description for your usage, e.g. "Handle dns challenge for wildcard certificate issue for **.domainname"
-- `Validity`: "Unlimited"
-- `Rights`:
-  - "GET /domain/zone/*"
-  - "PUT /domain/zone/*"
-  - "POST /domain/zone/*"
-  - "DELETE /domain/zone/*"
-
-And click `Create keys`.
-
-You will be given an Application Key, an Application Secret and a Consumer Key. Keep those secret and safe as you cannot retrieve them.
-
-Update `settings.yml` and add the following values:
-```yaml
-PINANAS_DNS_PROVIDER_VARS:
-  - { name: OVH_APPLICATION_KEY, value: <Your Application Key> }
-  - { name: OVH_APPLICATION_SECRET, value: <Your Application Secret> }
-  - { name: OVH_CONSUMER_KEY, value: <Your Consumer Key> }
-  - { name: OVH_ENDPOINT, value: <Your OVH zone, e.g. ovh-eu> }
-```
-
-Install
--------
-
-From your installation directory, run:
-```bash
-/path/to/pinanas/src/configure.sh
-```
-If you made important changes and want to regenerate PiNanas, run with `--force`.
-
-Your installation is now complete.
-
-Start
-=====
-
-From your installation directory, run `docker-compose up -d`.
+— [Yankel Scialom](https://github.com/yscialom "YSC on Github") and
+[glevil](https://github.com/glevil "glevil on Github").
