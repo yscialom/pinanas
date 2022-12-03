@@ -5,7 +5,7 @@ Test PiNanas on new harware / now OSes
 --------------------------------------
 
 If you happen to test PiNanas on architectures or OSes not listed in [INSTALL](INSTALL.md "docs/INSTALL.md"), please
-report your findings. You can Either do a [Pull Request](#create-a-pull-request) to update PiNanas' documentation, or
+report your findings. You can either do a [Pull Request](#create-a-pull-request) to update PiNanas' documentation, or
 open an issue as if it was a "bug" of documentation. See [Report issues](#report-issues-bug-request-features-).
 
 
