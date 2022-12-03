@@ -78,7 +78,7 @@ Who are we?
 -----------
 
 PiNanas was born in 2020 during the Covid Pandemic when two friends discussed their frustrations around attempts to
-setup Plex in a controlled environment, on low-cost hardware (Raspberry Pi 3).
+setup Plex and their own private-cloud in a controlled environment, on low-cost hardware (Raspberry Pi 4).
 
 It was around this time that [Techno Tim](https://www.technotim.live "Techno Tim homepage") published [a video on
 Youtube](https://youtu.be/liV3c9m_OX8 "Put Wildcard Certificates and SSL on EVERYTHING - Traefik Tutorial") on how to
