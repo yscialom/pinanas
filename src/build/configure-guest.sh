@@ -150,6 +150,7 @@ rm -rf -- "${PINANAS_VENV}"
 docker rmi pinanas-config
 docker images -f dangling=true -q | xargs docker rmi
 rm -- \$0
+rm -rf "${PINANAS_DIST}/docker-templates/"
 EOF
     chmod +x "/pinanas/dist/distclean.sh"
 }

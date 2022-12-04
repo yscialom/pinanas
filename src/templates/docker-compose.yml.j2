@@ -138,5 +138,5 @@ services:
     restart: unless-stopped
 
 {% for apps in pinanas.applications %}
-  {% include 'docker-templates/{{ apps }}.yml' %}
+  {% include "./docker-templates/" + apps + ".yml.j2" %}
 {% endfor %}
