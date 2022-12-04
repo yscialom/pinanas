@@ -136,3 +136,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./authelia/config:/config
     restart: unless-stopped
+
+{% for apps in pinanas.applications %}
+  {% include 'docker-templates/{{ apps }}.yml' %}
+{% endfor %}

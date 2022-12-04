@@ -49,7 +49,4 @@ report () {
 }
 
 configure "$@"|| exit $?
-
-. ${PINANAS_SRC}/build/configure-dc.sh
-
 report
