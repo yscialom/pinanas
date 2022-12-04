@@ -38,7 +38,7 @@ Download
 ### Download
 
 #### Direct download
-Go and donwload our [latest release](https://github.com/yscialom/pinanas/releases) Source code.
+Go and download our [latest release](https://github.com/yscialom/pinanas/releases) Source code.
 Unzip the content of `pinanas-$version/` anywhere on your PiNanas host. The following will assume you unzipped it in
 `/path/to/pinanas`.
 
