@@ -4,8 +4,6 @@
 heimdall:
   image: lscr.io/linuxserver/heimdall:2.4.13
   container_name: heimdall
-  profiles:
-    - {{ pinanas.applications.heimdall|default("not_activated",true) }}
   depends_on:
     - dhcpd
   networks:
@@ -32,4 +30,4 @@ heimdall:
   volumes:
     - ./heimdall/data:/config/www
   restart: unless-stopped
-
+  

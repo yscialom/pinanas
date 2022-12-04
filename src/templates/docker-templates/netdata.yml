@@ -4,8 +4,6 @@
 netdata:
   image: netdata/netdata:v1.36
   container_name: netdata
-  profiles:
-    - {{ pinanas.applications.netdata|default("not_activated",true) }}
   depends_on:
     - dhcpd
   cap_add:
@@ -44,4 +42,4 @@ netdata:
     - ./dhcpd/data:/var/lib/dhcp:ro
     - ./netdata/data:/etc/netdata
   restart: unless-stopped
-
+  

@@ -137,6 +137,11 @@ services:
       - ./authelia/config:/config
     restart: unless-stopped
 
-{% for apps in pinanas.applications %}
-  {% include "./docker-templates/" + apps + ".yml.j2" %}
-{% endfor %}
+{% if pinanas.applications is not none -%}
+  {% macro docker_compose() -%}
+    {% for apps in pinanas.applications %}
+      {% include "./docker-templates/" + apps + ".yml" -%}
+    {% endfor %}
+  {% endmacro %}
+  {{ docker_compose()|indent(2) }}
+{% endif %}

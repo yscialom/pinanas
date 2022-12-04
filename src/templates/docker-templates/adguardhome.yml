@@ -4,8 +4,6 @@
 adguardhome:
   image: adguard/adguardhome
   container_name: adguardhome
-  profiles:
-    - {{ pinanas.applications.adguardhome|default("not_activated",true) }}
   depends_on:
     - dhcpd
     - traefik
@@ -40,4 +38,4 @@ adguardhome:
     - ./adguardhome/config:/opt/adguardhome/conf
     - ./adguardhome/data:/opt/adguardhome/work/data
   restart: unless-stopped
-
+  

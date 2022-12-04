@@ -5,8 +5,6 @@
 database:
   image: linuxserver/mariadb:10.5.13-alpine
   container_name: database
-  profiles:
-    - {{ pinanas.applications.nextcloud|default("not_activated",true) }}
   depends_on:
     - dhcpd
   networks:
@@ -34,8 +32,6 @@ nextcloud:
   build:
     context: nextcloud/build
   container_name: nextcloud
-  profiles:
-    - {{ pinanas.applications.nextcloud|default("not_activated",true) }}
   depends_on:
     - dhcpd
     - database
@@ -77,4 +73,4 @@ nextcloud:
     - ./nextcloud/data/generated-config:/config/www/nextcloud/config
     - ./nextcloud/data/files:/data
   restart: unless-stopped
-
+  
