@@ -1,6 +1,8 @@
 #!/bin/bash
-DIST_DIR="$(readlink -f "${1}")"
+set -e
+
 TEST_DIR="$(dirname "$(readlink -f "$0")")"
+DIST_DIR="$(readlink -f "${1}")"
 source "${TEST_DIR}/web-functions.sh"
 
 domain="pinanas-ci.scialom.org"
