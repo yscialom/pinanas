@@ -138,12 +138,11 @@ services:
     restart: unless-stopped
 
 {% if pinanas.applications is none -%}
-  {% for file_name in listdir(./docker-templates/) %}
+  {% for name in directory|abs(name, "./docker-templates/") %}
     {% filter indent(width=2) %}
-    {% include "./docker-templates/" + file_name + ".yml" -%}
+    {% include "./docker-templates/" + name + ".yml" -%}
     {% endfilter %}
   {% endfor %}
-  {% endfrom %}
   
 {% else %}
   {% for apps in pinanas.applications %}
