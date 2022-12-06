@@ -1,6 +1,4 @@
-#
 ## === HEIMDALL ===
-#
 heimdall:
   image: lscr.io/linuxserver/heimdall:2.4.13
   container_name: heimdall
@@ -30,4 +28,3 @@ heimdall:
   volumes:
     - ./heimdall/data:/config/www
   restart: unless-stopped
-  

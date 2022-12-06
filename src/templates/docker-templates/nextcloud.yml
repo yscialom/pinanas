@@ -1,7 +1,5 @@
 {%- import 'secrets.j2' as secrets with context -%}
-#
 ## === NEXTCLOUD ===
-#
 database:
   image: linuxserver/mariadb:10.5.13-alpine
   container_name: database
@@ -73,4 +71,3 @@ nextcloud:
     - ./nextcloud/data/generated-config:/config/www/nextcloud/config
     - ./nextcloud/data/files:/data
   restart: unless-stopped
-  

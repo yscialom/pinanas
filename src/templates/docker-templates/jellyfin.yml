@@ -1,6 +1,4 @@
-#
 ## === JELLYFIN ===
-#
 jellyfin:
   image: lscr.io/linuxserver/jellyfin:10.8.7
   container_name: jellyfin
@@ -38,4 +36,3 @@ jellyfin:
     - ./jellyfin/data/misc/cache:/data/cache
     - ./jellyfin/data/misc/databases:/config/data/data
   restart: unless-stopped
-  

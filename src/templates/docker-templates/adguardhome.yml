@@ -1,6 +1,4 @@
-#
 ## === AD GUARD HOME ===
-#
 adguardhome:
   image: adguard/adguardhome
   container_name: adguardhome
@@ -38,4 +36,3 @@ adguardhome:
     - ./adguardhome/config:/opt/adguardhome/conf
     - ./adguardhome/data:/opt/adguardhome/work/data
   restart: unless-stopped
-  
