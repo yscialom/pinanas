@@ -7,18 +7,17 @@ What is an Applications?
 An application is any service natively include with PiNanas (like DHCPD, Traefik, etc).
 All applications are listed and detailled in [README](README.md#settings "README.md")
 
-Why would I want enable/disable some applications?
+Why would I want to enable/disable some applications?
 ---------------------------------------------
 
-PiNanas has been designed to propose all applications "in the box"
-But, you have the possibility to personalise your PiNanas and so
-you will want to be able to select the applications you are interested in.
+PiNanas has been designed to offer all applications "in the box" per default.
+You can personalise this behaviour by selecting which applications you are interested in and want to enable.
 
 How to?
 -------
 
-In your 'settings.yml' file (see [APPLICATIONS](applications_list.md "docs/applications_list.md") for more information), you will find
-the variable 'applications'. This is where you can list applications you want (from the list of those availables).
+In your 'settings.yml' file (see [APPLICATIONS] for more information), add the variable applications.
+In this variable, list all the application you want enabled. Other application will be disabled:
 
 ```yaml
 pinanas:
