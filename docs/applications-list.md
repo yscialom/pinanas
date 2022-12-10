@@ -1,7 +1,7 @@
 Applications: List and Descriptions
 ===================================
 
-Not optional applications
+Mandatory applications
 -----------------------------
 
 #### DHCPD
