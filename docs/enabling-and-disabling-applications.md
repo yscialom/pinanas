@@ -4,7 +4,7 @@ Enabling and Disabling Applications
 What is an Applications?
 ------------------------
 
-An application is any service natively include with PiNanas (like DHCPD, Traefik, etc).
+An application is any service natively included with PiNanas (like DHCPD, Traefik, etc).
 All applications are listed and detailled in [README](README.md#settings "README.md")
 
 Why would I want to enable/disable some applications?
