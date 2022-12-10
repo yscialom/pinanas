@@ -22,7 +22,7 @@ Optionnal applications
 ----------------------
 
 #### AD GUARD HOME
-AdGuard Home is a network-wide software for blocking ads and tracking. After you set it up, it'll cover ALL your home devices, and you don't need any client-side software for that
+AdGuard Home is a network-wide software for blocking ads and tracking. After you set it up, it'll cover ALL your home devices, and you don't need any client-side software for that.
 
 #### HEIMDALL
 Heimdall Application Dashboard is a dashboard for all your web applications.
@@ -36,4 +36,4 @@ Netdata is a tool designed to collect real-time metrics, such as CPU usage, disk
 
 #### NEXTCLOUD
 Nextcloud gives you access to all your files wherever you are.
-This configuration uses MariaDB as database
+This configuration uses MariaDB as database.
