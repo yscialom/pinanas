@@ -117,9 +117,3 @@ pinanas:
 
       # Send emails as. Type: string. Example: "contact@{{ pinanas.domain }}".
       sender:
-
-  applications:
-    # List of applications to enable. Type: list of strings. Default: none (all enabled). See documentation for listed applications available. Exemple:
-    # - adguardhome
-    # - netdata
-    # - ...

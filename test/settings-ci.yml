@@ -90,11 +90,3 @@ pinanas:
 
       # Send emails as. Type: string. Example: "contact@{{ pinanas.domain }}".
       sender:  "${settings_pinanas_network_smtp_sender}"
-
-  applications:
-    # List of applications to enable. Type: list of strings.
-    - adguardhome
-    - heimdall
-    - jellyfin
-    - netdata
-    - nextcloud

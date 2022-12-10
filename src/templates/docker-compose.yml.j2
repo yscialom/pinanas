@@ -126,17 +126,6 @@ services:
       - ./authelia/config:/config
     restart: unless-stopped
 
-{% if pinanas.applications is none %}
-  {% for default_apps in pinanas_default.applications %}
-    {% filter indent(2, True) %}
-    {% include "./docker-templates/" + default_apps + ".yml" +%}
-    {% endfilter %}
-  {% endfor %}
-  
-{% else %}
-  {% for apps in pinanas.applications %}
-    {% filter indent(2, True) %}
-    {% include "./docker-templates/" + apps + ".yml" +%}
-    {% endfilter %}
-  {% endfor %}
-{% endif %}
+{% for application in pinanas.applications %}
+  {% include "./docker-templates/" + application + ".yml" | indent(width=2, first=True) +%}
+{% endfor %}
