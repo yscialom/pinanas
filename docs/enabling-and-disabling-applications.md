@@ -17,7 +17,7 @@ you will want to be able to select the applications you are interested in.
 How to?
 -------
 
-In your 'settings.yml' file (see [INSTALL](INSTALL.md#settings "docs/INSTALL.md") for more information), you will find
+In your 'settings.yml' file (see [APPLICATIONS](applications_list.md "docs/applications_list.md") for more information), you will find
 the variable 'applications'. This is where you can list applications you want (from the list of those availables).
 
 ```yaml
