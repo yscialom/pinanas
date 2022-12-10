@@ -47,7 +47,7 @@ pinanas_default:
       upstreams: "{{ ansible_dns.nameservers }}"
 
   applications:
-    # List of enabled applications. Type: list of strings.
+    # List of optionnal applications. Default: all enabled. Type: list of strings.
     - adguardhome
     - heimdall
     - jellyfin

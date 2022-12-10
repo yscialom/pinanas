@@ -1,4 +1,4 @@
-#jinja2:lstrip_blocks: True
+#jinja2: lstrip_blocks: "True", keep_trailing_newline: "True"
 {%- import 'secrets.j2' as secrets with context -%}
 ---
 version: "3"
@@ -6,11 +6,9 @@ networks:
   pinanas:
   database:
 
-
 services:
-  #
+
   ## === DHCPD ===
-  #
   dhcpd:
     image: networkboot/dhcpd:1.3.0
     container_name: dhcpd
@@ -24,10 +22,7 @@ services:
       - ./dhcpd/cgroup:/sys/fs/cgroup
     restart: unless-stopped
 
-
-  #
   ## === FAIL2BAN ===
-  #
   fail2ban:
     image: lscr.io/linuxserver/fail2ban:0.11.2
     container_name: fail2ban
@@ -57,10 +52,7 @@ services:
       - ./traefik/log:/remotelogs/traefik:ro
     restart: unless-stopped
 
-
-  #
   ## === TRAEFIK ===
-  #
   traefik:
     image: traefik:v2.9
     container_name: traefik
@@ -105,10 +97,7 @@ services:
       test: traefik healthcheck --ping
     restart: unless-stopped
 
-
-  #
   ## === AUTHELIA ===
-  #
   authelia:
     image: authelia/authelia:4.37
     container_name: authelia
@@ -137,17 +126,17 @@ services:
       - ./authelia/config:/config
     restart: unless-stopped
 
-{% if pinanas.applications is none -%}
+{% if pinanas.applications is none %}
   {% for default_apps in pinanas_default.applications %}
-    {% filter indent(width=2) %}
-    {% include "./docker-templates/" + default_apps + ".yml" -%}
+    {% filter indent(2, True) %}
+    {% include "./docker-templates/" + default_apps + ".yml" +%}
     {% endfilter %}
   {% endfor %}
   
 {% else %}
   {% for apps in pinanas.applications %}
-    {% filter indent(width=2) %}
-    {% include "./docker-templates/" + apps + ".yml" -%}
+    {% filter indent(2, True) %}
+    {% include "./docker-templates/" + apps + ".yml" +%}
     {% endfilter %}
   {% endfor %}
 {% endif %}

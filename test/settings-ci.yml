@@ -92,19 +92,7 @@ pinanas:
       sender:  "${settings_pinanas_network_smtp_sender}"
 
   applications:
-    #
-    # === SELECT YOUR APPS === #
-    #
-    # PiNANAS includes following apps by default:
-    # - DHCPD
-    # - Traefik
-    # - Fail2ban
-    # - Authelia
-    #
-    # Optional applications can also be activated according to your needs. For a brief description of theses apps, go read the chapter "APPS DESCRIPTION" at the end of this file.
-    # To activate one, please uncomment wanted application bellow.
-    # (by default, optionnal apps are not activated)
-    #
+    # List of applications to enable. Type: list of strings.
     - adguardhome
     - heimdall
     - jellyfin

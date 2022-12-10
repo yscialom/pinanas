@@ -119,8 +119,7 @@ pinanas:
       sender:
 
   applications:
-    # List of enabled applications. Type: list of strings. Default: none (all enabled). See documentation for listed applications available. Exemple:
+    # List of applications to enable. Type: list of strings. Default: none (all enabled). See documentation for listed applications available. Exemple:
     # - adguardhome
     # - netdata
     # - ...
-    - 
