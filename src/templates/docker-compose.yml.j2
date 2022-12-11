@@ -1,4 +1,4 @@
-#jinja2:lstrip_blocks: True
+#jinja2: lstrip_blocks: True, keep_trailing_newline: True
 {%- import 'secrets.j2' as secrets with context -%}
 ---
 version: "3"
@@ -6,14 +6,9 @@ networks:
   pinanas:
   database:
 
-
 services:
-  #
+
   ## === DHCPD ===
-  # DHCP Daemon: answer to dhcp requests to assign IPs to
-  # clients and set their primary DNS server. This is necessary
-  # for adGuardHome to work with zero configuration on clients.
-  ##
   dhcpd:
     image: networkboot/dhcpd:1.3.0
     container_name: dhcpd
@@ -27,12 +22,7 @@ services:
       - ./dhcpd/cgroup:/sys/fs/cgroup
     restart: unless-stopped
 
-
-  #
   ## === FAIL2BAN ===
-  #
-  # Fail2ban ban hosts that cause multiple authentication errors.
-  ##
   fail2ban:
     image: lscr.io/linuxserver/fail2ban:0.11.2
     container_name: fail2ban
@@ -62,14 +52,7 @@ services:
       - ./traefik/log:/remotelogs/traefik:ro
     restart: unless-stopped
 
-
-  #
   ## === TRAEFIK ===
-  # Reverse proxy (HTTP, TCP, UDP): route requests to
-  # services hosted or not on the same host. This is
-  # useful to add SSO (authelia), HTTPS (let's encrypt),
-  # and protect services not suited to face the outside.
-  ##
   traefik:
     image: traefik:v2.9
     container_name: traefik
@@ -114,12 +97,7 @@ services:
       test: traefik healthcheck --ping
     restart: unless-stopped
 
-
-  #
   ## === AUTHELIA ===
-  # Single Sign On: handle authentification to users
-  # on the whole network.
-  ##
   authelia:
     image: authelia/authelia:4.37
     container_name: authelia
@@ -148,256 +126,8 @@ services:
       - ./authelia/config:/config
     restart: unless-stopped
 
-
-  #
-  ## === AD GUARD HOME ===
-  #
-  # Ad filter: acts as a primary DNS and filter
-  # hosts known to serve advertising.
-  ##
-  adguardhome:
-    image: adguard/adguardhome
-    container_name: adguardhome
-    depends_on:
-      - dhcpd
-      - traefik
-    networks:
-      pinanas:
-        aliases:
-          - adguardhome
-          - dns
-    environment:
-      - TZ={{ pinanas.timezone }}
-      - PUID={{ PUID }}
-      - PGID={{ PGID }}
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.middlewares.adguardhome-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.adguardhome-secure.entrypoints=https"
-      - "traefik.http.routers.adguardhome-secure.middlewares=authelia@docker"
-      - "traefik.http.routers.adguardhome-secure.rule=Host(`adguardhome-dashboard.{{ pinanas.domain }}`)"
-      - "traefik.http.routers.adguardhome-secure.service=adguardhome"
-      - "traefik.http.routers.adguardhome-secure.tls=true"
-      - "traefik.http.routers.adguardhome.entrypoints=http"
-      - "traefik.http.routers.adguardhome.middlewares=adguardhome-https-redirect"
-      - "traefik.http.routers.adguardhome.rule=Host(`adguardhome-dashboard.{{ pinanas.domain }}`)"
-      - "traefik.http.services.adguardhome.loadbalancer.server.port=80"
-      - "traefik.tcp.routers.adblockhome-dns.entrypoints=dns-tcp"
-      - "traefik.tcp.routers.adblockhome-dns.service=adblockhome-dns"
-      - "traefik.tcp.services.adblockhome-dns.loadBalancer.server.port=53"
-      - "traefik.udp.routers.adblockhome-dns.entrypoints=dns-udp"
-      - "traefik.udp.routers.adblockhome-dns.service=adblockhome-dns"
-      - "traefik.udp.services.adblockhome-dns.loadBalancer.server.port=53"
-    volumes:
-      - ./adguardhome/config:/opt/adguardhome/conf
-      - ./adguardhome/data:/opt/adguardhome/work/data
-    restart: unless-stopped
-
-
-  #
-  ## === NETDATA ===
-  #
-  # Resource monitor.
-  ##
-  netdata:
-    image: netdata/netdata:v1.36
-    container_name: netdata
-    depends_on:
-      - dhcpd
-    cap_add:
-      - SYS_PTRACE
-    security_opt:
-      - apparmor:unconfined
-    networks:
-      pinanas:
-        aliases:
-          - netdata
-          - resources
-    environment:
-      - TZ={{ pinanas.timezone }}
-      - PUID={{ PUID }}
-      - PGID={{ PGID }}
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.middlewares.netdata-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.netdata-secure.entrypoints=https"
-      - "traefik.http.routers.netdata-secure.middlewares=authelia@docker"
-      - "traefik.http.routers.netdata-secure.rule=Host(`resources.{{ pinanas.domain }}`)"
-      - "traefik.http.routers.netdata-secure.service=netdata"
-      - "traefik.http.routers.netdata-secure.tls=true"
-      - "traefik.http.routers.netdata.entrypoints=http"
-      - "traefik.http.routers.netdata.middlewares=netdata-https-redirect"
-      - "traefik.http.routers.netdata.rule=Host(`resources.{{ pinanas.domain }}`)"
-      - "traefik.http.services.netdata.loadbalancer.server.port=19999"
-    volumes:
-      - /etc/passwd:/host/etc/passwd:ro
-      - /etc/group:/host/etc/group:ro
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /etc/os-release:/host/etc/os-release:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /var/log/fail2ban.log:/var/log/fail2ban.log:ro
-      - ./dhcpd/data:/var/lib/dhcp:ro
-      - ./netdata/data:/etc/netdata
-    restart: unless-stopped
-
-
-  #
-  ## === HEIMDALL ===
-  #
-  # Application dashboard
-  ##
-  heimdall:
-    image: lscr.io/linuxserver/heimdall:2.4.13
-    container_name: heimdall
-    depends_on:
-      - dhcpd
-    networks:
-      pinanas:
-        aliases:
-          - heimdall
-          - apps
-    environment:
-      - TZ={{ pinanas.timezone }}
-      - PUID={{ PUID }}
-      - PGID={{ PGID }}
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.middlewares.heimdall-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.heimdall-secure.entrypoints=https"
-      - "traefik.http.routers.heimdall-secure.middlewares=authelia@docker"
-      - "traefik.http.routers.heimdall-secure.rule=Host(`apps.{{ pinanas.domain }}`)"
-      - "traefik.http.routers.heimdall-secure.service=heimdall"
-      - "traefik.http.routers.heimdall-secure.tls=true"
-      - "traefik.http.routers.heimdall.entrypoints=http"
-      - "traefik.http.routers.heimdall.middlewares=heimdall-https-redirect"
-      - "traefik.http.routers.heimdall.rule=Host(`apps.{{ pinanas.domain }}`)"
-      - "traefik.http.services.heimdall.loadbalancer.server.port=80"
-    volumes:
-      - ./heimdall/data:/config/www
-    restart: unless-stopped
-
-
-  #
-  ## === NEXTCLOUD ===
-  #
-  # Nextcloud gives you access to all your files wherever you are.
-  ##
-  database:
-    image: linuxserver/mariadb:10.5.13-alpine
-    container_name: database
-    depends_on:
-      - dhcpd
-    networks:
-      database:
-        aliases:
-          - mariadb
-          - mysql
-          - database
-          - sql
-    environment:
-      - TZ={{ pinanas.timezone }}
-      - PUID={{ PUID }}
-      - PGID={{ PGID }}
-      - "MYSQL_ROOT_PASSWORD={{ secrets.make_secret('pinanas.database.root_password') }}"
-      - MYSQL_USER=pinanas-nextcloud
-      - "MYSQL_PASSWORD={{ secrets.make_secret('pinanas.nextcloud.database_password') }}"
-      - MYSQL_DATABASE=pinanas-nextcloud
-    volumes:
-      - ./database/data/databases:/config/databases
-      - ./database/data/log:/config/log
-      - ./database/config:/config
-    restart: unless-stopped
-
-  nextcloud:
-    build:
-      context: nextcloud/build
-    container_name: nextcloud
-    depends_on:
-      - dhcpd
-      - database
-    links:
-      - database
-    networks:
-      pinanas:
-        aliases:
-          - nextcloud
-          - cloud
-      database:
-        aliases:
-          - nextcloud
-          - cloud
-    environment:
-      - TZ={{ pinanas.timezone }}
-      - PUID={{ PUID }}
-      - PGID={{ PGID }}
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=pinanas"
-      - "traefik.http.routers.nextcloud-secure.entrypoints=https"
-      - "traefik.http.routers.nextcloud-secure.middlewares=authelia@docker"
-      - "traefik.http.routers.nextcloud-secure.rule=Host(`cloud.{{ pinanas.domain }}`)"
-      - "traefik.http.routers.nextcloud-secure.service=nextcloud-secure"
-      - "traefik.http.routers.nextcloud-secure.tls=true"
-      - "traefik.http.routers.nextcloud.entrypoints=http"
-      - "traefik.http.routers.nextcloud.rule=Host(`cloud.{{ pinanas.domain }}`)"
-      - "traefik.http.routers.nextcloud.middlewares=nextcloud-https-redirect"
-      - "traefik.http.middlewares.nextcloud-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.services.nextcloud-secure.loadbalancer.server.scheme=https"
-      - "traefik.http.services.nextcloud-secure.loadbalancer.server.port=443"
-      - "traefik.http.middlewares.hsts.headers.stsincludesubdomains=false"
-      - "traefik.http.middlewares.hsts.headers.stspreload=true"
-      - "traefik.http.middlewares.hsts.headers.stsseconds=31536000"
-      - "traefik.http.routers.nextcloud-secure.middlewares=hsts"
-    volumes:
-      - ./nextcloud/data/crontabs:/config/crontabs
-      - ./nextcloud/data/generated-config:/config/www/nextcloud/config
-      - ./nextcloud/data/files:/data
-    restart: unless-stopped
-
-
-  #
-  ## === JELLYFIN ===
-  #
-  # Jellyfin is a Free Software Media System that puts you in control of
-  # managing and streaming your media. It is an alternative to the proprietary
-  # Emby and Plex, to provide media from a dedicated server to end-user
-  # devices via multiple apps.
-  ##
-  jellyfin:
-    image: lscr.io/linuxserver/jellyfin:10.8.7
-    container_name: jellyfin
-    networks:
-      pinanas:
-        aliases:
-          - jellyfin
-          - media
-    environment:
-      - TZ={{ pinanas.timezone }}
-      - PUID={{ PUID }}
-      - PGID={{ PGID }}
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.middlewares.jellyfin-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.jellyfin-secure.entrypoints=https"
-      - "traefik.http.routers.jellyfin-secure.middlewares=authelia@docker"
-      - "traefik.http.routers.jellyfin-secure.rule=Host(`media.{{ pinanas.domain }}`)"
-      - "traefik.http.routers.jellyfin-secure.service=jellyfin"
-      - "traefik.http.routers.jellyfin-secure.tls=true"
-      - "traefik.http.routers.jellyfin.entrypoints=http"
-      - "traefik.http.routers.jellyfin.middlewares=jellyfin-https-redirect"
-      - "traefik.http.routers.jellyfin.rule=Host(`media.{{ pinanas.domain }}`)"
-      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
-    volumes:
-      {% for configfile in ['branding.xml', 'network.xml', 'system.xml'] %}
-      - ./jellyfin/config/{{ configfile }}:/config/{{ configfile }}
-      {% endfor %}
-      - ./jellyfin/config/plugins:/config/data/plugins
-      - ./jellyfin/config/libraries/default:/config/data/root/default
-      - ./jellyfin/data/log:/config/log
-      - ./jellyfin/data/movies:/data/movies
-      - ./jellyfin/data/tvshows:/data/tvshows
-      - ./jellyfin/data/misc/metadata:/data/metadata
-      - ./jellyfin/data/misc/cache:/data/cache
-      - ./jellyfin/data/misc/databases:/config/data/data
-    restart: unless-stopped
+{% for application in pinanas.applications %}
+  {% filter indent(width=2, first=True) %}
+    {% include "./docker-templates/" + application + ".yml" +%}
+  {% endfilter %}
+{% endfor %}
