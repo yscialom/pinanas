@@ -1,4 +1,4 @@
-#jinja2: lstrip_blocks: "True", keep_trailing_newline: "True"
+#jinja2: lstrip_blocks: True, keep_trailing_newline: True
 {%- import 'secrets.j2' as secrets with context -%}
 ---
 version: "3"
@@ -127,5 +127,7 @@ services:
     restart: unless-stopped
 
 {% for application in pinanas.applications %}
-  {% include "./docker-templates/" + application + ".yml" | indent(width=2, first=True) +%}
+  {% filter indent(width=2, first=True) %}
+    {% include "./docker-templates/" + application + ".yml" +%}
+  {% endfilter %}
 {% endfor %}
