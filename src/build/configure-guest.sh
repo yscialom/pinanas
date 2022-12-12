@@ -154,6 +154,19 @@ EOF
     chmod +x "/pinanas/dist/distclean.sh"
 }
 
+#
+## Uninstaller-script
+#
+
+uninstaller () {
+    cat > "/pinanas/dist/uninstall.sh" <<EOF
+#!/bin/bash
+rm -r $(ls -I "settings.yml")
+docker rm -v $(docker ps --filter status=exited -q)
+docker rmi -f $(docker images -aq)
+EOF
+    chmod +x "/pinanas/dist/uninstall.sh"
+}
 
 #
 ## === ENTRY POINT ===
@@ -163,3 +176,4 @@ check "$@"
 prepare
 install "$@"
 clean
+uninstaller
