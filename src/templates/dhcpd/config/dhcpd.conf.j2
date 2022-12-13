@@ -1,0 +1,20 @@
+#jinja2:lstrip_blocks: True
+authoritative;
+
+subnet {{ pinanas.network.dhcp.base }} netmask {{ pinanas.network.dhcp.subnet }} {
+    option routers                  {{ pinanas.network.dhcp.gateway }};
+    option subnet-mask              {{ pinanas.network.dhcp.subnet }};
+    option domain-name-servers      {{ pinanas.network.ip }},{{ pinanas.network.dns.upstreams | join(',') }};
+    range                           {{ pinanas.network.dhcp.range.start }} {{ pinanas.network.dhcp.range.end }};
+}
+
+host home {
+    hardware ethernet {{ pinanas.network.hmac }};
+    fixed-address {{ pinanas.network.ip }};
+}
+{% for lease in pinanas.network.dhcp.fixed_address_leases %}
+host {{ lease.name }} {
+    hardware ethernet {{ lease.hmac }};
+    fixed-address {{ lease.ip }};
+}
+{% endfor %}

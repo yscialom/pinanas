@@ -1,0 +1,10 @@
+users:
+{% for user in pinanas.users %}
+  {{ user.login }}:
+    displayname: "{{ user.fullname }}"
+    password: "{{ user.password | authelia_password }}"
+    email: "{{ user.email }}"
+    groups:
+    - admins
+    - users
+{% endfor %}

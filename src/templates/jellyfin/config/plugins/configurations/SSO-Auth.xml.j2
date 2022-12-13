@@ -1,0 +1,36 @@
+{%- import 'secrets.j2' as secrets with context -%}
+<?xml version="1.0" encoding="utf-8"?>
+<PluginConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SamlConfigs />
+  <OidConfigs>
+    <item>
+      <key>
+        <string>Authelia</string>
+      </key>
+      <value>
+        <PluginConfiguration>
+          <OidEndpoint>https://auth.{{ pinanas.domain }}:{{ pinanas.ports.https }}/.well-known/openid-configuration</OidEndpoint>
+          <OidClientId>jellyfin</OidClientId>
+          <OidSecret>{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[jellyfin].secret') }}</OidSecret>
+          <Enabled>true</Enabled>
+          <EnableAuthorization>true</EnableAuthorization>
+          <EnableAllFolders>true</EnableAllFolders>
+          <EnabledFolders />
+          <AdminRoles>
+            <string>admins</string>
+          </AdminRoles>
+          <Roles>
+            <string>users</string>
+          </Roles>
+          <EnableFolderRoles>false</EnableFolderRoles>
+          <FolderRoleMappings />
+          <RoleClaim>groups</RoleClaim>
+          <OidScopes>
+            <string>groups</string>
+          </OidScopes>
+          <CanonicalLinks />
+        </PluginConfiguration>
+      </value>
+    </item>
+  </OidConfigs>
+</PluginConfiguration>

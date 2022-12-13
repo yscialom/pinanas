@@ -1,0 +1,27 @@
+---
+  - name: Ensure SSO Authentification installation dir exists
+    file:
+      path: "/pinanas/dist/jellyfin/config/plugins/SSO Authentication_3.4.0.0"
+      state: directory
+  - name: Download SSO Authentification 3.4.0.0
+    unarchive:
+      src: https://github.com/9p4/jellyfin-plugin-sso/releases/download/v3.4.0.2/sso-authentication_3.4.0.0.zip
+      dest: "/pinanas/dist/jellyfin/config/plugins/SSO Authentication_3.4.0.0"
+      remote_src: yes
+  - name: Ensure libraries exist
+    file:
+      path: "/pinanas/dist/jellyfin/data/{{ item }}"
+      state: directory
+    loop:
+      - movies
+      - tvshows
+  - name: Ensure custom directories exists and are owned by operator
+    file:
+      path: "/pinanas/dist/jellyfin/data/misc/{{ item }}"
+      state: directory
+      owner: "{{ PUID }}"
+      group: "{{ PGID }}"
+    loop:
+      - metadata
+      - cache
+      - databases
