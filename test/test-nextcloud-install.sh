@@ -1,6 +1,8 @@
 #!/bin/bash
-DIST_DIR="$(readlink -f "${1}")"
+set -e
+
 TEST_DIR="$(dirname "$(readlink -f "$0")")"
+DIST_DIR="$(readlink -f "${1}")"
 source "${TEST_DIR}/web-functions.sh"
 
 domain="pinanas-ci.scialom.org"
@@ -30,7 +32,7 @@ function test_install () {
 }
 
 function test_oidc () {
-    local expected_discovery_endpoint="https://${authelia}/.well-known/openid-configuration"
+    local expected_discovery_endpoint="https://${authelia}:443/.well-known/openid-configuration"
     local actual_discovery_endpoint=$(occ user_oidc:provider --output=json --ansi \
         | jq -r '.[] | select(.identifier=="Authelia") .discoveryEndpoint' \
         || true )
