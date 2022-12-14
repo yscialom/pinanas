@@ -159,9 +159,10 @@ EOF
 #
 
 uninstaller () {
-    cat > "/pinanas/dist/uninstall.sh" <<EOF
+    cat << \EOF > "/pinanas/dist/uninstall.sh"
 #!/bin/bash
 rm -r $(ls -I "settings.yml")
+rm -r .venv/
 docker rm -v $(docker ps --filter status=exited -q)
 docker rmi -f $(docker images -aq)
 EOF
@@ -174,6 +175,6 @@ EOF
 
 check "$@"
 prepare
+uninstaller
 install "$@"
 clean
-uninstaller

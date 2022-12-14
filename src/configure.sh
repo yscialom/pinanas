@@ -35,6 +35,8 @@ report () {
     info "Configuration successful."
     cont "You can clean work files with ./distclean.sh"
     cont "Start your services with docker-compose up -d"
+    cont ""
+    cont "You can uninstall all with ./uninstall.sh if needed"
 
     command -v netstat >/dev/null || return
     if netstat -lan | grep -qE ':53\W' ; then
