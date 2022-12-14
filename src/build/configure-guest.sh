@@ -115,6 +115,23 @@ EOT
 
 
 #
+## Uninstaller-script
+#
+
+uninstaller () {
+    cat > "/pinanas/dist/uninstall.sh" << \EOF
+#!/bin/bash
+rm -r $(ls -I "settings.yml*")
+rm -r .venv/
+docker rm -v $(docker ps --filter status=exited -q)
+docker rm $(docker volume ls -q)
+docker rmi -f $(docker images -aq)
+EOF
+    chmod +x "/pinanas/dist/uninstall.sh"
+}
+
+
+#
 ## Install
 #
 
@@ -154,21 +171,6 @@ EOF
     chmod +x "/pinanas/dist/distclean.sh"
 }
 
-#
-## Uninstaller-script
-#
-
-uninstaller () {
-    cat > "/pinanas/dist/uninstall.sh" << \EOF
-#!/bin/bash
-rm -r $(ls -I "settings.yml")
-rm -r .venv/
-docker rm -v $(docker ps --filter status=exited -q)
-docker rm $(docker volume ls -q)
-docker rmi -f $(docker images -aq)
-EOF
-    chmod +x "/pinanas/dist/uninstall.sh"
-}
 
 #
 ## === ENTRY POINT ===
