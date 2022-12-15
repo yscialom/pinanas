@@ -36,13 +36,19 @@ access_control:
     ## === ADMIN SERVICES ===
     #
 
-    # DNS / Ad filter: AdGuardHome
+    # AdGuardHome
     - domain: "adguardhome-dashboard.{{ pinanas.domain }}"
       policy: two_factor
       subject:
       - "group:admins"
 
-    # Resource monitor: Netdata
+    # Duplicati
+    - domain: "backup.{{ pinanas.domain }}"
+      policy: two_factor
+      subject:
+      - "group:admins"
+
+    # Netdata
     - domain: "resources.{{ pinanas.domain }}"
       policy: one_factor
       subject:
@@ -51,18 +57,18 @@ access_control:
     #
     ## === USER SERVICES ===
     #
-    # Application dashboard: Heimdall
+    # Heimdall
     - domain: "apps.{{ pinanas.domain }}"
       policy: one_factor
       subject:
       - "group:users"
 
-    # Cloud: Nextcloud
-    - domain: "cloud.{{ pinanas.domain }}"
+    # Jellyfin
+    - domain: "media.{{ pinanas.domain }}"
       policy: bypass
 
-    # Media: Jellyfin
-    - domain: "media.{{ pinanas.domain }}"
+    # Nextcloud
+    - domain: "cloud.{{ pinanas.domain }}"
       policy: bypass
 
     #
