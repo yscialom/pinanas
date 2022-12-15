@@ -123,7 +123,8 @@ uninstaller () {
 #!/bin/bash
 rm -r $(ls -I "settings.yml*")
 rm -r .venv/
-docker rm -v $(docker ps --filter status=exited -q)
+docker stop $(docker ps -a -q)
+docker rm -v $(docker ps -a -q)
 docker rm $(docker volume ls -q)
 docker rmi -f $(docker images -aq)
 EOF
