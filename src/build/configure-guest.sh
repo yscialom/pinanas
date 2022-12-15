@@ -7,9 +7,9 @@
 #
 
 check () {
-    if [ ! -f "/pinanas/dist/settings.yml" ] ; then
-        fatal "/pinanas/dist/settings.yml no such file."
-        cont "Copy ${PINANAS_SRC}/settings.yml.sample to ${PINANAS_DIST}/settings.yml and fill in your personnal configuration."
+    if [ ! -f "/pinanas/dist/settings.yaml" ] ; then
+        fatal "/pinanas/dist/settings.yaml no such file."
+        cont "Copy ${PINANAS_SRC}/settings.yaml.sample to ${PINANAS_DIST}/settings.yaml and fill in your personnal configuration."
         exit 1
     fi
 
@@ -58,7 +58,7 @@ prepare () {
     done
 
     ## Playbooks
-    playbook="${playbook_dir}/playbook.yml"
+    playbook="${playbook_dir}/playbook.yaml"
 
     # Playbook header
     cat > ${playbook} <<EOH
@@ -66,8 +66,8 @@ prepare () {
 - hosts: localhost
   gather_facts: yes
   tasks:
-  - include_vars: /pinanas/src/default-settings.yml
-  - include_vars: /pinanas/dist/settings.yml
+  - include_vars: /pinanas/src/default-settings.yaml
+  - include_vars: /pinanas/dist/settings.yaml
   - name: combine default + custom
     set_fact:
       pinanas: "{{ pinanas_default | combine(pinanas, recursive=True) }}"

@@ -35,7 +35,7 @@ Encrypt") can be found on Traefik documentation website. Make sure your provider
 How to provide API Keys to PiNanas?
 ----------------------------------
 
-In your `settings.yml` file (see [INSTALL](INSTALL.md#settings "docs/INSTALL.md") for more information), you will find
+In your `settings.yaml` file (see [INSTALL](INSTALL.md#settings "docs/INSTALL.md") for more information), you will find
 the variable `provider`. You need to fill in the details for your provider. It is composed of three fields:
 - The `name` (or code) of your provider as defined by
   [ACME](https://en.wikipedia.org/wiki/Automatic_Certificate_Management_Environment "Wikipedia —
@@ -62,7 +62,7 @@ In order to identify the right information for your provider, head on to Traefik
 Encrypt") and find yours. Click the left-most link "Ad conf" to access this provider's documentation page on
 [Lego](https://go-acme.github.io/lego/ "Let's Encrypt client and ACME library written in Go.").
 
-Next step is to create your API Keys and provide them into your `settings.yml`. You will find guidance on the creation
+Next step is to create your API Keys and provide them into your `settings.yaml`. You will find guidance on the creation
 of API keys on the Lego's documentation page for your provider.
 
 
@@ -91,7 +91,7 @@ And click `Create keys`.
 You will be given an Application Key, an Application Secret and a Consumer Key. Keep those secret and safe as you
 cannot retrieve them.
 
-Update `settings.yml` and add the following values:
+Update `settings.yaml` and add the following values:
 ```yaml
 pinanas:
   network:

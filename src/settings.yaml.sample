@@ -1,6 +1,6 @@
 ---
 ##
-# This is PiNanas configuration file: settings.yml.
+# This is PiNanas configuration file: settings.yaml.
 #
 # Once every mandatory value has been set, you can call PiNanas'
 # configure.sh script from the directory directly containing this
