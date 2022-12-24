@@ -6,20 +6,23 @@
 # configure.sh script from the directory directly containing this
 # file. See README.md for more information.
 #
+# Some values are optional and have default values or auto-discovered.
+# Those values are commented in this file.
+#
 
 pinanas:
   # Registered domain name. Type: string. Example: "home.example.com".
   domain:
 
   # Port numbers
-  ports:
+  #ports:
     # HTTP port. Type: integer. Default: 80.
     # Exemple: 8080
-    http:
+    #http:
 
     # HTTPS port. Type: integer. Default: 443.
     # Exemple: 8443
-    https:
+    #https:
 
   # Master password to encrypt/derive all PiNanas secrets. Type: string.
   # Example: "Randomly-generated-complex-string-with-mixed-case-digits-and-special-characters".
@@ -41,19 +44,19 @@ pinanas:
   # Service: { name: string, url: string }. Example:
   # - name: "myservice"'
   #   url: "https://192.168.0.2:1234"
-  services:
+  #services:
 
-  acme:
+  #acme:
     # Use Let's Encrypt stagging servers. Type: boolean. Optional, default: false. Example: true.
     #stagging:
 
-  network:
+  #network:
     # MAC address of PiNana's host network card. Type: string. Default: auto discovery. Example: "01:02:03:04:05:06".
     #hmac:
     # Desired IP address of PiNanas's host. Type: string. Default: auto discovery. Example "192.168.0.1".
     #ip:
 
-    dhcp:
+    #dhcp:
       # Base IP for the network. Type: string. Default: auto discovery. Example: "192.168.0.0".
       #base:
 
@@ -76,7 +79,7 @@ pinanas:
       #  - name: "DeviceName"
       #    hmac: "01:23:45:67:89:ab"
       #    ip: "192.168.0.42"
-      fixed_address_leases:
+      #fixed_address_leases:
 
     dns:
       # Upstream DNS servers. Type: list of strings. Default: auto discovery. Example:
