@@ -1,7 +1,7 @@
 PiNanas Settings Editor
 ======================
 
-To help you with the redaction of the `settings.yml` file (See [INSTALL](/docs/INSTALL.md "docs/INSTALL.md")), this
+To help you with the redaction of the `settings.yaml` file (See [INSTALL](/docs/INSTALL.md "docs/INSTALL.md")), this
 web editor lets you define your settings through a web UI providing basic validation.
 
 
@@ -23,7 +23,7 @@ Using the editor
 1. Fill in your details.
 2. Don't forget the optional settings, available under the "properties" buttons.
 3. Once happy, click the Download button.
-4. Save this `settings.yml` file and deploy it to your PiNanas installation director (See
+4. Save this `settings.yaml` file and deploy it to your PiNanas installation director (See
    [INSTALL](/docs/INSTALL.md "docs/INSTALL.md")).
 
 
