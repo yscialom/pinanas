@@ -35,8 +35,8 @@ PiNanas includes:
   - [Netdata](https://www.netdata.cloud "Netdata homepage"):
     monitor your infrastructure resources.
 
-[![Continuous Integration](https://github.com/yscialom/pinanas/actions/workflows/continuous-integration.yml/badge.svg?branch=develop)](https://github.com/yscialom/pinanas/actions/workflows/continuous-integration.yml)
-[![Continuous Deplyment](https://github.com/yscialom/pinanas/actions/workflows/continuous-deployment.yml/badge.svg?branch=develop)](https://github.com/yscialom/pinanas/actions/workflows/continuous-deployment.yml)
+[![Continuous Integration](https://github.com/yscialom/pinanas/actions/workflows/continuous-integration.yaml/badge.svg?branch=develop)](https://github.com/yscialom/pinanas/actions/workflows/continuous-integration.yaml)
+[![Continuous Deplyment](https://github.com/yscialom/pinanas/actions/workflows/continuous-deployment.yaml/badge.svg?branch=develop)](https://github.com/yscialom/pinanas/actions/workflows/continuous-deployment.yaml)
 
 
 Installation

@@ -89,8 +89,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik/config/config.yml:/config.yml:ro
-      - ./traefik/config/traefik.yml:/traefik.yml:ro
+      - ./traefik/config/config.yaml:/config.yaml:ro
+      - ./traefik/config/traefik.yaml:/traefik.yaml:ro
       - ./traefik/data/acme.json:/acme.json
       - ./traefik/log:/opt/traefik
     healthcheck:
@@ -128,6 +128,6 @@ services:
 
 {% for application in pinanas.applications %}
   {% filter indent(width=2, first=True) %}
-    {% include "./docker-templates/" + application + ".yml" +%}
+    {% include "./docker-templates/" + application + ".yaml" +%}
   {% endfilter %}
 {% endfor %}

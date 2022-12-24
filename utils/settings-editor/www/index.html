@@ -54,7 +54,7 @@
     document.getElementById('download').addEventListener('click', function() {
       // TODO: check form validity
       const doc = jsyaml.dump(editor.getValue());
-      const filename = "settings.yml";
+      const filename = "settings.yaml";
       var anchor = document.createElement('a');
       anchor.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(doc));
       anchor.setAttribute('download', filename);

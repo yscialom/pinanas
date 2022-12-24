@@ -16,7 +16,7 @@ You can personalise this behaviour by selecting which applications you are inter
 How to?
 -------
 
-In your `settings.yml` file (see [SETTINGS](INSTALL.md#settings "docs/INSTALLt.md") and
+In your `settings.yaml` file (see [SETTINGS](INSTALL.md#settings "docs/INSTALLt.md") and
 [APPLICATIONS](applications-list.md "docs/applications-list.md") for more information), add the variable
 `applications`. In this variable, list all the application you want enabled. Other application will be disabled:
 ```yaml

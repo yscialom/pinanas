@@ -78,13 +78,13 @@ Settings
 --------
 
 ### Define your settings
-In the instalation directory, create a file `settings.yml` from [`src/settings.yml.sample`](/src/settings.yml.sample)
+In the instalation directory, create a file `settings.yaml` from [`src/settings.yaml.sample`](/src/settings.yaml.sample)
 and fill in all mandatory values:
 ```bash
 cd /opt/pinanas
-cp /path/to/pinanas/src/settings.yml.sample settings.yml
-chmod 600 settings.yml # contains passwords
-nano settings.yml
+cp /path/to/pinanas/src/settings.yaml.sample settings.yaml
+chmod 600 settings.yaml # contains passwords
+nano settings.yaml
 ```
 
 Save and exit.
@@ -94,13 +94,13 @@ PiNanas needs delegation on your domain name. To this end, you must create and f
 PiNanas. Read [DNS Provider Variables](dns-provider-variables.md "docs/dns-provider-variables.md") for a complete
 guide.
 
-### Special care needed on `settings.yml`
+### Special care needed on `settings.yaml`
 This file is both _secret_ and _precious_. It contains passwords to both PiNanas administration and to
 external services. As such, it must be kept private, only readable to user having administration rights on the PiNanas
-host, and the `pinanas` user itself. If you run PiNanas on a disposable virtual machine, make a copy of `settings.yml`
+host, and the `pinanas` user itself. If you run PiNanas on a disposable virtual machine, make a copy of `settings.yaml`
 and store it properly on a second device.
 
-Ideally, `settings.yml` is built upon deployment and secrets are kept by a dedicated tool.
+Ideally, `settings.yaml` is built upon deployment and secrets are kept by a dedicated tool.
 
 
 Install
@@ -111,7 +111,7 @@ From your installation directory, run `src/configure.sh`:
 cd /opt/pinanas
 /path/to/pinanas/src/configure.sh
 ```
-If you made important changes to `settings.yml` and want to regenerate PiNanas, run with `--force`:
+If you made important changes to `settings.yaml` and want to regenerate PiNanas, run with `--force`:
 ```bash
 cd /opt/pinanas
 /path/to/pinanas/src/configure.sh --force

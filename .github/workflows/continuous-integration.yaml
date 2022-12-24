@@ -48,7 +48,7 @@ jobs:
           settings_pinanas_network_smtp_username: "${{ secrets.settings_pinanas_network_smtp_username }}"
         run: |
           mkdir dist
-          envsubst <test/settings-ci.yml >dist/settings.yml
+          envsubst <test/settings-ci.yaml >dist/settings.yaml
 
       - name: Configure
         run: cd dist && ../src/configure.sh

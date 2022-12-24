@@ -1,9 +1,9 @@
 # Private files
 /user.env
-/settings.yml
+/settings.yaml
 
 # Generated files
-/docker-compose.yml
+/docker-compose.yaml
 
 # Application directories
 /adguardhome

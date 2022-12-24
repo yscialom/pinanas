@@ -1,6 +1,6 @@
 ---
 ##
-# This is PiNanas configuration file: settings.yml.
+# This is PiNanas configuration file: settings.yaml.
 #
 # Once every mandatory value has been set, you can call PiNanas'
 # configure.sh script from the directory directly containing this
@@ -9,11 +9,7 @@
 
 pinanas:
   # Registered domain name. Type: string. Example: "home.example.com".
-  domain: uat.home.scialom.org
-
-  ports:
-    http: 8080
-    https: 8443
+  domain: pinanas-ci.scialom.org
 
   # Master password to encrypt/derive all PiNanas secrets. Type: string_
   # Example: "Randomly-generated-complex-string-with-mixed-case-digits-and-special-characters".
@@ -31,7 +27,7 @@ pinanas:
   #   fullname: "John D. Doe"
   users:
     - login: johndoe
-      password: "${settings_pinanas_johndoe_password}"
+      password: johndoe-password
       email: johndoe@example.com
       fullname: "John Doe (JD)"
 
