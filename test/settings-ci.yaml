@@ -36,8 +36,20 @@ pinanas:
   # - name: "myservice"'
   #   url: "https://192.168.0.2:1234"
   services:
-    - name: external
-      url: "http://localhost"
+    - name: ext1
+      policy: bypass
+    - name: ext2
+      policy: one_factor
+    - name: ext3
+    - name: ext4
+      groups:
+        - users
+    - name: ext5
+      url: "http://www.perdu.com"
+      policy: bypass
+      groups:
+        - admins
+        - users
 
   acme:
     # Use Let's Encrypt stagging servers. Type: boolean. Optional. Example: false.

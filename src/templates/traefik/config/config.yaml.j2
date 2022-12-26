@@ -10,15 +10,17 @@ http:
         - default-headers
         - authelia@docker
       tls: {}
-      service: {{ service.name }}
+      service: {{ service.name + ("@docker" if service.url is not defined else "") }}
     {% endfor %}
   services:
     {% for service in pinanas.services %}
+      {% if service.url is defined %}
     {{ service.name }}:
       loadBalancer:
         servers:
           - url: "{{ service.url }}"
         passHostHeader: true
+      {% endif %}
     {% endfor %}
   middlewares:
     https-redirect:

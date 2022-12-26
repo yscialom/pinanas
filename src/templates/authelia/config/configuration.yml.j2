@@ -65,21 +65,18 @@ access_control:
     - domain: "media.{{ pinanas.domain }}"
       policy: bypass
 
-    # Web IDE: VS Code
-    #TODO: remove
-    - domain: "code.{{ pinanas.domain }}"
-      policy: two_factor
-      subject:
-      - "group:users"
-
     #
     ## === EXTERNAL SERVICES ===
     #
     {% for service in pinanas.services %}
     - domain: "{{ service.name }}.{{ pinanas.domain }}"
       policy: "{{ service.policy | default('two_factor') }}"
+      {% if service.policy is not defined or service.policy != "bypass" %}
       subject:
-      - "group:{{ service.group | default('admins') }}"
+        {% for group in service.groups | default(['admins']) %}
+      - "group:{{ group }}"
+        {% endfor %}
+      {% endif %}
     {% endfor %}
 
 jwt_secret: "{{ secrets.make_secret('pinanas.authelia.jwt_secret') }}"
@@ -94,7 +91,7 @@ authentication_backend:
     disable: false
   refresh_interval: 5m
   file:
-    path: /config/users_database.yaml
+    path: /config/users_database.yml
     password:
       algorithm: argon2id
       iterations: 1
