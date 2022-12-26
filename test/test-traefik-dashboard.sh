@@ -10,14 +10,13 @@ traefik="traefik-dashboard.${domain}"
 
 # setup external services
 trap "docker stop pinanas-ci-ext-services && docker rmi httpd:2-alpine" EXIT
-ext_port=$(shuf -i 30000-40000 -n1)
 docker run \
-  -d --rm --name pinanas-ci-ext-services -p ${ext_port}:80 \
+  -d --rm --name pinanas-ci-ext-services \
   --network "$(basename ${DIST_DIR})_pinanas" \
   -l "traefik.enable=true" \
-  -l "traefik.http.services.ext1.loadbalancer.server.port=${ext_port}" \
-  -l "traefik.http.services.ext3.loadbalancer.server.port=${ext_port}" \
-  -l "traefik.http.services.ext4.loadbalancer.server.port=${ext_port}" \
+  -l "traefik.http.services.ext1.loadbalancer.server.port=80" \
+  -l "traefik.http.services.ext3.loadbalancer.server.port=80" \
+  -l "traefik.http.services.ext4.loadbalancer.server.port=80" \
   httpd:2-alpine
 sleep 10
 
