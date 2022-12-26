@@ -79,7 +79,7 @@ access_control:
     - domain: "{{ service.name }}.{{ pinanas.domain }}"
       policy: "{{ service.policy | default('two_factor') }}"
       subject:
-      - "group:{{ service.group | default('admins') }}"
+      - "group:{{ service.groups | default('admins') }}"
     {% endfor %}
 
 jwt_secret: "{{ secrets.make_secret('pinanas.authelia.jwt_secret') }}"

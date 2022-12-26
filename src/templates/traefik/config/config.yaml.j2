@@ -14,11 +14,13 @@ http:
     {% endfor %}
   services:
     {% for service in pinanas.services %}
+      {% if service.url %}
     {{ service.name }}:
       loadBalancer:
         servers:
           - url: "{{ service.url }}"
         passHostHeader: true
+      {% endif %}
     {% endfor %}
   middlewares:
     https-redirect:
