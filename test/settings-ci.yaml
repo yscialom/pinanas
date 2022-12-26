@@ -38,19 +38,18 @@ pinanas:
   services:
     - name: ext1
     - name: ext2
-      url: "http://localhost"
-    - name: ext3
       policy: bypass
+    - name: ext3
+      policy: one_factor
     - name: ext4
+      groups:
+        - users
+    - name: ext5
+      url: "http://www.perdu.com"
+      policy: bypass
       groups:
         - admins
         - users
-    - name: ext5
-      url: "http://www.google.com"
-      policy: one_factor
-      groups:
-        - users
-
 
   acme:
     # Use Let's Encrypt stagging servers. Type: boolean. Optional. Example: false.

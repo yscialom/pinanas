@@ -15,6 +15,7 @@ docker run \
   --network "$(basename ${DIST_DIR})_pinanas" \
   -l "traefik.enable=true" \
   -l "traefik.http.services.ext1.loadbalancer.server.port=80" \
+  -l "traefik.http.services.ext2.loadbalancer.server.port=80" \
   -l "traefik.http.services.ext3.loadbalancer.server.port=80" \
   -l "traefik.http.services.ext4.loadbalancer.server.port=80" \
   httpd:2-alpine
@@ -34,3 +35,13 @@ api_expect "https://${traefik}/api/overview" -q '.udp.services.total==1'
 for entity in .{http,udp,tcp}.{services,middlewares,routers} ; do
     api_expect "https://${traefik}/api/overview" -q "${entity}.warnings==0 and ${entity}.errors==0"
 done
+
+# external services
+for sid in $(seq 1 5) ; do
+    web_expect "http://ext${sid}.${domain}" -c 301 -r "https://ext${sid}.${domain}/"
+done
+for sid in 1 3 4 ; do
+    curl_ "https://ext${sid}.${domain}/" | grep -q '<title>Login - Authelia</title>'
+done
+curl_ "https://ext2.${domain}/" | grep -q '<html><body><h1>It works!</h1></body></html>'
+curl_ "https://ext5.${domain}/" | grep -q '<title>Vous Etes Perdu ?</title>'
