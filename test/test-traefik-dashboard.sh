@@ -37,7 +37,7 @@ for entity in .{http,udp,tcp}.{services,middlewares,routers} ; do
 done
 
 # external services
-web_expect "http://ext${sid}.${domain}" -c 301 -r "https://ext${sid}.${domain}/"
+web_expect "http://ext1.${domain}" -c 301 -r "https://ext1.${domain}/"
 html_expect "https://ext1.${domain}/" -r '<html><body><h1>It works!</h1></body></html>'
 for sid in $(seq 2 4) ; do
     web_expect "http://ext${sid}.${domain}" -c 301 -r "https://ext${sid}.${domain}/"
