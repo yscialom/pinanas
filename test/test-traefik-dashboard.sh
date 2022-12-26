@@ -2,6 +2,7 @@
 set -e
 
 TEST_DIR="$(dirname "$(readlink -f "$0")")"
+DIST_DIR="$(readlink -f "${1}")"
 source "${TEST_DIR}/web-functions.sh"
 
 domain="pinanas-ci.scialom.org"
@@ -12,18 +13,10 @@ trap "docker stop pinanas-ci-ext-services && docker rmi httpd:2-alpine" EXIT
 ext_port=$(shuf -i 30000-40000 -n1)
 docker run \
   -d --rm --name pinanas-ci-ext-services -p ${ext_port}:80 \
+  --network "$(basename ${DIST_DIR})_pinanas" \
   -l "traefik.enable=true" \
-  \
-  -l "traefik.http.routers.ext1.entrypoints=http" \
-  -l "traefik.http.routers.ext1.rule=Host(\`ext1.${domain}\`)" \
   -l "traefik.http.services.ext1.loadbalancer.server.port=${ext_port}" \
-  \
-  -l "traefik.http.routers.ext3.entrypoints=http" \
-  -l "traefik.http.routers.ext3.rule=Host(\`ext3.${domain}\`)" \
   -l "traefik.http.services.ext3.loadbalancer.server.port=${ext_port}" \
-  \
-  -l "traefik.http.routers.ext4.entrypoints=http" \
-  -l "traefik.http.routers.ext4.rule=Host(\`ext4.${domain}\`)" \
   -l "traefik.http.services.ext4.loadbalancer.server.port=${ext_port}" \
   httpd:2-alpine
 sleep 10
