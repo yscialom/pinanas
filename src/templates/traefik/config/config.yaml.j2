@@ -14,7 +14,7 @@ http:
     {% endfor %}
   services:
     {% for service in pinanas.services %}
-      {% if service.url %}
+      {% if service.url is defined %}
     {{ service.name }}:
       loadBalancer:
         servers:
