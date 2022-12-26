@@ -37,10 +37,10 @@ pinanas:
   #   url: "https://192.168.0.2:1234"
   services:
     - name: ext1
-    - name: ext2
       policy: bypass
-    - name: ext3
+    - name: ext2
       policy: one_factor
+    - name: ext3
     - name: ext4
       groups:
         - users
