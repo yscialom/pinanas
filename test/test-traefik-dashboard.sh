@@ -38,8 +38,8 @@ done
 
 # external services
 web_expect "http://ext${sid}.${domain}" -c 301 -r "https://ext${sid}.${domain}/"
-curl_ "https://ext1.${domain}/" | grep -q '<html><body><h1>It works!</h1></body></html>'
+html_expect "https://ext1.${domain}/" -r '<html><body><h1>It works!</h1></body></html>'
 for sid in $(seq 2 4) ; do
     web_expect "http://ext${sid}.${domain}" -c 301 -r "https://ext${sid}.${domain}/"
-    curl_ -L "https://ext${sid}.${domain}/" | grep -q '<title>Login - Authelia</title>'
+    html_expect "https://ext${sid}.${domain}/" -r '<title>Login - Authelia</title>'
 done

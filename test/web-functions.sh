@@ -97,3 +97,19 @@ function api_expect () {
         test_field "${query}" "${url}" ${result} true || return
     fi
 }
+
+function html_expect () {
+    local url="${1}"
+    shift
+
+    # get tests options
+    while getopts "r:" opt ; do
+        case "${opt}" in
+        r) local regex=${OPTARG} ;;
+        *) error "Unknown option ${opt}." ; exit 1 ;;
+        esac
+    done
+
+    # request & search
+    curl_ --silent --location "${url}" | grep -Eq "${regex}"
+}
