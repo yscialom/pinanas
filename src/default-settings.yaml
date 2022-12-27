@@ -53,3 +53,7 @@ pinanas_default:
     - jellyfin
     - netdata
     - nextcloud
+
+internal:
+  install:
+    path: "{{ lookup('env', 'PINANAS_DIST') }}"

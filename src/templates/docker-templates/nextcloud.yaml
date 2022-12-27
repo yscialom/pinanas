@@ -49,7 +49,7 @@ nextcloud:
     - PGID={{ PGID }}
   labels:
     - "traefik.enable=true"
-    - "traefik.docker.network=pinanas"
+    - "traefik.docker.network={{ internal.install.path | basename }}_pinanas"
     - "traefik.http.routers.nextcloud-secure.entrypoints=https"
     - "traefik.http.routers.nextcloud-secure.middlewares=authelia@docker"
     - "traefik.http.routers.nextcloud-secure.rule=Host(`cloud.{{ pinanas.domain }}`)"
