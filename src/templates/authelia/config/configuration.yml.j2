@@ -150,7 +150,7 @@ identity_providers:
           - email
           - profile
         redirect_uris:
-          - "https://cloud.{{ pinanas.domain }}:{{ pinanas.ports.https }}/apps/user_oidc/code"
+          - "https://cloud.{{ pinanas.domain }}{{ ":" ~ pinanas.ports.https if pinanas.ports.https != 443 else "" }}/apps/user_oidc/code"
         grant_types:
           - refresh_token
           - authorization_code
@@ -172,7 +172,7 @@ identity_providers:
           - email
           - profile
         redirect_uris:
-          - "https://media.{{ pinanas.domain }}:{{ pinanas.ports.https }}/sso/OID/r/Authelia"
+          - "https://media.{{ pinanas.domain }}{{ ":" ~ pinanas.ports.https if pinanas.ports.https != 443 else "" }}/sso/OID/r/Authelia"
         grant_types:
           - refresh_token
           - authorization_code
