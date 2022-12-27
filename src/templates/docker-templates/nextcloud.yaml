@@ -69,4 +69,5 @@ nextcloud:
     - ./nextcloud/data/crontabs:/config/crontabs
     - ./nextcloud/data/generated-config:/config/www/nextcloud/config
     - ./nextcloud/data/files:/data
+    - ./media:/data/media
   restart: unless-stopped
