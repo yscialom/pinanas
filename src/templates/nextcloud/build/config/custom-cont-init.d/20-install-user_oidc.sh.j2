@@ -29,7 +29,7 @@ function install_user_oidc () {
   occ user_oidc:provider Authelia \
     --clientid="nextcloud" \
     --clientsecret="{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[nextcloud].secret')[:16] }}" \
-    --discoveryuri="https://auth.{{ pinanas.domain }}:{{ pinanas.ports.https }}/.well-known/openid-configuration" \
+    --discoveryuri="https://auth.{{ pinanas.domain }}{{ ":" ~ pinanas.ports.https if pinanas.ports.https != 443 else "" }}/.well-known/openid-configuration" \
     --scope="openid groups email profile" \
     --unique-uid=0 \
     --mapping-uid="preferred_username" \
