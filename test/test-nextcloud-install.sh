@@ -39,7 +39,7 @@ function test_nextcloud_api () {
 
     # Check Nextcloud status
     local url="https://${nextcloud}/ocs/v2.php/cloud/users/${admin_username}"
-    api_expect "${url}" -c "--user '${credentials}' --header 'OCS-APIRequest: true'" -q ".ocs.data.backend==Database"
+    api_expect "${url}" -c "--user '${credentials}' --header 'OCS-APIRequest: true'" -q '.ocs.data.backend=="Database"'
 }
 
 function test_oidc () {
