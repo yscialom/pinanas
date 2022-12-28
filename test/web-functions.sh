@@ -95,7 +95,7 @@ function api_expect () {
     # check query
     if [[ -n ${query} ]] ; then
         local result=$(jq "${query}" <${response})
-        test_field "${query}" "${url}" ${result} true || return
+        test_field "${query}" "${url}" "${result}" true || return
     fi
 }
 
