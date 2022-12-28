@@ -70,9 +70,10 @@ function api_expect () {
     shift
 
     # get tests options
+    declare -a curl_options
     while getopts "c:l:q:" opt ; do
         case "${opt}" in
-        c) local curl_options="${OPTARG}" ;;
+        c) curl_options+=(${OPTARG}) ;; # do not quote OPTARG here!
         l) local expected_length=${OPTARG} ;;
         q) local query="${OPTARG}" ;;
         *) error "Unknown option ${opt}." ; exit 1 ;;
@@ -81,7 +82,7 @@ function api_expect () {
 
     # request
     response=$(mktemp)
-    curl_ --silent --header "Accept: application/json" ${curl_options} "${url}" >${response}
+    curl_ --silent --header "Accept: application/json" "${curl_options[@]}" "${url}" >${response}
 
     # check curl status
     test_field exit_status "${url}" $? 0 || return
