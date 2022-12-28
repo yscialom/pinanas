@@ -73,7 +73,7 @@ function api_expect () {
     declare -a curl_options
     while getopts "c:l:q:" opt ; do
         case "${opt}" in
-        c) curl_options+=(${OPTARG}) ;; # do not quote OPTARG here!
+        c) curl_options+=("${OPTARG}") ;;
         l) local expected_length=${OPTARG} ;;
         q) local query="${OPTARG}" ;;
         *) error "Unknown option ${opt}." ; exit 1 ;;
