@@ -7,6 +7,7 @@ source "${TEST_DIR}/web-functions.sh"
 
 domain="pinanas-ci.scialom.org"
 authelia="auth.${domain}"
+nextcloud="cloud.${domain}"
 
 function cmd () {
     local user="${1}" ; shift
@@ -31,12 +32,22 @@ function test_install () {
     test_field "admin"       "occ user:info admin" "$(command_field enabled user:info admin)" "true"
 }
 
+function test_nextcloud_api () {
+    # Generate application password for admin acount
+    local admin_username=admin # set in src/templates/nextcloud/build/config/custom-cont-init.d/10-install-nextcloud.sh.j2
+    local credentials="${admin_username}:$(docker exec -u $(id -u) -e NC_PASS=ignored nextcloud /config/www/nextcloud/occ user:add-app-password --password-from-env ${admin_username} | tail -1)"
+
+    # Check Nextcloud status
+    local url="https://${nextcloud}/ocs/v2.php/cloud/users/${admin_username}"
+    api_expect "${url}" -u "${credentials}" -h "OCS-APIRequest: true" -q '.ocs.data.backend=="Database"'
+}
+
 function test_oidc () {
     local expected_discovery_endpoint="https://${authelia}/.well-known/openid-configuration"
     local actual_discovery_endpoint=$(occ user_oidc:provider --output=json --ansi \
         | jq -r '.[] | select(.identifier=="Authelia") .discoveryEndpoint' \
         || true )
-        test_field "url" "openid connect" "${actual_discovery_endpoint}" "${expected_discovery_endpoint}"
+    test_field "url" "openid connect" "${actual_discovery_endpoint}" "${expected_discovery_endpoint}"
 }
 
 function test_cron () {
@@ -48,5 +59,6 @@ function test_cron () {
 }
 
 test_install
+test_nextcloud_api
 test_oidc
 test_cron
