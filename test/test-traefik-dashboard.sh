@@ -27,6 +27,7 @@ web_expect "https://${traefik}" -c 302 -r "https://${traefik}/dashboard/"
 web_expect "https://${traefik}/dashboard/" -c 200
 
 # api
+sleep 60
 api_expect "https://${traefik}/api/overview" -q '.http.services.total==16'
 api_expect "https://${traefik}/api/overview" -q '.http.middlewares.total==14'
 api_expect "https://${traefik}/api/overview" -q '.http.routers.total==20'
