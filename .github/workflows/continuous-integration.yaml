@@ -33,7 +33,7 @@ jobs:
         run: curl -o /tmp/letsencrypt-stg-root-x1.pem 'https://letsencrypt.org/certs/staging/letsencrypt-stg-root-x1.pem'
 
       - name: Clone
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Prepare settings from secrets
         env:

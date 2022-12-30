@@ -23,6 +23,11 @@ database:
     - ./database/data/databases:/config/databases
     - ./database/data/log:/config/log
     - ./database/config:/config
+  healthcheck:
+    test: [ "CMD", "mysqladmin", "--user=pinanas-nextcloud", "--password={{ secrets.make_secret('pinanas.nextcloud.database_password') }}", "ping", "--silent" ]
+    interval: 1m
+    timeout: 5s
+    retries: 3
   restart: unless-stopped
 
 nextcloud:

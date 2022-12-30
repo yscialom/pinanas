@@ -1,2 +1,8 @@
 FROM lscr.io/linuxserver/nextcloud:25.0.2
+
+COPY healthcheck.sh /healthcheck.sh
+RUN chmod +x /healthcheck.sh
+
 COPY custom-cont-init.d/ /custom-cont-init.d
+
+HEALTHCHECK --timeout=5s CMD /healthcheck.sh
