@@ -1,7 +1,8 @@
 #jinja2:lstrip_blocks: True
 http:
   routers:
-    {% for service in pinanas.services %}
+    {% if pinanas.services is defined %}
+      {% for service in pinanas.services %}
     {{ service.name }}:
       entryPoints:
         - "https"
@@ -11,17 +12,20 @@ http:
         - authelia@docker
       tls: {}
       service: {{ service.name + ("@docker" if service.url is not defined else "") }}
-    {% endfor %}
+      {% endfor %}
+    {% endif %}
   services:
-    {% for service in pinanas.services %}
-      {% if service.url is defined %}
+    {% if pinanas.services is defined %}
+      {% for service in pinanas.services %}
+        {% if service.url is defined %}
     {{ service.name }}:
       loadBalancer:
         servers:
           - url: "{{ service.url }}"
         passHostHeader: true
-      {% endif %}
-    {% endfor %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
   middlewares:
     https-redirect:
       redirectScheme:

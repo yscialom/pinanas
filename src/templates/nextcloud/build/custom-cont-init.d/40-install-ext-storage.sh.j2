@@ -1,0 +1,21 @@
+#!/bin/bash
+
+[[ -f /config/www/nextcloud/config/installed ]] && exit
+
+function occ () {
+    sudo -u  "#${PUID}" /config/www/nextcloud/occ "$@"
+}
+
+function install_external_storage () {
+  echo "*** Enable Nextcloud External Storage application ***"
+  occ app:install files_external
+  occ app:enable files_external
+
+  echo "*** Configuring Nextcloud External Storage application ***"
+  occ files_external:create -c datadir=/data/media/tvshows 'TV Shows' local null::null
+  occ files_external:create -c datadir=/data/media/movies 'Movies' local null::null
+
+  echo "*** Nextcloud External Storage application ready ***"
+}
+
+install_external_storage

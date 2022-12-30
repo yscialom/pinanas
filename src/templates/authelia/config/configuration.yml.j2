@@ -68,16 +68,18 @@ access_control:
     #
     ## === EXTERNAL SERVICES ===
     #
-    {% for service in pinanas.services %}
+    {% if pinanas.services is defined %}
+      {% for service in pinanas.services %}
     - domain: "{{ service.name }}.{{ pinanas.domain }}"
       policy: "{{ service.policy | default('two_factor') }}"
-      {% if service.policy is not defined or service.policy != "bypass" %}
+        {% if service.policy is not defined or service.policy != "bypass" %}
       subject:
-        {% for group in service.groups | default(['admins']) %}
+          {% for group in service.groups | default(['admins']) %}
       - "group:{{ group }}"
-        {% endfor %}
-      {% endif %}
-    {% endfor %}
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
 
 jwt_secret: "{{ secrets.make_secret('pinanas.authelia.jwt_secret') }}"
 
