@@ -22,4 +22,22 @@ function install_nextcloud () {
   && echo "*** Nextcloud base application ready ***"
 }
 
+function is_nextcloud_installed () {
+  php -r '
+    $configfile = "/config/www/nextcloud/config/config.php";
+    file_exists($configfile) or exit(1);
+    require($configfile);
+    exit(isset($CONFIG["installed"]) && $CONFIG["installed"] ? 0 : 1);
+  '
+}
+
+function wait_for_nextcloud_installed () {
+  while ! is_nextcloud_installed ; do
+    echo "*** Nextcloud not yet installed, deferring... ***"
+    sleep 15
+  done
+  echo "*** Nextcloud fully installed... ***"
+}
+
 install_nextcloud
+wait_for_nextcloud_installed

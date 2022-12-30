@@ -6,7 +6,6 @@ function occ () {
     sudo -u  "#${PUID}" /config/www/nextcloud/occ "$@"
 }
 
-
 function install_external_storage () {
   echo "*** Enable Nextcloud External Storage application ***"
   occ app:install files_external
