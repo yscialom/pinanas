@@ -76,7 +76,7 @@ prepare () {
       path: "/pinanas/dist/{{ item[0] }}/{{ item[1] }}"
       state: directory
       mode: 0755
-    loop: "{{ ['adguardhome', 'authelia', 'database', dhcpd', 'duplicati', 'heimdall', 'jellyfin', 'netdata', 'nextcloud', 'traefik'] | product(['config', 'data']) | list }}"
+    loop: "{{ ['adguardhome', 'authelia', 'database', 'dhcpd', 'duplicati', 'heimdall', 'jellyfin', 'netdata', 'nextcloud', 'traefik'] | product(['config', 'data']) | list }}"
   - name: ensure media directories exist
     file:
       path: "/pinanas/dist/media/{{ item }}"
