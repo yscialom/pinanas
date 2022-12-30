@@ -79,10 +79,10 @@ prepare () {
     loop: "{{ ['dhcpd', 'traefik', 'authelia', 'adguardhome', 'netdata', 'heimdall', 'database', 'nextcloud', 'jellyfin'] | product(['config', 'data']) | list }}"
   - name: ensure media directories exist
     file:
-      path: "/pinanas/dist/{{ item[0] }}/{{ item[1] }}"
+      path: "/pinanas/dist/media/{{ item }}"
       state: directory
-      mode: 0760
-    loop: "{{ ['media'] | product(['movies', 'tvshows']) | list }}"
+      mode: 0770
+    loop: ['movies', 'tvshows']
   - name: ensure traefik/acme.json exists
     file:
       path: "/pinanas/dist/traefik/data/acme.json"
