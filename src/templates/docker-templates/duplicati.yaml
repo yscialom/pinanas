@@ -14,10 +14,10 @@ duplicati:
     - TZ={{ pinanas.timezone }}
     - PUID={{ PUID }}
     - PGID={{ PGID }}
-    - CLI_ARGS="\
-      --server-datafolder=/data \
-      --webservice-allowed-hostnames=backup.{{ pinanas.domain }} \
-      "
+    - CLI_ARGS="
+      --server-datafolder=/data
+      --webservice-allowed-hostnames=backup.{{ pinanas.domain }}
+      " #added to help vscode yaml's parser -->"
   labels:
     - "traefik.enable=true"
     - "traefik.http.middlewares.duplicati-https-redirect.redirectscheme.scheme=https"
@@ -33,5 +33,6 @@ duplicati:
   volumes:
     - ./duplicati/config:/config
     - ./duplicati/data:/data
-    - ./media:/source/media:ro
+    - ./media:/source/media
+    - ./nextcloud/data/files:/source/nextcloud-files
   restart: unless-stopped
