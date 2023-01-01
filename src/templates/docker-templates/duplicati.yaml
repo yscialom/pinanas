@@ -14,10 +14,10 @@ duplicati:
     - TZ={{ pinanas.timezone }}
     - PUID={{ PUID }}
     - PGID={{ PGID }}
-    - CLI_ARGS="
+    - "CLI_ARGS=
       --server-datafolder=/data
       --webservice-allowed-hostnames=backup.{{ pinanas.domain }}
-      " #added to help vscode yaml's parser -->"
+      "
   labels:
     - "traefik.enable=true"
     - "traefik.http.middlewares.duplicati-https-redirect.redirectscheme.scheme=https"
