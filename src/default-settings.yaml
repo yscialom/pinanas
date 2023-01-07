@@ -49,6 +49,7 @@ pinanas_default:
   applications:
     # List of optionnal applications. Type: list of strings.
     - adguardhome
+    - duplicati
     - heimdall
     - jellyfin
     - netdata
