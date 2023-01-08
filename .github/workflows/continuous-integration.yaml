@@ -21,6 +21,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      ## == Prepare environment ==
       - name: "Prepare test environment: Disable DNS cache server to free 53/udp up"
         run: |
           sudo mkdir -p /etc/systemd/resolved.conf.d
@@ -35,6 +36,7 @@ jobs:
       - name: Clone
         uses: actions/checkout@v3
 
+      ## == Configure PiNanas ==
       - name: Prepare settings from secrets
         env:
           settings_pinanas_master_secret: "${{ secrets.settings_pinanas_master_secret }}"
@@ -53,7 +55,21 @@ jobs:
       - name: Configure
         run: cd dist && ../src/configure.sh
 
-      - name: Start
+      ## == Archive configuration files and upload them as artifacts ==
+      - name: Prepare configuration files for archiving
+        run: |
+          cp --recursive dist dist-archived
+          cp --force test/settings-ci.yaml dist-archived/settings.yaml
+          tar --use-compress-program="gzip --best" --create --file pinanas-dist.tar.gz dist-archived
+
+      - name: Upload configuration files
+        uses: actions/upload-artifact@v3
+        with:
+          name: pinanas-dist
+          path: pinanas-dist.tar.gz
+
+      ## == Start & test PiNanas ==
+      - name: Start PiNanas
         run: |
           cd dist
           docker-compose up -d
