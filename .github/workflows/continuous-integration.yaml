@@ -61,7 +61,7 @@ jobs:
           cp --recursive dist dist-archived
           cp --force test/settings-ci.yaml dist-archived/settings.yaml
           rm -rf -- dist-archived/.venv dist-archived/distclean.sh
-          tar --create --file dist-archived.tar --directory dist-archived .
+          tar --create --file dist-archived.tar --directory dist-archived $(ls dist-archived)
           rm -rf dist-archived
 
       - name: Upload configuration files
