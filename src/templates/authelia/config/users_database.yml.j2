@@ -1,4 +1,5 @@
 #jinja2:lstrip_blocks: True
+users:
 {% for user in pinanas.users %}
   {{ user.login }}:
     displayname: "{{ user.fullname }}"
