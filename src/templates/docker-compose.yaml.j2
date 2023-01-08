@@ -59,8 +59,8 @@ services:
     depends_on:
       - dhcpd
     ports:
-      - 80:80
-      - 443:443
+      - {{ pinanas.port.http }}:{{ pinanas.port.http }}
+      - {{ pinanas.port.https }}:{{ pinanas.port.https }}
       - 53:53/udp
     networks:
       pinanas:
