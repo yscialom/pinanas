@@ -66,6 +66,11 @@ var schema = {
                 type: "string",
                 description: "User fullname",
               },
+              admin: {
+                type: "string",
+                enum: [ "yes", "no" ],
+                description: "Give user administration rights",
+              },
             },
           },
         },
