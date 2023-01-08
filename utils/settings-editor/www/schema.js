@@ -67,8 +67,7 @@ var schema = {
                 description: "User fullname",
               },
               admin: {
-                type: "string",
-                enum: [ "yes", "no" ],
+                type: "boolean",
                 description: "Give user administration rights",
               },
             },
@@ -102,8 +101,7 @@ var schema = {
           required: [ "stagging" ],
           properties: {
             stagging: {
-              type: "string",
-              enum: [ "true", "false" ],
+              type: "boolean",
               description: "Use Let's Encrypt stagging servers",
               default: "false",
               format: "radio",
@@ -278,7 +276,7 @@ var schema = {
           items: {
             type: "string",
             title: "Application",
-            enum: [ "adguardhome", "heimdall", "jellyfin", "netdata", "nextcloud" ],
+            enum: [ "adguardhome", "duplicati", "heimdall", "jellyfin", "netdata", "nextcloud" ],
           },
         },
       },
