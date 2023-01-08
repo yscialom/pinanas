@@ -60,13 +60,13 @@ jobs:
         run: |
           cp --recursive dist dist-archived
           cp --force test/settings-ci.yaml dist-archived/settings.yaml
-          tar --use-compress-program="gzip --best" --create --file pinanas-dist.tar.gz dist-archived
+          rm -rf dist-archived/.venv
 
       - name: Upload configuration files
         uses: actions/upload-artifact@v3
         with:
           name: pinanas-dist
-          path: pinanas-dist.tar.gz
+          path: pinanas-dist
 
       ## == Start & test PiNanas ==
       - name: Start PiNanas
