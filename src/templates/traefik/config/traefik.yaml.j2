@@ -4,16 +4,16 @@ api:
 ping: {}
 entryPoints:
   http:
-    address: ":{{ pinanas.port.http }}"
+    address: ":{{ pinanas.ports.http }}"
     http:
       redirections:
         entryPoint:
           to: https
           scheme: https
   https:
-    address: ":{{ pinanas.port.https }}"
+    address: ":{{ pinanas.ports.https }}"
   traefik:
-    address: ":{% 8080 if pinanas.ports.http != 8080 else 8081 %}"
+    address: ":{% if pinanas.ports.http != 8080 %}8080{% else %}8081{% endif %}"
   dns-udp:
     address: ":53/udp"
   dns-tcp:

@@ -54,6 +54,12 @@ access_control:
       subject:
       - "group:admins"
 
+    # Netdata
+    - domain: "resources.{{ pinanas.domain }}"
+      policy: {{ pinanas.traefik_auth }}
+      subject:
+      - "group:admins"
+
     #
     ## === USER SERVICES ===
     #

@@ -59,8 +59,8 @@ services:
     depends_on:
       - dhcpd
     ports:
-      - {{ pinanas.port.http }}:{{ pinanas.port.http }}
-      - {{ pinanas.port.https }}:{{ pinanas.port.https }}
+      - {{ pinanas.ports.http }}:{{ pinanas.ports.http }}
+      - {{ pinanas.ports.https }}:{{ pinanas.ports.https }}
       - 53:53/udp
     networks:
       pinanas:
@@ -76,6 +76,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.traefik-secure.middlewares=authelia@docker"
       - "traefik.http.routers.traefik-secure.entrypoints=https"
       - "traefik.http.routers.traefik-secure.rule=Host(`traefik-dashboard.{{ pinanas.domain }}`)"
       - "traefik.http.routers.traefik-secure.service=api@internal"
