@@ -6,7 +6,10 @@ DIST_DIR="$(readlink -f "${1}")"
 source "${TEST_DIR}/web-functions.sh"
 
 domain="pinanas-ci.scialom.org"
-traefik="traefik-dashboard.${domain}:8443"
+http_port=":8080"
+https_port=":8443"
+traefik_unsecure="traefik-dashboard.${domain}${http_port}"
+traefik_secure="traefik-dashboard.${domain}${https_port}"
 
 # setup external services
 trap "docker stop pinanas-ci-ext-services && docker rmi httpd:2-alpine" EXIT
@@ -14,24 +17,24 @@ docker run \
   -d --rm --name pinanas-ci-ext-services \
   --network "$(basename ${DIST_DIR})_pinanas" \
   -l "traefik.enable=true" \
-  -l "traefik.http.services.ext1.loadbalancer.server.port=80" \
-  -l "traefik.http.services.ext2.loadbalancer.server.port=80" \
-  -l "traefik.http.services.ext3.loadbalancer.server.port=80" \
-  -l "traefik.http.services.ext4.loadbalancer.server.port=80" \
+  -l "traefik.http.services.ext1.loadbalancer.server.port=${http_port}" \
+  -l "traefik.http.services.ext2.loadbalancer.server.port=${http_port}" \
+  -l "traefik.http.services.ext3.loadbalancer.server.port=${http_port}" \
+  -l "traefik.http.services.ext4.loadbalancer.server.port=${http_port}" \
   httpd:2-alpine
 sleep 10
 
 # http -> https
-web_expect "http://${traefik}"  -c 301 -r "https://${traefik}/"
-web_expect "https://${traefik}" -c 302 -r "https://${traefik}/dashboard/"
-web_expect "https://${traefik}/dashboard/" -c 200
+web_expect "http://${traefik_unsecure}"  -c 301 -r "https://${traefik_secure}/"
+web_expect "https://${traefik_secure}" -c 302 -r "https://${traefik_secure}/dashboard/"
+web_expect "https://${traefik_secure}/dashboard/" -c 200
 
 # api
-api_expect "https://${traefik}/api/overview" -q '.http.services.total==17'
-api_expect "https://${traefik}/api/overview" -q '.http.middlewares.total==15'
-api_expect "https://${traefik}/api/overview" -q '.http.routers.total==22'
-api_expect "https://${traefik}/api/overview" -q '.udp.routers.total==1'
-api_expect "https://${traefik}/api/overview" -q '.udp.services.total==1'
+api_expect "https://${traefik_secure}/api/overview" -q '.http.services.total==17'
+api_expect "https://${traefik_secure}/api/overview" -q '.http.middlewares.total==15'
+api_expect "https://${traefik_secure}/api/overview" -q '.http.routers.total==22'
+api_expect "https://${traefik_secure}/api/overview" -q '.udp.routers.total==1'
+api_expect "https://${traefik_secure}/api/overview" -q '.udp.services.total==1'
 for entity in .{http,udp,tcp}.{services,middlewares,routers} ; do
     api_expect "https://${traefik}/api/overview" -q "${entity}.warnings==0 and ${entity}.errors==0"
 done
