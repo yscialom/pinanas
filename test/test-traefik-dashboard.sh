@@ -6,10 +6,8 @@ DIST_DIR="$(readlink -f "${1}")"
 source "${TEST_DIR}/web-functions.sh"
 
 domain="pinanas-ci.scialom.org"
-http_port=":8080"
-https_port=":8443"
-traefik_unsecure="traefik-dashboard.${domain}${http_port}"
-traefik_secure="traefik-dashboard.${domain}${https_port}"
+traefik_unsecure="traefik-dashboard.${domain}:8080"
+traefik_secure="traefik-dashboard.${domain}:8443"
 
 # setup external services
 trap "docker stop pinanas-ci-ext-services && docker rmi httpd:2-alpine" EXIT
