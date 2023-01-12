@@ -36,7 +36,7 @@ api_expect "https://${traefik_secure}/api/overview" -q '.http.routers.total==22'
 api_expect "https://${traefik_secure}/api/overview" -q '.udp.routers.total==1'
 api_expect "https://${traefik_secure}/api/overview" -q '.udp.services.total==1'
 for entity in .{http,udp,tcp}.{services,middlewares,routers} ; do
-    api_expect "https://${traefik}/api/overview" -q "${entity}.warnings==0 and ${entity}.errors==0"
+    api_expect "https://${traefik_secure}/api/overview" -q "${entity}.warnings==0 and ${entity}.errors==0"
 done
 
 # external services
