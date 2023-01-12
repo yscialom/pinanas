@@ -61,6 +61,7 @@ access_control:
       subject:
           {% for group in traefik_auth.groups | default(['admins']) %}
       - "group:{{ group }}"
+          {% endfor %}
         {% endif %}
 
     #
