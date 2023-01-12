@@ -58,6 +58,7 @@ services:
     container_name: traefik
     depends_on:
       - dhcpd
+      - authelia
     ports:
       - {{ pinanas.ports.http }}:{{ pinanas.ports.http }}
       - {{ pinanas.ports.https }}:{{ pinanas.ports.https }}
@@ -102,8 +103,6 @@ services:
   authelia:
     image: authelia/authelia:4.37
     container_name: authelia
-    depends_on:
-      - traefik
     networks:
       pinanas:
         aliases:

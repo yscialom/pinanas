@@ -107,5 +107,6 @@ pinanas:
       # Send emails as. Type: string. Example: "contact@{{ pinanas.domain }}".
       sender:  "${settings_pinanas_network_smtp_sender}"
 
-  # Authentification on Traefik's dashboard. Type: string. Value: bypass, one_factor, two_factor.
-  traefik_auth: bypass
+  # Authentification on Traefik's dashboard. Type: string.
+  traefik_auth:
+    policy: bypass
