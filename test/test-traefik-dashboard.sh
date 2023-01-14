@@ -23,7 +23,7 @@ docker run \
 sleep 10
 
 # http -> https
-web_expect "http://${traefik_unsecure}"  -c 301 -r "https://${traefik_secure}/"
+web_expect "http://${traefik_unsecure}" -c 301 -r "https://${traefik_secure}/"
 web_expect "https://${traefik_secure}" -c 302 -r "https://${traefik_secure}/dashboard/"
 web_expect "https://${traefik_secure}/dashboard/" -c 200
 
