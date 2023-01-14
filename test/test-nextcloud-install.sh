@@ -6,8 +6,9 @@ DIST_DIR="$(readlink -f "${1}")"
 source "${TEST_DIR}/web-functions.sh"
 
 domain="pinanas-ci.scialom.org"
-authelia="auth.${domain}:8443"
-nextcloud="cloud.${domain}:8443"
+https_port=":8443"
+authelia="auth.${domain}${https_port}"
+nextcloud="cloud.${domain}${https_port}"
 
 function cmd () {
     local user="${1}" ; shift
