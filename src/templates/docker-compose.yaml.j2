@@ -122,7 +122,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./authelia/config:/config
-      - ./log/authelia:log
+      - ./log/authelia:/log
     restart: unless-stopped
 
   ## === LOGROTATE ===
