@@ -77,6 +77,12 @@ prepare () {
       state: directory
       mode: 0755
     loop: "{{ ['adguardhome', 'authelia', 'database', 'dhcpd', 'duplicati', 'heimdall', 'jellyfin', 'netdata', 'nextcloud', 'traefik'] | product(['config', 'data']) | list }}"
+  - name: ensure log directories exist
+    file:
+      path: "/pinanas/dist/log/{{ item }}"
+      state: directory
+      mode: 0770
+    loop: ['authelia', 'nextcloud', 'traefik']
   - name: ensure media directories exist
     file:
       path: "/pinanas/dist/media/{{ item }}"
