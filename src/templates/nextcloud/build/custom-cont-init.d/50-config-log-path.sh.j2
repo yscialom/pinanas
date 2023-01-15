@@ -8,7 +8,7 @@ function occ () {
 
 function configure_log_path () {
   echo "*** Configure Nextcloud Log Path ***"
-  occ log:file --file=/log/nextcloud
+  occ log:file --file=/log/nextcloud.log
   occ log:manage --level=info
 
   echo "*** Nextcloud Log Path Configured ***"
