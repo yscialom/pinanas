@@ -46,6 +46,7 @@ services:
     volumes:
       - ./fail2ban/config:/config/fail2ban
       - ./fail2ban:/config/log/fail2ban
+      - ./log/fail2ban:/log
       - /var/log:/var/log:ro
       - ./log:/remotelogs:ro
     restart: unless-stopped
