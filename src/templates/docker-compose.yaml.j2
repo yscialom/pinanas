@@ -125,6 +125,29 @@ services:
       - ./log/authelia:log
     restart: unless-stopped
 
+  ## === LOGROTATE ===
+  logrotate:
+    image: blacklabelops/logrotate
+    container_name: logrotate
+    networks:
+      pinanas:
+        aliases:
+          - logrotate
+    environment:
+      - TZ={{ pinanas.timezone }}
+      - PUID={{ PUID }}
+      - PGID={{ PGID }}
+      - LOGS_DIRECTORIES=/var/log
+      - LOGS_INTERVAL=weekly
+      - LOGROTATE_COPIES=5
+      - LOGROTATE_SIZE=20M # Will rotate when log file exceeds 20 Megabytes.
+      - LOGROTATE_COMPRESSION=nocompress
+      - LOGROTATE_LOGFILE=/var/log/logrotate.log
+      - LOGROTATE_STATUSFILE=/var/log/logrotate_status.log
+    volumes:
+      - ./log:/var/log
+    restart: unless-stopped
+
 {% for application in pinanas.applications %}
   {% filter indent(width=2, first=True) %}
     {% include "./docker-templates/" + application + ".yaml.j2" +%}
