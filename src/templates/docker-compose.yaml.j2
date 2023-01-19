@@ -141,7 +141,7 @@ services:
       - LOGS_DIRECTORIES=/var/log
       - LOGS_INTERVAL=weekly
       - LOGROTATE_COPIES=5
-      - LOGROTATE_SIZE=20M # Will rotate when log file exceeds 20 Megabytes.
+      - LOGROTATE_SIZE=10M # Will rotate when log file exceeds 10 Megabytes.
       - LOGROTATE_COMPRESSION=nocompress
       - LOGROTATE_LOGFILE=/var/log/logrotate.log
       - LOGROTATE_STATUSFILE=/var/log/logrotate_status.log

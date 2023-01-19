@@ -81,7 +81,7 @@ prepare () {
     file:
       path: "/pinanas/dist/log/{{ item }}"
       state: directory
-      mode: 0770
+      mode: 0750
     loop: ['authelia', 'fail2ban', 'nextcloud', 'traefik']
   - name: ensure media directories exist
     file:
