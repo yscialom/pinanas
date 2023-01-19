@@ -28,4 +28,3 @@ ADD configure-logging.sh /configure-logging.sh
 ADD configure-guest.sh /configure-guest.sh
 ADD configure-uninstaller.sh /configure-uninstaller.sh
 ENTRYPOINT ["/bin/sh", "/configure-guest.sh"]
-ENTRYPOINT ["/bin/sh", "/configure-uninstaller.sh"]

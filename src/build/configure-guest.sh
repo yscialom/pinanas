@@ -1,6 +1,7 @@
 #!/bin/sh
 
 . /configure-logging.sh
+. /configure-uninstaller.sh
 
 #
 ## Check
@@ -169,3 +170,4 @@ check "$@"
 prepare
 install "$@"
 clean
+uninstaller

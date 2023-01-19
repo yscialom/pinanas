@@ -1,11 +1,5 @@
 #!/bin/sh
 
-. /configure-logging.sh
-
-#
-## Uninstaller-script
-#
-
 uninstaller () {
     cat > "/pinanas/dist/uninstall.sh" << \EOF
 #!/bin/bash
@@ -23,10 +17,3 @@ rm -r $(ls -I "settings.yaml*")
 EOF
     chmod +x "/pinanas/dist/uninstall.sh"
 }
-
-
-#
-## === ENTRY POINT ===
-#
-
-uninstaller
