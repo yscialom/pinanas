@@ -59,7 +59,7 @@ access_control:
       policy: "{{ pinanas.traefik_auth.policy }}"
         {% if pinanas.traefik_auth.policy != "bypass" %}
       subject:
-          {% for group in pinanas.traefik_auth.groups | default(['admins']) %}
+          {% for group in pinanas.traefik_auth.groups %}
       - "group:{{ group }}"
           {% endfor %}
         {% endif %}

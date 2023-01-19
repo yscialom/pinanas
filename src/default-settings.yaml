@@ -58,6 +58,8 @@ pinanas_default:
   # Authentification on Traefik's dashboard. Type: string.
   traefik_auth:
     policy: one_factor
+    groups:
+      - admins
 
 internal:
   install:
