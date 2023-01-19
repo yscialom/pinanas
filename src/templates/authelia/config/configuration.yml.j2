@@ -56,8 +56,8 @@ access_control:
 
     # Traefik
     - domain: "traefik-dashboard.{{ pinanas.domain }}"
-      policy: "{{ pinanas.traefik_auth.policy | default('two_factor') }}"
-        {% if pinanas.traefik_auth.policy is not defined or pinanas.traefik_auth.policy != "bypass" %}
+      policy: "{{ pinanas.traefik_auth.policy }}"
+        {% if pinanas.traefik_auth.policy != "bypass" %}
       subject:
           {% for group in pinanas.traefik_auth.groups | default(['admins']) %}
       - "group:{{ group }}"

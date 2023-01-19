@@ -55,6 +55,10 @@ pinanas_default:
     - netdata
     - nextcloud
 
+  # Authentification on Traefik's dashboard. Type: string.
+  traefik_auth:
+    policy: one_factor
+
 internal:
   install:
     path: "{{ lookup('env', 'PINANAS_DIST') }}"
