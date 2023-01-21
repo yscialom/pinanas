@@ -1,8 +1,12 @@
 api:
+  insecure: false
   dashboard: true
   debug: true
-ping: {}
+ping:
+  entryPoint: "ping"
 entryPoints:
+  ping:
+    address: ":{% if pinanas.ports.http != 8080 %}8080{% else %}8081{% endif %}"
   http:
     address: ":{{ pinanas.ports.http }}"
     http:
@@ -12,8 +16,6 @@ entryPoints:
           scheme: https
   https:
     address: ":{{ pinanas.ports.https }}"
-  traefik:
-    address: ":{% if pinanas.ports.http != 8080 %}8080{% else %}8081{% endif %}"
   dns-udp:
     address: ":53/udp"
   dns-tcp:

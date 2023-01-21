@@ -47,7 +47,7 @@ Installation
 #### Hardware
 
 PiNanas will need a linux-based host, with:
-- 30GB free disk space
+- 32GB free disk space
 - 4GB RAM, 8GB suggested
 - An access to Internet
 - Optionnally: a GPU suited to your needs (video transcoding & playing)
