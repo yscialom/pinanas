@@ -1,7 +1,6 @@
 #!/bin/sh
 
 . /configure-logging.sh
-. /configure-uninstaller.sh
 
 #
 ## Check
