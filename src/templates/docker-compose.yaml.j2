@@ -99,7 +99,7 @@ services:
 
   ## === AUTHELIA ===
   authelia:
-    image: authelia/authelia:4.37 {# Ideally, update src/utils/ansible_passwords.py with the same tag (version) #}
+    image: authelia/authelia:4.37 {# Ideally, update src/utils/ansible_passwords.py with the same tag (version) #} 
     container_name: authelia
     depends_on:
       - traefik
