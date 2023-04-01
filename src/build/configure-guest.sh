@@ -173,7 +173,9 @@ trap "rm .images" EXIT
 docker-compose images -q >.images
 docker-compose down
 xargs docker image rm <.images
+rm -rf -- docker-compose.yaml */config
 rm -- \$0
+echo "settings.yaml and */data/ are left untouched and should be removed manually."
 EOF
     chmod +x "/pinanas/dist/uninstall.sh"
 }
