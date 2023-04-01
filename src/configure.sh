@@ -33,13 +33,16 @@ configure () {
 
 report () {
     info "Configuration successful."
-    cont "You can clean work files with ./distclean.sh"
-    cont "Start your services with docker-compose up -d"
+    cont "Start your services with 'docker-compose up -d'"
+    cont "Optionnally, you can:"
+    cont "  - clean work files with './distclean.sh'"
+    cont "  - uninstall all with './uninstall.sh'"
+    cont "Thank you for using PiNanas!"
 
     command -v netstat >/dev/null || return
     if netstat -lan | grep -qE ':53\W' ; then
-        warn "Port udp/53 appears to be already in use. You should free it before starting pinanas."
-        cont "On Ubuntu 18.04+ systems, in order to free udp/53 you can disable your local DNS cache server:"
+        warn "Port 53/udp appears to be already in use. You should free it before starting PiNanas."
+        cont "On Ubuntu 18.04+ systems, in order to free 53/udp you can disable your local DNS cache server:"
         cont "    sudo mkdir -p /etc/systemd/resolved.conf.d"
         cont "    echo -e '[Resolve]\nDNSStubListener=no' | sudo tee -a /etc/systemd/resolved.conf.d/disable-for-pinanas.conf"
         cont "    sudo systemctl force-reload systemd-resolved"

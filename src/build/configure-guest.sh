@@ -162,6 +162,26 @@ EOF
 
 
 #
+## Uninstall
+#
+
+uninstall () {
+    cat > "/pinanas/dist/uninstall.sh" <<EOF
+#!/bin/bash
+[[ -x ./distclean.sh ]] && ./distclean.sh
+trap "rm .images" EXIT
+docker-compose images -q >.images
+docker-compose down
+xargs docker image rm <.images
+rm -rf -- docker-compose.yaml */config
+rm -- \$0
+echo "settings.yaml and */data/ are left untouched and should be removed manually."
+EOF
+    chmod +x "/pinanas/dist/uninstall.sh"
+}
+
+
+#
 ## === ENTRY POINT ===
 #
 
@@ -169,3 +189,4 @@ check "$@"
 prepare
 install "$@"
 clean
+uninstall
