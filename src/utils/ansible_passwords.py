@@ -16,7 +16,8 @@ class Authelia:
     def key(self, opt=''):
         try:
             _ = self.__run(['docker', 'run', '--rm', '-u', '{}'.format(os.getuid()), '-v', 'pinanas-config:/pinanas-config', 'authelia/authelia:4.37', 'authelia',
-                'rsa', 'generate', '--dir', '/pinanas-config/keys'])
+                'crypto', 'certificate', 'rsa', 'generate',
+                '--directory', '/pinanas-config/keys', '--file.private-key', 'key.pem'])
             with open('/pinanas-config/keys/key.pem') as keyfile:
                 key = keyfile.read()
         finally:
