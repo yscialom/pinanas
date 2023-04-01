@@ -15,7 +15,7 @@ ENCODING='utf-8'
 class Authelia:
     def key(self, opt=''):
         try:
-            _ = self.__run(['docker', 'run', '--rm', '-u', '{}'.format(os.getuid()), '-v', 'pinanas-config:/pinanas-config', 'authelia/authelia:4.35', 'authelia',
+            _ = self.__run(['docker', 'run', '--rm', '-u', '{}'.format(os.getuid()), '-v', 'pinanas-config:/pinanas-config', 'authelia/authelia:4.37', 'authelia',
                 'rsa', 'generate', '--dir', '/pinanas-config/keys'])
             with open('/pinanas-config/keys/key.pem') as keyfile:
                 key = keyfile.read()
@@ -24,7 +24,7 @@ class Authelia:
         return self.__transform(key, opt)
 
     def password(self, cleartext):
-        command = ['docker', 'run', '--rm', 'authelia/authelia:4', 'authelia', 'hash-password', '--', cleartext]
+        command = ['docker', 'run', '--rm', 'authelia/authelia:4.37', 'authelia', 'hash-password', '--', cleartext]
         stdout = self.__run(command)
         return self.__extract_ciphertext(command, stdout)
 
