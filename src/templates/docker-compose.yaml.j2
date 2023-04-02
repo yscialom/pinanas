@@ -151,6 +151,6 @@ services:
 
 {% for application in pinanas.applications %}
   {% filter indent(width=2, first=True) %}
-    {% include "./docker-templates/" + application + ".yaml.j2" +%}
+    {% include "./docker-templates/" + application + ".yaml" +%}
   {% endfilter %}
 {% endfor %}

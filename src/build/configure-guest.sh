@@ -97,7 +97,7 @@ prepare () {
 EOH
 
     # Playbook tasks
-    find /pinanas/src/templates -type f -name "*.j2" -not -path "*/docker-templates*" | while read -r j2 ; do
+    find /pinanas/src/templates -type f -name "*.j2" | while read -r j2 ; do
         destdir="$(dirname "/pinanas/dist/${j2#/pinanas/src/templates/}")"
         filename="$(basename "${j2%.j2}")"
         cat >> ${playbook} <<EOT
