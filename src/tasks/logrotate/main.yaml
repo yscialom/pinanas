@@ -1,7 +1,12 @@
 ---
+  - name: Ensure log directory exists
+    file:
+      path: "/pinanas/dist/log/"
+      state: directory
+      mode: 0750
   - name: Ensure logrotate files are created and owned by the right user
     file:
-      path: "/pinanas/log/{{ item }}"
+      path: "/pinanas/dist/log//{{ item }}"
       state: file
     loop:
     - "logrotate.log"
