@@ -2,7 +2,7 @@
   - name: Ensure logrotate files are created and owned by the right user
     file:
       path: "/pinanas/log/{{ item }}"
-      state: present
+      state: file
     loop:
     - "logrotate.log"
     - "logrotate.status"
