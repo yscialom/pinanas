@@ -45,11 +45,10 @@ services:
       - SSMTP_STARTTLS=YES
     volumes:
       - ./fail2ban/config:/config/fail2ban
-      - ./fail2ban:/config/log/fail2ban
+      - ./fail2ban:/config/logs/fail2ban
+      - ./logs/fail2ban:/log
       - /var/log:/var/log:ro
-      - ./authelia/config/logs:/remotelogs/authelia:ro
-      - ./nextcloud/data/files:/remotelogs/nextcloud:ro
-      - ./traefik/log:/remotelogs/traefik:ro
+      - ./logs:/remotelogs:ro
     restart: unless-stopped
 
   ## === TRAEFIK ===
@@ -92,7 +91,7 @@ services:
       - ./traefik/config/config.yaml:/config.yaml:ro
       - ./traefik/config/traefik.yaml:/traefik.yaml:ro
       - ./traefik/data/acme.json:/acme.json
-      - ./traefik/log:/opt/traefik
+      - ./logs/traefik:/log
     healthcheck:
       test: traefik healthcheck --ping
     restart: unless-stopped
@@ -124,6 +123,28 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./authelia/config:/config
+      - ./logs/authelia:/log
+    restart: unless-stopped
+
+  ## === LOGROTATE ===
+  logrotate:
+    image: blacklabelops/logrotate:1.3
+    container_name: logrotate
+    networks:
+      pinanas:
+        aliases:
+          - logrotate
+    environment:
+      - TZ={{ pinanas.timezone }}
+      - LOGS_DIRECTORIES=/var/log
+      - LOGROTATE_INTERVAL=hourly
+      - LOGROTATE_COPIES=5
+      - LOGROTATE_SIZE=10M # Will rotate when log file exceeds 10 Megabytes.
+      - LOGROTATE_COMPRESSION=nocompress
+      - LOGROTATE_LOGFILE=/var/log/logrotate.log
+      - LOGROTATE_STATUSFILE=/var/log/logrotate.status
+    volumes:
+      - ./logs:/var/log
     restart: unless-stopped
 
 {% for application in pinanas.applications %}
