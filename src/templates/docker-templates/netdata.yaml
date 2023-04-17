@@ -30,13 +30,13 @@ netdata:
     - "traefik.http.routers.netdata.rule=Host(`resources.{{ pinanas.domain }}`)"
     - "traefik.http.services.netdata.loadbalancer.server.port=19999"
   volumes:
+    - ./netdata/data:/etc/netdata
     - /etc/passwd:/host/etc/passwd:ro
     - /etc/group:/host/etc/group:ro
     - /proc:/host/proc:ro
     - /sys:/host/sys:ro
     - /etc/os-release:/host/etc/os-release:ro
     - /var/run/docker.sock:/var/run/docker.sock:ro
-    - /var/log/fail2ban.log:/var/log/fail2ban.log:ro
+    - ./logs/fail2ban/fail2ban.log:/var/log/fail2ban.log:ro
     - ./dhcpd/data:/var/lib/dhcp:ro
-    - ./netdata/data:/etc/netdata
   restart: unless-stopped

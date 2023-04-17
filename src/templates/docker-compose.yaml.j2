@@ -45,10 +45,10 @@ services:
       - SSMTP_STARTTLS=YES
     volumes:
       - ./fail2ban/config:/config/fail2ban
-      - ./fail2ban:/config/log/fail2ban
-      - ./log/fail2ban:/log
+      - ./fail2ban:/config/logs/fail2ban
+      - ./logs/fail2ban:/log
       - /var/log:/var/log:ro
-      - ./log:/remotelogs:ro
+      - ./logs:/remotelogs:ro
     restart: unless-stopped
 
   ## === TRAEFIK ===
@@ -91,7 +91,7 @@ services:
       - ./traefik/config/config.yaml:/config.yaml:ro
       - ./traefik/config/traefik.yaml:/traefik.yaml:ro
       - ./traefik/data/acme.json:/acme.json
-      - ./log/traefik:/log
+      - ./logs/traefik:/log
     healthcheck:
       test: traefik healthcheck --ping
     restart: unless-stopped
@@ -123,7 +123,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./authelia/config:/config
-      - ./log/authelia:/log
+      - ./logs/authelia:/log
     restart: unless-stopped
 
   ## === LOGROTATE ===
@@ -139,12 +139,12 @@ services:
       - LOGS_DIRECTORIES=/var/log
       - LOGROTATE_INTERVAL=hourly
       - LOGROTATE_COPIES=5
-      - LOGROTATE_SIZE=1M # Will rotate when log file exceeds 10 Megabytes.
+      - LOGROTATE_SIZE=10M # Will rotate when log file exceeds 10 Megabytes.
       - LOGROTATE_COMPRESSION=nocompress
       - LOGROTATE_LOGFILE=/var/log/logrotate.log
       - LOGROTATE_STATUSFILE=/var/log/logrotate.status
     volumes:
-      - ./log:/var/log
+      - ./logs:/var/log
     restart: unless-stopped
 
 {% for application in pinanas.applications %}

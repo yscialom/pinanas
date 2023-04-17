@@ -21,7 +21,7 @@ database:
     - MYSQL_DATABASE=pinanas-nextcloud
   volumes:
     - ./database/data/databases:/config/databases
-    - ./database/data/log:/config/log
+    - ./logs/nextcloud/database:/config/log
     - ./database/config:/config
   healthcheck:
     test: [ "CMD", "mysqladmin", "--user=pinanas-nextcloud", "--password={{ secrets.make_secret('pinanas.nextcloud.database_password') }}", "ping", "--silent" ]
@@ -74,6 +74,6 @@ nextcloud:
     - ./nextcloud/data/crontabs:/config/crontabs
     - ./nextcloud/data/generated-config:/config/www/nextcloud/config
     - ./nextcloud/data/files:/data
-    - ./log/nextcloud:/log
+    - ./logs/nextcloud:/log
     - ./media:/data/media
   restart: unless-stopped
