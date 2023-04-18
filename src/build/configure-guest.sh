@@ -98,7 +98,7 @@ EOH
 
     # Playbook tasks
     find /pinanas/src/templates -type f -name "*.j2" | while read -r j2 ; do
-        [[ "${j2}" =~ /^docker-compose\..+\.yaml\.j2$/ ]] && continue # skip application-specific docker-compose templates
+        [[ "${j2}" =~ /\/docker-compose\..+\.yaml\.j2$/ ]] && continue # skip application-specific docker-compose templates
         destdir="$(dirname "/pinanas/dist/${j2#/pinanas/src/templates/}")"
         filename="$(basename "${j2%.j2}")"
         cat >> ${playbook} <<EOT
