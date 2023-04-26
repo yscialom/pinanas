@@ -36,7 +36,7 @@ prepare () {
 
     . /pinanas/venv/bin/activate
     python3 -m pip install --upgrade pip
-    pip3 install ansible==7.0.0
+    #pip3 install ansible==7.0.0
 
     ## Apply private configuration
     # Create playbook directory
