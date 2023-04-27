@@ -1,3 +1,4 @@
-ansible==5.6
-bcrypt==3.2
+ansible==7.0.0
+bcrypt==4.0
+passlib==1.7
 netaddr==0.8

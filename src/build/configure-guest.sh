@@ -36,7 +36,6 @@ prepare () {
 
     . /pinanas/venv/bin/activate
     python3 -m pip install --upgrade pip
-    pip3 install ansible==5.6
 
     ## Apply private configuration
     # Create playbook directory
