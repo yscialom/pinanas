@@ -1,0 +1,11 @@
+--- ci.yaml
++++ bad01.yaml
+@@ -9,7 +9,7 @@
+ 
+ pinanas:
+   # Registered domain name. Type: string. Example: "home.example.com".
+-  domain: pinanas-ci.scialom.org
++  domain: ""
+ 
+   # Master password to encrypt/derive all PiNanas secrets. Type: string_
+   # Example: "Randomly-generated-complex-string-with-mixed-case-digits-and-special-characters".

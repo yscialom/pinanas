@@ -88,7 +88,7 @@ jobs:
           settings_pinanas_network_smtp_username: "${{ secrets.settings_pinanas_network_smtp_username }}"
         run: |
           env | grep ^settings_pinanas_ | ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cat >~/.ssh/environment"
-          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "envsubst <~/pinanas-src/test/settings-cd.yaml >~/pinanas/settings.yaml"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "envsubst <~/pinanas-src/test/settings.yaml.d/cd.yaml >~/pinanas/settings.yaml"
 
       - name: Configure
         run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && ~/pinanas-src/src/configure.sh && rm ~/.ssh/environment"
