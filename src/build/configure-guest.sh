@@ -36,6 +36,8 @@ prepare () {
 
     . /pinanas/venv/bin/activate
     python3 -m pip install --upgrade pip
+    pip3 install --requirement /pinanas/src/build/requirements.txt
+    pip3 install --requirement /pinanas/src/utils/settings-validator/requirements.txt
 
     ## Apply private configuration
     # Create playbook directory
@@ -51,7 +53,6 @@ prepare () {
 
     echo "${plugin_files}" | tr : '\n' | while read -r file ; do
         if [ -r "${file}" ] ; then
-            pip3 install -r "$(dirname "${file}")"/requirements.txt
             cp "${file}" "${plugins_dir}/$(basename "${file}")"
         fi
     done
@@ -122,7 +123,18 @@ EOT
     done
 
     # Make Jinja find secrets.j2
-    ln -fs /pinanas/src/utils/secrets.j2 ${playbook_dir}/.
+    ln -fs /pinanas/src/src/utils/secrets.j2 ${playbook_dir}/.
+}
+
+
+#
+## Validate
+#
+
+validate () {
+    /pinanas/src/utils/settings-validator/validate.py \
+        -s /pinanas/src/utils/settings-validator/schema.json \
+        -y /pinanas/dist/settings.yaml
 }
 
 
@@ -193,6 +205,7 @@ EOF
 
 check "$@"
 prepare
-install "$@"
+validate || exit $?
+install "$@" || exit $?
 clean
 uninstall
