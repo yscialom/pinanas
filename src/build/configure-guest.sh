@@ -123,7 +123,7 @@ EOT
     done
 
     # Make Jinja find secrets.j2
-    ln -fs /pinanas/src/src/utils/secrets.j2 ${playbook_dir}/.
+    ln -fs /pinanas/src/utils/secrets.j2 ${playbook_dir}/.
 }
 
 
