@@ -29,7 +29,7 @@ function check () {
     local path=$(echo ${patchname%-*} | tr . /)
     local reason=$(echo ${patchname##*-})
     local explanation="field: ${path}, test: ${reason}"
-    test_field ${explanation} "${patch}" ${actual} ${expected}
+    test_field "${explanation}" "${patch}" ${actual} ${expected}
 }
 
 check "${TEST_DIR}/settings.yaml.d/pinanas.domain-empty.patch" 1
