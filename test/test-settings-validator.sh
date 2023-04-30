@@ -12,7 +12,7 @@ source "${DIST_DIR}/.venv/bin/activate"
 function validate_schema () {
     local patch="${1}"
     local settings_validator="$(readlink -f ${TEST_DIR}/../src/utils/settings-validator)"
-    patch --output="${TMP_FILE}" "${TEST_DIR}/settings.yaml.d/ci.yaml" "${patch}"
+    patch --quiet --output="${TMP_FILE}" "${TEST_DIR}/settings.yaml.d/ci.yaml" "${patch}"
     "${settings_validator}/validate.py" --quiet --schema "${settings_validator}/schema.json" --yaml-document "${TMP_FILE}"
 }
 
@@ -25,7 +25,11 @@ function check () {
     local actual=$?
     set -e
 
-    test_field field url ${actual} ${expected}
+    local patchname=$(basename ${patch%.*})
+    local path=$(echo ${patchname%-*} | tr . /)
+    local reason=$(echo ${patchname##*-})
+    local explanation="field: ${path}, test: ${reason}"
+    test_field ${explanation} "${patch}" ${actual} ${expected}
 }
 
 check "${TEST_DIR}/settings.yaml.d/pinanas.domain-empty.patch" 1
