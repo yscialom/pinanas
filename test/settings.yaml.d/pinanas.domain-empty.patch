@@ -1,5 +1,5 @@
 --- ci.yaml
-+++ bad01.yaml
++++ pinanas.domain-empty.yaml
 @@ -9,7 +9,7 @@
  
  pinanas:

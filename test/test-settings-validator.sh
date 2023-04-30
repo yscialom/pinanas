@@ -12,7 +12,7 @@ source "${DIST_DIR}/.venv/bin/activate"
 function validate () {
     local patch="${1}"
     local settings_validator="$(readlink -f ${TEST_DIR}/../src/utils/settings-validator)"
-    patch -p1 "${patch}" <"${TEST_DIR}/settings.yaml.d/ci.yaml" >"${TMP_FILE}"
+    patch --output="${TMP_FILE}" "${TEST_DIR}/settings.yaml.d/ci.yaml" "${patch}"
     "${settings_validator}/validate.py" -s "${settings_validator}/schema.json" -y "${TMP_FILE}"
 }
 
