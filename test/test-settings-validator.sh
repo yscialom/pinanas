@@ -56,6 +56,13 @@ function check () {
     set -e
 
     test_field "'${path} = \"${value}\"'" "settings.yaml validation" ${actual} ${expected}
+    local error_code=$?
+    if [[ ${error_code} != 0 ]] ; then
+        if [[ "${actual}" == "invalid" ]] ; then
+            "${settings_validator}/validate.py" --schema "${settings_validator}/schema.json" --yaml-document "${SETTINGS_FILE}"
+        fi
+        exit ${error_code}
+    fi
 }
 
 #
