@@ -69,4 +69,4 @@ jobs:
         run: test/test-nextcloud-install.sh dist
 
       - name: Test settings.yaml validator
-        run: test/test-settings-validator.sh
+        run: test/test-settings-validator.sh dist
