@@ -80,4 +80,4 @@ check "pinanas/master_secret" "$(head -c 100 </dev/random | base64)"    valid
 
 # TODO timezone
 
-check "pinanas/users" '[{ "login": "John Doe (JDO)", "password": "azAZ09 /*-+&~#([{|\`\\^@])}=$%!:;,?.", "email": "john-john.doe+label@gmail.com" }]' valid
+check "pinanas/users" '[{ "login": "John Doe (JDO)", "password": "azAZ09 /*-+&~#([{|\\`^@])}=$%!:;,?.", "email": "john-john.doe+label@gmail.com" }]' valid
