@@ -76,7 +76,7 @@
             "type": "object",
             "title": "service",
             "description": "External service",
-            "required": [ "name", "url" ],
+            "required": [ "name" ],
             "properties": {
               "name": {
                 "type": "string",

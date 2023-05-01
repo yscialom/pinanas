@@ -15,6 +15,7 @@ function prepare () {
 #!/usr/bin/env python3
 import sys
 import yaml
+import json
 
 with open("${DIST_DIR}/settings.yaml") as f:
     settings = yaml.safe_load(f)
@@ -22,8 +23,8 @@ with open("${DIST_DIR}/settings.yaml") as f:
 fields = sys.argv[1].split('/')
 last_field = fields[-1]
 try:
-    value = int(sys.argv[2])
-except ValueError:
+    value = json.loads(sys.argv[2])
+except json.decoder.JSONDecodeError:
     value = sys.argv[2]
 node = settings
 for field in fields[:-1]:
@@ -79,4 +80,4 @@ check "pinanas/master_secret" "$(head -c 100 </dev/random | base64)"    valid
 
 # TODO timezone
 
-#check "pinanas/users" "[{ login: login, password: pass, email: email }]" valid
+check "pinanas/users" '[{ "login": "John Doe (JDO)", "password": "azAZ09 /*-+&~#([{|\`\\^@])}=$%!:;,?.", "email": "john-john.doe+label@gmail.com" }]' valid
