@@ -31,7 +31,10 @@ except json.decoder.JSONDecodeError:
 node = settings
 for field in fields[:-1]:
     node = node.setdefault(field, dict())
-node[last_field] = value
+if value is None:
+    del node[last_field]
+else:
+    node[last_field] = value
 print(yaml.dump(settings, default_flow_style=False, sort_keys=False))
 EOF
     chmod +x -- "${SCRIPT_FILE}"
@@ -157,4 +160,4 @@ check "pinanas/acme" '{ "stagging": false }'    valid
 check "pinanas/acme" '{ "stagging": 0 }'        invalid
 check "pinanas/acme" '{ "stagging": "true" }'   invalid
 
-exit ${error_code}
+exit ${check_result}
