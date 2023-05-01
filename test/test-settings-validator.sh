@@ -227,18 +227,18 @@ check "pinanas/network/dhcp/fixed_address_leases" '[{ "name": "somename", "ip": 
 check "pinanas/network/dhcp/fixed_address_leases" '[{ "hmac": "01:23:45:67:89:ab", "ip": "0.0.0.0" }]'                          invalid
 check "pinanas/network/dhcp/fixed_address_leases" '[{ "name": "somename1", "hmac": "01:23:45:67:89:ab", "ip": "0.0.0.0" }, { "name": "somename2", "hmac": "01:23:45:67:89:ab", "ip": "0.0.0.0" }]' \
                                                                                                                                 valid
-check "pinanas/network/dns" null                        invalid
-check "pinanas/network/dns" ''                          invalid
-check "pinanas/network/dns" '{}'                        invalid
-check "pinanas/network/dns" '[]'                        invalid
-check "pinanas/network/dns" '{ "upstream": "0.0.0.0" }' invalid
+check "pinanas/network/dns" null                            invalid
+check "pinanas/network/dns" ''                              invalid
+check "pinanas/network/dns" '{}'                            invalid
+check "pinanas/network/dns" '[]'                            invalid
+check "pinanas/network/dns" '{ "upstreams": ["0.0.0.0"] }'  invalid
 
-check "pinanas/network/dns/upstream" ''                                 invalid
-check "pinanas/network/dns/upstream" '{}'                               invalid
-check "pinanas/network/dns/upstream" '[]'                               valid
-check "pinanas/network/dns/upstream" '[ "0.0.0.0" ]'                    valid
-check "pinanas/network/dns/upstream" '[ "0.0.0.0", "255.255.255.255" ]' valid
-check "pinanas/network/dns/upstream" '[ "0.0.0.0", "localhost" ]'       valid
+check "pinanas/network/dns/upstreams" ''                                    invalid
+check "pinanas/network/dns/upstreams" '{}'                                  invalid
+check "pinanas/network/dns/upstreams" '[]'                                  valid
+check "pinanas/network/dns/upstreams" '[ "0.0.0.0" ]'                       valid
+check "pinanas/network/dns/upstreams" '[ "0.0.0.0", "255.255.255.255" ]'    valid
+check "pinanas/network/dns/upstreams" '[ "0.0.0.0", "localhost" ]'          valid
 
 check "pinanas/network/dns/provider" null                                                           invalid
 check "pinanas/network/dns/provider" ''                                                             invalid
