@@ -118,8 +118,8 @@ check "pinanas/timezone" "Asia/New_York"            invalid
 check "pinanas/timezone" 42                         invalid
 
 check "pinanas/users" '[{ "login": "johndoe", "password": "azAZ09 /*-+&~#([{|\\`^@])}=$%!:;,?.", "email": "john-john.doe+label@gmail.com" }]'   valid
-check "pinanas/users" '[{ "login": "johndoe", "password": "qwerty", "fullname": "John Doe (JDO)", "email": "john-john.doe+label@gmail.com" }, \
-                        { "login": "janedo", "password": "azerty", "email": "jane@do.it" }]'                                                    valid
+check "pinanas/users" '[{ "login": "johndoe", "password": "qwerty", "fullname": "John Doe (JDO)", "email": "john-john.doe+label@gmail.com" }, { "login": "janedo", "password": "azerty", "email": "jane@do.it" }]' \
+                                                                                                                                                valid
 check "pinanas/users" '[]'                                                                                                                      valid
 check "pinanas/users" '{ "login": "janedo", "password": "azerty", "email": "jane@do.it" }'                                                      invalid
 check "pinanas/users" '[{ "login": "janedo", "password": "azerty" }]'                                                                           invalid
