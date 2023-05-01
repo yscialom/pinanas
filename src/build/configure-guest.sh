@@ -36,6 +36,7 @@ prepare () {
 
     . /pinanas/venv/bin/activate
     python3 -m pip install --upgrade pip
+    pip3 install --requirement /pinanas/src/requirements.txt
     pip3 install --requirement /pinanas/src/build/requirements.txt
     pip3 install --requirement /pinanas/src/utils/settings-validator/requirements.txt
 
