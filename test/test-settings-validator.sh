@@ -160,4 +160,123 @@ check "pinanas/acme" '{ "stagging": false }'    valid
 check "pinanas/acme" '{ "stagging": 0 }'        invalid
 check "pinanas/acme" '{ "stagging": "true" }'   invalid
 
+check "pinanas/network/dhcp" null valid
+
+check "pinanas/network/dhcp/hmac" ''                        invalid
+check "pinanas/network/dhcp/hmac" '{}'                      invalid
+check "pinanas/network/dhcp/hmac" '[]'                      invalid
+check "pinanas/network/dhcp/hmac" '01:23:45:67:89:ab'       valid
+check "pinanas/network/dhcp/hmac" 'cd:ef:AB:CD:EF:00'       valid
+check "pinanas/network/dhcp/hmac" '01:23:45:67:89'          invalid
+check "pinanas/network/dhcp/hmac" '01:23:45:67:89:ab:'      invalid
+check "pinanas/network/dhcp/hmac" '01:23:45:67:89:ab:cd'    invalid
+check "pinanas/network/dhcp/hmac" '01,23,45,67,89,ab'       invalid
+check "pinanas/network/dhcp/hmac" '01f23f45f67f89fab'       invalid
+
+check "pinanas/network/dhcp/ip" ''                          invalid
+check "pinanas/network/dhcp/ip" '{}'                        invalid
+check "pinanas/network/dhcp/ip" '[]'                        invalid
+check "pinanas/network/dhcp/ip" '0.0.0.0'                   valid
+check "pinanas/network/dhcp/ip" '254.254.254.254'           valid
+check "pinanas/network/dhcp/ip" '254,254,254,254'           invalid
+check "pinanas/network/dhcp/ip" '254254254254...'           invalid
+check "pinanas/network/dhcp/ip" '254 254 254 254'           invalid
+
+check "pinanas/network/dhcp/base" ''                        invalid
+check "pinanas/network/dhcp/base" '{}'                      invalid
+check "pinanas/network/dhcp/base" '[]'                      invalid
+check "pinanas/network/dhcp/base" '0.0.0.0'                 valid
+check "pinanas/network/dhcp/base" '254.254.254.254'         valid
+check "pinanas/network/dhcp/base" '254,254,254,254'         invalid
+check "pinanas/network/dhcp/base" '254254254254...'         invalid
+check "pinanas/network/dhcp/base" '254 254 254 254'         invalid
+
+check "pinanas/network/dhcp/subnet" ''                      invalid
+check "pinanas/network/dhcp/subnet" '{}'                    invalid
+check "pinanas/network/dhcp/subnet" '[]'                    invalid
+check "pinanas/network/dhcp/subnet" '0.0.0.0'               valid
+check "pinanas/network/dhcp/subnet" '254.254.254.254'       valid
+check "pinanas/network/dhcp/subnet" '254,254,254,254'       invalid
+check "pinanas/network/dhcp/subnet" '254254254254...'       invalid
+check "pinanas/network/dhcp/subnet" '254 254 254 254'       invalid
+
+check "pinanas/network/dhcp/gateway" ''                     invalid
+check "pinanas/network/dhcp/gateway" '{}'                   invalid
+check "pinanas/network/dhcp/gateway" '[]'                   invalid
+check "pinanas/network/dhcp/gateway" '0.0.0.0'              valid
+check "pinanas/network/dhcp/gateway" '254.254.254.254'      valid
+check "pinanas/network/dhcp/gateway" '254,254,254,254'      invalid
+check "pinanas/network/dhcp/gateway" '254254254254...'      invalid
+check "pinanas/network/dhcp/gateway" '254 254 254 254'      invalid
+
+check "pinanas/network/dhcp/range" null                                         valid
+check "pinanas/network/dhcp/range" ''                                           invalid
+check "pinanas/network/dhcp/range" '{}'                                         valid
+check "pinanas/network/dhcp/range" '[]'                                         invalid
+check "pinanas/network/dhcp/range" '{ "start": "0.0.0.0", "end": "0.0.0.0" }'   valid
+check "pinanas/network/dhcp/range" '{ "start": "0.0.0.0" }'                     valid
+check "pinanas/network/dhcp/range" '{ "end": "0.0.0.0" }'                       valid
+
+check "pinanas/network/dhcp/fixed_address_leases" null                                                                          valid
+check "pinanas/network/dhcp/fixed_address_leases" ''                                                                            invalid
+check "pinanas/network/dhcp/fixed_address_leases" '{}'                                                                          invalid
+check "pinanas/network/dhcp/fixed_address_leases" '[]'                                                                          valid
+check "pinanas/network/dhcp/fixed_address_leases" '[{ "name": "somename", "hmac": "01:23:45:67:89:ab", "ip": "0.0.0.0" }]'      valid
+check "pinanas/network/dhcp/fixed_address_leases" '[{ "name": "somename", "hmac": "01:23:45:67:89:ab" }]'                       invalid
+check "pinanas/network/dhcp/fixed_address_leases" '[{ "name": "somename", "ip": "0.0.0.0" }]'                                   invalid
+check "pinanas/network/dhcp/fixed_address_leases" '[{ "hmac": "01:23:45:67:89:ab", "ip": "0.0.0.0" }]'                          invalid
+check "pinanas/network/dhcp/fixed_address_leases" '[{ "name": "somename1", "hmac": "01:23:45:67:89:ab", "ip": "0.0.0.0" }, { "name": "somename2", "hmac": "01:23:45:67:89:ab", "ip": "0.0.0.0" }]' \
+                                                                                                                                valid
+check "pinanas/network/dns" null                        invalid
+check "pinanas/network/dns" ''                          invalid
+check "pinanas/network/dns" '{}'                        invalid
+check "pinanas/network/dns" '[]'                        invalid
+check "pinanas/network/dns" '{ "upstream": "0.0.0.0" }' invalid
+
+check "pinanas/network/dns/upstream" ''         invalid
+check "pinanas/network/dns/upstream" '{}'       invalid
+check "pinanas/network/dns/upstream" '[]'       invalid
+check "pinanas/network/dns/upstream" '0.0.0.0'  valid
+
+check "pinanas/network/dns/provider" null                                                           invalid
+check "pinanas/network/dns/provider" ''                                                             invalid
+check "pinanas/network/dns/provider" '{}'                                                           invalid
+check "pinanas/network/dns/provider" '[]'                                                           invalid
+check "pinanas/network/dns/provider" '{ "name": "somename", "email": "jd@gmail.com", "api": [] }'   valid
+check "pinanas/network/dns/provider" '{ "name": "somename", "email": "jd@gmail.com" }'              invalid
+check "pinanas/network/dns/provider" '{ "name": "somename", "api": [] }'                            invalid
+check "pinanas/network/dns/provider" '{ "email": "jd@gmail.com", "api": [] }'                       invalid
+
+check "pinanas/network/dns/provider/email" ''                   invalid
+check "pinanas/network/dns/provider/email" '{}'                 invalid
+check "pinanas/network/dns/provider/email" '[]'                 invalid
+check "pinanas/network/dns/provider/email" 'john-doe@mail.com'  valid
+check "pinanas/network/dns/provider/email" 'jane@do.it'         valid
+check "pinanas/network/dns/provider/email" 'jane at do.it'      invalid
+
+check "pinanas/network/dns/provider/api" ''                                                                 invalid
+check "pinanas/network/dns/provider/api" '{}'                                                               invalid
+check "pinanas/network/dns/provider/api" '[]'                                                               valid
+check "pinanas/network/dns/provider/api" '[{ "name": "k", "value": "v" }]'                                  valid
+check "pinanas/network/dns/provider/api" '[{ "name": "k" }]'                                                invalid
+check "pinanas/network/dns/provider/api" '[{ "value": "v" }]'                                               invalid
+check "pinanas/network/dns/provider/api" '[{ "name": "k1", "value": "v" }, { "name": "k2", "value": "v" }]' valid
+
+check "pinanas/network/smtp/" null  invalid
+check "pinanas/network/smtp/" ''    invalid
+check "pinanas/network/smtp/" '{}'  invalid
+check "pinanas/network/smtp/" '[]'  invalid
+
+check "pinanas/network/smtp/host" null      invalid
+check "pinanas/network/smtp/port" null      invalid
+check "pinanas/network/smtp/port" ''        invalid
+check "pinanas/network/smtp/port" 0         invalid
+check "pinanas/network/smtp/port" 1         valid
+check "pinanas/network/smtp/port" 65535     valid
+check "pinanas/network/smtp/port" 65536     invalid
+check "pinanas/network/smtp/port" '42'      invalid
+check "pinanas/network/smtp/username" null  invalid
+check "pinanas/network/smtp/password" null  invalid
+check "pinanas/network/smtp/sender" null    invalid
+
 exit ${check_result}
