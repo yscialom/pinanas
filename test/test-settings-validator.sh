@@ -72,6 +72,7 @@ prepare
 
 check "pinanas/domain" "example.com"                valid
 check "pinanas/domain" "home-18.example.com"        valid
+check "pinanas/domain" null                         invalid
 check "pinanas/domain" ""                           invalid
 check "pinanas/domain" "example/com"                invalid
 
@@ -89,11 +90,14 @@ check "pinanas/ports/https" 0                       invalid
 check "pinanas/ports/https" 65536                   invalid
 check "pinanas/ports/https" http                    invalid
 
+check "pinanas/master_secret" null                                      invalid
 check "pinanas/master_secret" ""                                        valid
 check "pinanas/master_secret" "s3cr3t"                                  valid
 check "pinanas/master_secret" "azAZ09 /*-+&~#'([{|\`\\^@])}=$%!:;,?."   valid
 check "pinanas/master_secret" "$(head -c 100 </dev/random | base64)"    valid
 
+check "pinanas/timezone" null                       invalid
+check "pinanas/timezone" ""                         invalid
 check "pinanas/timezone" "Europe/Paris"             valid
 check "pinanas/timezone" "America/Louisville"       valid
 check "pinanas/timezone" "US/Samoa"                 valid
@@ -117,11 +121,24 @@ check "pinanas/timezone" "Europe/Mont_Saint_Michel" invalid
 check "pinanas/timezone" "Asia/New_York"            invalid
 check "pinanas/timezone" 42                         invalid
 
+check "pinanas/users" null                                                                                                                      invalid
+check "pinanas/users" '[]'                                                                                                                      invalid
 check "pinanas/users" '[{ "login": "johndoe", "password": "azAZ09 /*-+&~#([{|\\`^@])}=$%!:;,?.", "email": "john-john.doe+label@gmail.com" }]'   valid
 check "pinanas/users" '[{ "login": "johndoe", "password": "qwerty", "fullname": "John Doe (JDO)", "email": "john-john.doe+label@gmail.com" }, { "login": "janedo", "password": "azerty", "email": "jane@do.it" }]' \
                                                                                                                                                 valid
-check "pinanas/users" '[]'                                                                                                                      valid
 check "pinanas/users" '{ "login": "janedo", "password": "azerty", "email": "jane@do.it" }'                                                      invalid
 check "pinanas/users" '[{ "login": "janedo", "password": "azerty" }]'                                                                           invalid
 check "pinanas/users" '[{ "login": "janedo", "email": "jane@do.it"" }]'                                                                         invalid
 check "pinanas/users" '[{ "password": "azerty", "email": "jane@do.it" }]'                                                                       invalid
+
+check "pinanas/services" null                                                                           valid
+check "pinanas/services" '[]'                                                                           valid
+check "pinanas/services" '[{ "name": "somename" }]'                                                     valid
+check "pinanas/services" '[{ "name": "somename", "url": "http://example.com" }]'                        valid
+check "pinanas/services" '[{ "name": "somename", "url": "https://127.0.0.1" }]'                         valid
+check "pinanas/services" '[{ "name": "somename", "policy": "bypass" }]'                                 valid
+check "pinanas/services" '[{ "name": "somename1" }, { "name": "somename2" }]'                           valid
+check "pinanas/services" '{ "name": "somename" }'                                                       invalid
+check "pinanas/services" '[{ "policy": "bypass" }]'                                                     invalid
+check "pinanas/services" '[{ "name": "somename1" }, { "name": "somename2" }, { "policy": "bypass" }]'   invalid
+check "pinanas/services" '[{ "name": "somename", "policy": "does_not_exist" }]'                         invalid

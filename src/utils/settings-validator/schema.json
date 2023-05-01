@@ -45,6 +45,7 @@
         "users": {
           "type": "array",
           "description": "Users",
+          "minItems": 1,
           "items": {
             "type": "object",
             "title": "user",
@@ -88,6 +89,11 @@
                 "type": "string",
                 "description": "Service url",
                 "pattern": "https?://[A-Za-z0-9-_.]+(:[0-9]+)?(/.*)?$"
+              },
+              "policy": {
+                "type": "string",
+                "description": "Authelia route policy",
+                "enum": [ "bypass", "one_factor", "two_factor" ]
               }
             }
           }
