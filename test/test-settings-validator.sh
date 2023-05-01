@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 TEST_DIR="$(dirname "$(readlink -f "$0")")"
 DIST_DIR="$(readlink -f "${1}")"
@@ -50,10 +49,8 @@ function check () {
 
     "${SCRIPT_FILE}" "${path}" "${value}" >"${SETTINGS_FILE}"
 
-    set +e
     "${settings_validator}/validate.py" --quiet --schema "${settings_validator}/schema.json" --yaml-document "${SETTINGS_FILE}"
     if [[ $? == 0 ]] ; then local actual=valid ; else local actual=invalid ; fi
-    set -e
 
     test_field "'${path} = \"${value}\"'" "settings.yaml validation" ${actual} ${expected}
     local error_code=$?
