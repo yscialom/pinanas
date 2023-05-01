@@ -233,10 +233,12 @@ check "pinanas/network/dns" '{}'                        invalid
 check "pinanas/network/dns" '[]'                        invalid
 check "pinanas/network/dns" '{ "upstream": "0.0.0.0" }' invalid
 
-check "pinanas/network/dns/upstream" ''         invalid
-check "pinanas/network/dns/upstream" '{}'       invalid
-check "pinanas/network/dns/upstream" '[]'       invalid
-check "pinanas/network/dns/upstream" '0.0.0.0'  valid
+check "pinanas/network/dns/upstream" ''                                 invalid
+check "pinanas/network/dns/upstream" '{}'                               invalid
+check "pinanas/network/dns/upstream" '[]'                               valid
+check "pinanas/network/dns/upstream" '[ "0.0.0.0" ]'                    valid
+check "pinanas/network/dns/upstream" '[ "0.0.0.0", "255.255.255.255" ]' valid
+check "pinanas/network/dns/upstream" '[ "0.0.0.0", "localhost" ]'       valid
 
 check "pinanas/network/dns/provider" null                                                           invalid
 check "pinanas/network/dns/provider" ''                                                             invalid
@@ -262,10 +264,10 @@ check "pinanas/network/dns/provider/api" '[{ "name": "k" }]'                    
 check "pinanas/network/dns/provider/api" '[{ "value": "v" }]'                                               invalid
 check "pinanas/network/dns/provider/api" '[{ "name": "k1", "value": "v" }, { "name": "k2", "value": "v" }]' valid
 
-check "pinanas/network/smtp/" null  invalid
-check "pinanas/network/smtp/" ''    invalid
-check "pinanas/network/smtp/" '{}'  invalid
-check "pinanas/network/smtp/" '[]'  invalid
+check "pinanas/network/smtp" null   invalid
+check "pinanas/network/smtp" ''     invalid
+check "pinanas/network/smtp" '{}'   invalid
+check "pinanas/network/smtp" '[]'   invalid
 
 check "pinanas/network/smtp/host" null      invalid
 check "pinanas/network/smtp/port" null      invalid
@@ -274,7 +276,7 @@ check "pinanas/network/smtp/port" 0         invalid
 check "pinanas/network/smtp/port" 1         valid
 check "pinanas/network/smtp/port" 65535     valid
 check "pinanas/network/smtp/port" 65536     invalid
-check "pinanas/network/smtp/port" '42'      invalid
+check "pinanas/network/smtp/port" '"42"'    invalid
 check "pinanas/network/smtp/username" null  invalid
 check "pinanas/network/smtp/password" null  invalid
 check "pinanas/network/smtp/sender" null    invalid
