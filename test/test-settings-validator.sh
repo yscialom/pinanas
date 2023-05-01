@@ -279,4 +279,12 @@ check "pinanas/network/smtp/username" null  invalid
 check "pinanas/network/smtp/password" null  invalid
 check "pinanas/network/smtp/sender" null    invalid
 
+check "pinanas/applications" null                                               valid
+check "pinanas/applications" ''                                                 invalid
+check "pinanas/applications" '{}'                                               invalid
+check "pinanas/applications" '[]'                                               valid
+check "pinanas/applications" '[ "adguardhome" ]'                                valid
+check "pinanas/applications" '[ "netdata", "adguardhome" ]'                     valid
+check "pinanas/applications" '[ "netdata", "adguardhome", "doesnotexists" ]'    invalid
+
 exit ${check_result}
