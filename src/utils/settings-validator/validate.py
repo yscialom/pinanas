@@ -30,7 +30,7 @@ def main():
     parser.add_argument("-y", "--yaml-document", help="YAML document to validate")
     args = parser.parse_args()
 
-    printer = lambda message: None if args.quiet else lambda message: print(message, file=sys.stderr)
+    printer = (lambda message: None) if args.quiet else (lambda message: print(message, file=sys.stderr))
     validate(args.schema, args.yaml_document, printer)
 
 if __name__ == "__main__":
