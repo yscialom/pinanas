@@ -40,6 +40,7 @@ EOF
 #
 ## === check() ===
 #
+check_result=0
 function check () {
     local path="${1}"
     local value="${2}"
@@ -58,7 +59,7 @@ function check () {
         if [[ "${actual}" == "invalid" ]] ; then
             "${settings_validator}/validate.py" --schema "${settings_validator}/schema.json" --yaml-document "${SETTINGS_FILE}"
         fi
-        exit ${error_code}
+        check_result=${error_code}
     fi
 }
 
@@ -155,3 +156,5 @@ check "pinanas/acme" '{ "stagging": true }'     valid
 check "pinanas/acme" '{ "stagging": false }'    valid
 check "pinanas/acme" '{ "stagging": 0 }'        invalid
 check "pinanas/acme" '{ "stagging": "true" }'   invalid
+
+exit ${error_code}
