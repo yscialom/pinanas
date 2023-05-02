@@ -32,7 +32,7 @@ node = settings
 for field in fields[:-1]:
     node = node.setdefault(field, dict())
 if value is None:
-    del node[last_field]
+    node.pop(last_field, None)
 else:
     node[last_field] = value
 print(yaml.dump(settings, default_flow_style=False, sort_keys=False))
