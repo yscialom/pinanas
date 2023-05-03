@@ -279,7 +279,7 @@
           "items": {
             "type": "string",
             "title": "Application",
-            "enum": [ "adguardhome", "heimdall", "jellyfin", "netdata", "nextcloud" ]
+            "enum": [ "adguardhome", "duplicati", "heimdall", "jellyfin", "netdata", "nextcloud" ]
           }
         }
       }
