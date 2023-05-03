@@ -10,8 +10,7 @@ Starting the editor
 
 From this directory (`utils/settings-editor`):
 ```bash
-docker build -t pinanas-settings-editor .
-docker run -d --name pinanas-settings-editor --rm -p 80:80 pinanas-settings-editor
+make run
 ```
 
 The editor is available at [http://localhost](http://localhost).
@@ -30,5 +29,5 @@ Using the editor
 Stopping the editor
 ------------------
 ```bash
-docker stop pinanas-settings-editor
+make stop
 ```
