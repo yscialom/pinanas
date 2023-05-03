@@ -67,6 +67,15 @@
               "fullname": {
                 "type": "string",
                 "description": "User fullname"
+              },
+              "groups": {
+                "type": "array",
+                "description": "Groups the user belongs to",
+                "items": {
+                  "type": "string",
+                  "title": "group",
+                  "description": "Group name"
+                }
               }
             }
           }

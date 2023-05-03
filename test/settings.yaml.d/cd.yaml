@@ -31,9 +31,15 @@ pinanas:
   #   fullname: "John D. Doe"
   users:
     - login: johndoe
-      password: "${settings_pinanas_johndoe_password}"
+      password: johndoe-password
       email: johndoe@example.com
       fullname: "John Doe (JD)"
+      groups:
+      - admins
+    - login: janedoe
+      password: janedoe-password
+      email: janedoe@example.com
+      fullname: "Jane Doe (JD)"
 
   # List of services external to PiNanas to serve through it. Type: list of services.
   # Service: { name: string, url: string }. Example:

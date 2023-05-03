@@ -33,11 +33,13 @@ pinanas:
   timezone:
 
   # Users. Type: List of users.
-  # User: { login: string, password: string, email: string, fullname: string }. Exemple:
+  # User: { login: string, password: string, email: string, (opt)fullname: string, (opt)groups: list of strings }. Exemple:
   # - login: johndoe
   #   password: "s3cr3t"
   #   email: john@doe.com
   #   fullname: "John D. Doe"
+  #   groups: # "users" is always implied and must NOT be listed, "admins" is a special group giving full access to all of PiNanas.
+  #   - "admins"
   users:
 
   # List of services external to PiNanas to serve through it. Type: list of services.
@@ -45,7 +47,7 @@ pinanas:
   # - name: "myservice" # Must only include [A-Za-z0-9_-]
   #   url: "https://192.168.0.2:1234" # optional
   #   policy: two_factor # optional, possible values are: two_factor (default), one_factor, bypass
-  #   groups: # optional, possible values are: admins (default), users
+  #   groups: # optional, possible values are: admins (default), users; see users.groups
   #     - admins
   #services:
 
