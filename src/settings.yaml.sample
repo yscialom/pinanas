@@ -47,8 +47,8 @@ pinanas:
   # - name: "myservice" # Must only include [A-Za-z0-9_-]
   #   url: "https://192.168.0.2:1234" # optional
   #   policy: two_factor # optional, possible values are: two_factor (default), one_factor, bypass
-  #   groups: # optional, possible values are: admins (default), users; see users.groups
-  #     - admins
+  #   groups: # optional, possible values are: admin (default), user; see users.groups
+  #     - admin
   #services:
 
   #acme:
