@@ -38,8 +38,8 @@ pinanas:
   #   password: "s3cr3t"
   #   email: john@doe.com
   #   fullname: "John D. Doe"
-  #   groups: # "users" is always implied and must NOT be listed, "admins" is a special group giving full access to all of PiNanas.
-  #   - "admins"
+  #   groups: # "user" is always implied and must NOT be listed, "admin" is a special group giving full access to all of PiNanas.
+  #   - "admin"
   users:
 
   # List of services external to PiNanas to serve through it. Type: list of services.

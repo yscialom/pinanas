@@ -40,19 +40,19 @@ access_control:
     - domain: "adguardhome-dashboard.{{ pinanas.domain }}"
       policy: two_factor
       subject:
-      - "group:admins"
+      - "group:admin"
 
     # Duplicati
     - domain: "backup.{{ pinanas.domain }}"
       policy: two_factor
       subject:
-      - "group:admins"
+      - "group:admin"
 
     # Netdata
     - domain: "resources.{{ pinanas.domain }}"
       policy: one_factor
       subject:
-      - "group:admins"
+      - "group:admin"
 
     #
     ## === USER SERVICES ===
@@ -61,7 +61,7 @@ access_control:
     - domain: "apps.{{ pinanas.domain }}"
       policy: one_factor
       subject:
-      - "group:users"
+      - "group:user"
 
     # Jellyfin
     - domain: "media.{{ pinanas.domain }}"
@@ -80,7 +80,7 @@ access_control:
       policy: "{{ service.policy | default('two_factor') }}"
         {% if service.policy is not defined or service.policy != "bypass" %}
       subject:
-          {% for group in service.groups | default(['admins']) %}
+          {% for group in service.groups | default(['admin']) %}
       - "group:{{ group }}"
           {% endfor %}
         {% endif %}

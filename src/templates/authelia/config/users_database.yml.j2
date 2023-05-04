@@ -5,8 +5,8 @@ users:
     password: "{{ user.password | authelia_password }}"
     email: "{{ user.email }}"
     groups:
-    {% for group in user.groups | default([]) | reject("equalto", "users") %}
+    {% for group in user.groups | default([]) | reject("equalto", "user") %}
     - {{ group }}
     {% endfor %}
-    - users
+    - user
 {% endfor %}

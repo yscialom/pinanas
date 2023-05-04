@@ -20,18 +20,20 @@ pinanas:
   timezone: Europe/Paris
 
   # Users. Type: List of users.
-  # User: { login: string, password: string, email: string, fullname: string }. Exemple:
+  # User: { login: string, password: string, email: string, (opt)fullname: string, (opt)groups: list of strings }. Exemple:
   # - login: johndoe
   #   password: "s3cr3t"
   #   email: john@doe.com
   #   fullname: "John D. Doe"
+  #   groups: # "user" is always implied and must NOT be listed, "admin" is a special group giving full access to all of PiNanas.
+  #   - "admin"
   users:
     - login: johndoe
       password: johndoe-password
       email: johndoe@example.com
       fullname: "John Doe (JD)"
       groups:
-      - admins
+      - admin
     - login: janedoe
       password: janedoe-password
       email: janedoe@example.com
@@ -49,13 +51,13 @@ pinanas:
     - name: ext3
     - name: ext4
       groups:
-        - users
+        - user
     - name: ext5
       url: "http://www.perdu.com"
       policy: bypass
       groups:
-        - admins
-        - users
+        - admin
+        - user
 
   acme:
     # Use Let's Encrypt stagging servers. Type: boolean. Optional. Example: false.
