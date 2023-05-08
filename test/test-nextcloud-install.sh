@@ -22,7 +22,7 @@ function parse_yaml {
     }'
 }
 
-eval $(parse_yaml ~/dist/settings.yaml "SETTINGS_")
+eval $(parse_yaml ${DIST_DIR}/settings.yaml "SETTINGS_")
 
 domain="$SETTINGS_pinanas_domain"
 http_port="$SETTINGS_pinanas_ports_http"
