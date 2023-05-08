@@ -5,14 +5,6 @@ TEST_DIR="$(dirname "$(readlink -f "$0")")"
 DIST_DIR="$(readlink -f "${1}")"
 source "${TEST_DIR}/web-functions.sh"
 
-eval $(parse_yaml ~/dist/settings.yaml "SETTINGS_")
-
-domain="$SETTINGS_pinanas_domain"
-http_port="$SETTINGS_pinanas_ports_http"
-https_port="$SETTINGS_pinanas_ports_https"
-authelia="auth.${domain}${https_port}"
-nextcloud="cloud.${domain}${https_port}"
-
 function parse_yaml {
     local prefix=$2
     local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
@@ -29,6 +21,14 @@ function parse_yaml {
         }
     }'
 }
+
+eval $(parse_yaml ~/dist/settings.yaml "SETTINGS_")
+
+domain="$SETTINGS_pinanas_domain"
+http_port="$SETTINGS_pinanas_ports_http"
+https_port="$SETTINGS_pinanas_ports_https"
+authelia="auth.${domain}${https_port}"
+nextcloud="cloud.${domain}${https_port}"
 
 function cmd () {
     local user="${1}" ; shift

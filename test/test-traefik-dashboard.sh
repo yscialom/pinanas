@@ -5,15 +5,6 @@ TEST_DIR="$(dirname "$(readlink -f "$0")")"
 DIST_DIR="$(readlink -f "${1}")"
 source "${TEST_DIR}/web-functions.sh"
 
-eval $(parse_yaml ~/dist/settings.yaml "SETTINGS_")
-
-domain="$SETTINGS_pinanas_domain"
-http_port="$SETTINGS_pinanas_ports_http"
-https_port="$SETTINGS_pinanas_ports_https"
-traefik_http="traefik-dashboard.${domain}${http_port}"
-traefik_https="traefik-dashboard.${domain}${https_port}"
-
-
 function parse_yaml {
     local prefix=$2
     local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
@@ -30,6 +21,14 @@ function parse_yaml {
         }
     }'
 }
+
+eval $(parse_yaml ~/dist/settings.yaml "SETTINGS_")
+
+domain="$SETTINGS_pinanas_domain"
+http_port="$SETTINGS_pinanas_ports_http"
+https_port="$SETTINGS_pinanas_ports_https"
+traefik_http="traefik-dashboard.${domain}${http_port}"
+traefik_https="traefik-dashboard.${domain}${https_port}"
 
 # setup external services
 trap "docker stop pinanas-ci-ext-services && docker rmi httpd:2-alpine" EXIT
