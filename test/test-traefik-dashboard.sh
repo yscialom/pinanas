@@ -11,7 +11,8 @@ domain="$SETTINGS_pinanas_domain"
 http_port="$SETTINGS_pinanas_ports_http"
 https_port="$SETTINGS_pinanas_ports_https"
 traefik_http="traefik-dashboard.${domain}${http_port}"
-traefik_https="traefik-dashboard.${domain}${https_port}
+traefik_https="traefik-dashboard.${domain}${https_port}"
+
 
 function parse_yaml {
     local prefix=$2
