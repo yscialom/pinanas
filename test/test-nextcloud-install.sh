@@ -5,9 +5,30 @@ TEST_DIR="$(dirname "$(readlink -f "$0")")"
 DIST_DIR="$(readlink -f "${1}")"
 source "${TEST_DIR}/web-functions.sh"
 
-domain="pinanas-ci.scialom.org"
-authelia="auth.${domain}"
-nextcloud="cloud.${domain}"
+eval $(parse_yaml settings.yaml "SETTINGS_")
+
+domain="$SETTINGS_pinanas_domain"
+http_port="$SETTINGS_pinanas_ports_http"
+https_port="$SETTINGS_pinanas_ports_https"
+authelia="auth.${domain}${https_port}"
+nextcloud="cloud.${domain}${https_port}"
+
+function parse_yaml {
+    local prefix=$2
+    local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
+    sed -ne "s|^\($s\):|\1|" \
+        -e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
+        -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
+    awk -F$fs '{
+        indent = length($1)/2;
+        vname[indent] = $2;
+        for (i in vname) {if (i > indent) {delete vname[i]}}
+        if (length($3) > 0) {
+            vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("_")}
+            printf("%s%s%s=\"%s\"\n", "'$prefix'",vn, $2, $3);
+        }
+    }'
+}
 
 function cmd () {
     local user="${1}" ; shift
