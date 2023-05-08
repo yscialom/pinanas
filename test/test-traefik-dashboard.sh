@@ -5,7 +5,7 @@ TEST_DIR="$(dirname "$(readlink -f "$0")")"
 DIST_DIR="$(readlink -f "${1}")"
 source "${TEST_DIR}/web-functions.sh"
 
-eval $(parse_yaml settings.yaml "SETTINGS_")
+eval $(parse_yaml ~/dist/settings.yaml "SETTINGS_")
 
 domain="$SETTINGS_pinanas_domain"
 http_port="$SETTINGS_pinanas_ports_http"
