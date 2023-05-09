@@ -45,10 +45,9 @@ services:
       - SSMTP_STARTTLS=YES
     volumes:
       - ./fail2ban/config:/config/fail2ban
-      - ./fail2ban:/config/logs/fail2ban
-      - ./logs/fail2ban:/log
-      - /var/log:/var/log:ro
-      - ./logs:/remotelogs:ro
+      - ./logs/fail2ban:/fail2ban/fail2ban_log
+      - ./logs:/fail2ban/remotelogs:ro
+      - /var/log:/fail2ban/pinanas_logs:ro
     restart: unless-stopped
 
   ## === TRAEFIK ===
