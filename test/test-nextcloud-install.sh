@@ -25,8 +25,8 @@ function parse_yaml {
 eval $(parse_yaml ${DIST_DIR}/settings.yaml "SETTINGS_")
 
 domain="$SETTINGS_pinanas_domain"
-http_port="$SETTINGS_pinanas_ports_http"
-https_port="$SETTINGS_pinanas_ports_https"
+if [ $SETTINGS_pinanas_ports_http != 80 ]; then http_port=":$SETTINGS_pinanas_ports_http"; else http_port=""; fi
+if [ $SETTINGS_pinanas_ports_https != 443 ];then https_port=":$SETTINGS_pinanas_ports_https"; else https_port=""; fi 
 authelia="auth.${domain}:${https_port}"
 nextcloud="cloud.${domain}:${https_port}"
 
