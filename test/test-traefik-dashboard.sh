@@ -27,8 +27,8 @@ eval $(parse_yaml ${DIST_DIR}/settings.yaml "SETTINGS_")
 domain="$SETTINGS_pinanas_domain"
 http_port="$SETTINGS_pinanas_ports_http"
 https_port="$SETTINGS_pinanas_ports_https"
-traefik_http="traefik-dashboard.${domain}${http_port}"
-traefik_https="traefik-dashboard.${domain}${https_port}"
+traefik_http="traefik-dashboard.${domain}:${http_port}"
+traefik_https="traefik-dashboard.${domain}:${https_port}"
 
 # setup external services
 trap "docker stop pinanas-ci-ext-services && docker rmi httpd:2-alpine" EXIT
