@@ -25,8 +25,8 @@ function parse_yaml {
 eval $(parse_yaml ${DIST_DIR}/settings.yaml "SETTINGS_")
 
 domain="$SETTINGS_pinanas_domain"
-if [ $SETTINGS_pinanas_ports_http != 80 ]; then http_port=":$SETTINGS_pinanas_ports_http"; else http_port=""; fi
-if [ $SETTINGS_pinanas_ports_https != 443 ]; then https_port=":$SETTINGS_pinanas_ports_https"; else https_port=""; fi 
+if [ "$SETTINGS_pinanas_ports_http" != 80 ]; then http_port=":$SETTINGS_pinanas_ports_http"; else http_port=""; fi
+if [ "$SETTINGS_pinanas_ports_https" != 443 ]; then https_port=":$SETTINGS_pinanas_ports_https"; else https_port=""; fi 
 traefik_http="traefik-dashboard.${domain}${http_port}"
 traefik_https="traefik-dashboard.${domain}${https_port}"
 
