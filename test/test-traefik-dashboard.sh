@@ -38,9 +38,9 @@ for entity in .{http,udp,tcp}.{services,middlewares,routers} ; do
 done
 
 # external services
-web_expect "http://ext1.${domain}${http_port}" -c 301 -r "https://ext1.${domain}${https_port}/"
-html_expect "https://ext1.${domain}${https_port}/" -r '<html><body><h1>It works!</h1></body></html>'
+web_expect "http://ext1.${pinanas_domain}${http_port}" -c 301 -r "https://ext1.${pinanas_domain}${https_port}/"
+html_expect "https://ext1.${pinanas_domain}${https_port}/" -r '<html><body><h1>It works!</h1></body></html>'
 for sid in $(seq 2 4) ; do
-    web_expect "http://ext${sid}.${domain}${http_port}" -c 301 -r "https://ext${sid}.${domain}${https_port}/"
-    html_expect "https://ext${sid}.${domain}${https_port}/" -r '<title>Login - Authelia</title>'
+    web_expect "http://ext${sid}.${pinanas_domain}${http_port}" -c 301 -r "https://ext${sid}.${pinanas_domain}${https_port}/"
+    html_expect "https://ext${sid}.${pinanas_domain}${https_port}/" -r '<title>Login - Authelia</title>'
 done
