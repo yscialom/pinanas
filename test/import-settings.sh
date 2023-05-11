@@ -31,6 +31,5 @@ function parse_yaml {
 
 eval $(parse_yaml "${1}")
 
-#domain="${pinanas_domain}"
 [[ "${pinanas_ports_http}"  != "80"  ]] && http_port=":${pinanas_ports_http}"   || http_port=""
 [[ "${pinanas_ports_https}" != "443" ]] && https_port=":${pinanas_ports_https}" || https_port=""
