@@ -12,7 +12,7 @@
 function parse_yaml {
     local filepath="${1}"
     local prefix=${2}
-    local delimiter=${3:'_'}
+    local delimiter=${3:-_}
 
     local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
     sed -ne "s|^\($s\):|\1|" \
@@ -23,7 +23,7 @@ function parse_yaml {
         vname[indent] = $2;
         for (i in vname) {if (i > indent) {delete vname[i]}}
         if (length($3) > 0) {
-            vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("'${delimiter}'")}
+            vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("'$delimiter'")}
             printf("%s%s%s=\"%s\"\n", "'$prefix'",vn, $2, $3);
         }
     }'
