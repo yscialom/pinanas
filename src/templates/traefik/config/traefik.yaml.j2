@@ -5,7 +5,7 @@ ping:
   entryPoint: "ping"
 entryPoints:
   ping:
-    address: ":{% if pinanas.ports.http != 8080 %}8080{% else %}8081{% endif %}"
+    address: ":{{ 8080 if pinanas.ports.http != 8080 else 8081 }}"
   http:
     address: ":{{ pinanas.ports.http }}"
     http:
