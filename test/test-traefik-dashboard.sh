@@ -4,10 +4,10 @@ set -e
 TEST_DIR="$(dirname "$(readlink -f "$0")")"
 DIST_DIR="$(readlink -f "${1}")"
 source "${TEST_DIR}/web-functions.sh"
-source "${TEST_DIR}/variables-from-settings.sh"
+source "${TEST_DIR}/import-settings.sh" "${DIST_DIR}/settings.yaml"
 
-traefik_http="traefik-dashboard.${domain}${http_port}"
-traefik_https="traefik-dashboard.${domain}${https_port}"
+traefik_http="traefik-dashboard.${pinanas_domain}${http_port}"
+traefik_https="traefik-dashboard.${pinanas_domain}${https_port}"
 
 # setup external services
 trap "docker stop pinanas-ci-ext-services && docker rmi httpd:2-alpine" EXIT
