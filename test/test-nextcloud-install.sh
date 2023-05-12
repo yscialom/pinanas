@@ -4,10 +4,10 @@ set -e
 TEST_DIR="$(dirname "$(readlink -f "$0")")"
 DIST_DIR="$(readlink -f "${1}")"
 source "${TEST_DIR}/web-functions.sh"
+source "${TEST_DIR}/import-settings.sh" "${DIST_DIR}/settings.yaml"
 
-domain="pinanas-ci.scialom.org"
-authelia="auth.${domain}"
-nextcloud="cloud.${domain}"
+authelia="auth.${pinanas_domain}${https_port}"
+nextcloud="cloud.${pinanas_domain}${https_port}"
 
 function cmd () {
     local user="${1}" ; shift

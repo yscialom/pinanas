@@ -1,17 +1,20 @@
 api:
   dashboard: true
   debug: true
-ping: {}
+ping:
+  entryPoint: "ping"
 entryPoints:
+  ping:
+    address: ":{{ 8080 if pinanas.ports.http != 8080 else 8081 }}"
   http:
-    address: ":80"
+    address: ":{{ pinanas.ports.http }}"
     http:
       redirections:
         entryPoint:
           to: https
           scheme: https
   https:
-    address: ":443"
+    address: ":{{ pinanas.ports.https }}"
   dns-udp:
     address: ":53/udp"
   dns-tcp:

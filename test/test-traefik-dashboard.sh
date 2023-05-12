@@ -4,9 +4,10 @@ set -e
 TEST_DIR="$(dirname "$(readlink -f "$0")")"
 DIST_DIR="$(readlink -f "${1}")"
 source "${TEST_DIR}/web-functions.sh"
+source "${TEST_DIR}/import-settings.sh" "${DIST_DIR}/settings.yaml"
 
-domain="pinanas-ci.scialom.org"
-traefik="traefik-dashboard.${domain}"
+traefik_http="traefik-dashboard.${pinanas_domain}${http_port}"
+traefik_https="traefik-dashboard.${pinanas_domain}${https_port}"
 
 # setup external services
 trap "docker stop pinanas-ci-ext-services && docker rmi httpd:2-alpine" EXIT
@@ -22,24 +23,24 @@ docker run \
 sleep 10
 
 # http -> https
-web_expect "http://${traefik}"  -c 301 -r "https://${traefik}/"
-web_expect "https://${traefik}" -c 302 -r "https://${traefik}/dashboard/"
-web_expect "https://${traefik}/dashboard/" -c 200
+web_expect "http://${traefik_http}" -c 301 -r "https://${traefik_https}/"
+web_expect "https://${traefik_https}" -c 302 -r "https://${traefik_https}/dashboard/"
+web_expect "https://${traefik_https}/dashboard/" -c 200
 
 # api
-api_expect "https://${traefik}/api/overview" -q '.http.services.total==17'
-api_expect "https://${traefik}/api/overview" -q '.http.middlewares.total==15'
-api_expect "https://${traefik}/api/overview" -q '.http.routers.total==22'
-api_expect "https://${traefik}/api/overview" -q '.udp.routers.total==1'
-api_expect "https://${traefik}/api/overview" -q '.udp.services.total==1'
+api_expect "https://${traefik_https}/api/overview" -q '.http.services.total==17'
+api_expect "https://${traefik_https}/api/overview" -q '.http.middlewares.total==15'
+api_expect "https://${traefik_https}/api/overview" -q '.http.routers.total==22'
+api_expect "https://${traefik_https}/api/overview" -q '.udp.routers.total==1'
+api_expect "https://${traefik_https}/api/overview" -q '.udp.services.total==1'
 for entity in .{http,udp,tcp}.{services,middlewares,routers} ; do
-    api_expect "https://${traefik}/api/overview" -q "${entity}.warnings==0 and ${entity}.errors==0"
+    api_expect "https://${traefik_https}/api/overview" -q "${entity}.warnings==0 and ${entity}.errors==0"
 done
 
 # external services
-web_expect "http://ext1.${domain}" -c 301 -r "https://ext1.${domain}/"
-html_expect "https://ext1.${domain}/" -r '<html><body><h1>It works!</h1></body></html>'
+web_expect "http://ext1.${pinanas_domain}${http_port}" -c 301 -r "https://ext1.${pinanas_domain}${https_port}/"
+html_expect "https://ext1.${pinanas_domain}${https_port}/" -r '<html><body><h1>It works!</h1></body></html>'
 for sid in $(seq 2 4) ; do
-    web_expect "http://ext${sid}.${domain}" -c 301 -r "https://ext${sid}.${domain}/"
-    html_expect "https://ext${sid}.${domain}/" -r '<title>Login - Authelia</title>'
+    web_expect "http://ext${sid}.${pinanas_domain}${http_port}" -c 301 -r "https://ext${sid}.${pinanas_domain}${https_port}/"
+    html_expect "https://ext${sid}.${pinanas_domain}${https_port}/" -r '<title>Login - Authelia</title>'
 done
