@@ -49,7 +49,7 @@ function check () {
     local value="${2}"
     local expected="${3}"
 
-    local settings_validator="$(readlink -f ${TEST_DIR}/../src/utils/settings-validator)"
+    local settings_validator="$(readlink -f ${TEST_DIR}/../src/configure/settings-validator)"
 
     "${SCRIPT_FILE}" "${path}" "${value}" >"${SETTINGS_FILE}"
 
