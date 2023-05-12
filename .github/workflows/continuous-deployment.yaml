@@ -97,7 +97,7 @@ jobs:
     name: Start
     runs-on: ubuntu-latest
     environment: uat
-    needs: configure
+    needs: install
     steps:
       - name: Adding Known Hosts
         run: mkdir -p ~/.ssh && ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
