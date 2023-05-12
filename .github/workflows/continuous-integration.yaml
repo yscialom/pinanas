@@ -51,7 +51,7 @@ jobs:
           envsubst <test/settings.yaml.d/ci.yaml >dist/settings.yaml
 
       - name: Configure
-        run: cd dist && ../src/configure.sh
+        run: cd dist && ../src/install/installer.sh
 
       - name: Start
         run: |

@@ -91,7 +91,7 @@ jobs:
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "envsubst <~/pinanas-src/test/settings.yaml.d/cd.yaml >~/pinanas/settings.yaml"
 
       - name: Configure
-        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && ~/pinanas-src/src/configure.sh && rm ~/.ssh/environment"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && ~/pinanas-src/src/install/installer.sh && rm ~/.ssh/environment"
 
   start:
     name: Start
