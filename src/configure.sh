@@ -51,5 +51,5 @@ report () {
     fi
 }
 
-configure "$@"|| exit $?
+configure "$@" || exit $?
 report
