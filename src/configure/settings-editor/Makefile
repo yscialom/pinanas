@@ -8,7 +8,7 @@ help:
 	@echo "make stop ........... stops yankelscialom/pinanas-settings-editor"
 
 build:
-	@sed '1s/^/var schema = /' <../../src/utils/settings-validator/schema.json >www/schema.js
+	@sed '1s/^/var schema = /' <../settings-validator/schema.json >www/schema.js
 	docker build -t "yankelscialom/pinanas-settings-editor:$(shell git describe --tags)" .
 	docker tag "yankelscialom/pinanas-settings-editor:$(shell git describe --tags)" yankelscialom/pinanas-settings-editor:latest
 	@rm www/schema.js

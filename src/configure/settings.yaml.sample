@@ -1,6 +1,6 @@
 ---
 ##
-# This is PiNanas configuration file: settings.yml.
+# This is PiNanas configuration file: settings.yaml.
 #
 # Once every mandatory value has been set, you can call PiNanas'
 # configure.sh script from the directory directly containing this
@@ -14,7 +14,7 @@ pinanas:
   # Registered domain name. Type: string. Example: "home.example.com".
   domain:
 
-  # Port numbers
+  # Port numbers (optional)
   #ports:
     # HTTP port. Type: integer. Default: 80.
     # Exemple: 8080
@@ -32,7 +32,7 @@ pinanas:
   # Use a TZ database name, see <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>.
   timezone:
 
-  # Users. Type: List of users.
+  # Users. Type: List of users. At least one required; at least one admin recommanded.
   # User: { login: string, password: string, email: string, (opt)fullname: string, (opt)groups: list of strings }. Exemple:
   # - login: johndoe
   #   password: "s3cr3t"

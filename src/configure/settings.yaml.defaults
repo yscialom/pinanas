@@ -1,4 +1,4 @@
-pinanas_default:
+pinanas_defaults:
   # Port numbers
   ports:
     # HTTP port. Type: integer. Default: 80.

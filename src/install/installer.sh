@@ -1,9 +1,9 @@
 #!/bin/sh
-PINANAS_SRC="$(dirname "$(readlink -f "${0}")")"
+PINANAS_SRC="$(dirname "$(dirname "$(readlink -f "${0}")")")"
 PINANAS_DIST="$(readlink -f "${PWD}")"
 PINANAS_VENV="${PINANAS_DIST}/.venv"
 
-. ${PINANAS_SRC}/build/configure-logging.sh
+. ${PINANAS_SRC}/install/installer/configure-logging.sh
 
 configure () {
     local tag=pinanas-config
@@ -12,7 +12,7 @@ configure () {
         -t ${tag} \
         --build-arg PUID=$(id -u) \
         --build-arg PGID=$(stat -c %g /var/run/docker.sock) \
-        "${PINANAS_SRC}"/build
+        "${PINANAS_SRC}"/install/installer
     mkdir -p "${PINANAS_VENV}"
     trap "docker volume rm pinanas-config" EXIT
     docker volume create pinanas-config >/dev/null # used for inter-container communication
