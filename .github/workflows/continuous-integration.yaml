@@ -35,7 +35,7 @@ jobs:
       - name: Clone
         uses: actions/checkout@v3
 
-      - name: Prepare settings from secrets
+      - name: Configure
         env:
           settings_pinanas_master_secret: "${{ secrets.settings_pinanas_master_secret }}"
           settings_pinanas_network_dns_provider_api: "${{ secrets.settings_pinanas_network_dns_provider_api }}"
@@ -50,7 +50,7 @@ jobs:
           mkdir dist
           envsubst <test/settings.yaml.d/ci.yaml >dist/settings.yaml
 
-      - name: Configure
+      - name: Install
         run: cd dist && ../src/install/installer.sh
 
       - name: Start

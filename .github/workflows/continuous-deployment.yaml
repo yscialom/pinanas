@@ -60,8 +60,8 @@ jobs:
       - name: Deploy to PiNanas UAT
         run: scp -P ${{ secrets.SSH_PORT }} -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/pinanas-src/.
 
-  configure:
-    name: Configure
+  install:
+    name: Install
     runs-on: ubuntu-latest
     environment: uat
     needs: deploy
@@ -74,7 +74,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           known_hosts: unnecessary
 
-      - name: Prepare settings from secrets
+      - name: Configure
         env:
           settings_pinanas_master_secret: "${{ secrets.settings_pinanas_master_secret }}"
           settings_pinanas_johndoe_password: "${{ secrets.settings_pinanas_johndoe_password }}"
@@ -90,7 +90,7 @@ jobs:
           env | grep ^settings_pinanas_ | ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cat >~/.ssh/environment"
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "envsubst <~/pinanas-src/test/settings.yaml.d/cd.yaml >~/pinanas/settings.yaml"
 
-      - name: Configure
+      - name: Install
         run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && ~/pinanas-src/src/install/installer.sh && rm ~/.ssh/environment"
 
   start:
