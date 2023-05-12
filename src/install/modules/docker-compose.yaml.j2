@@ -24,7 +24,7 @@ services:
 
   ## === FAIL2BAN ===
   fail2ban:
-    image: lscr.io/linuxserver/fail2ban:0.11.2
+    image: lscr.io/linuxserver/fail2ban:1.0.2
     container_name: fail2ban
     depends_on:
       - traefik
@@ -52,7 +52,7 @@ services:
 
   ## === TRAEFIK ===
   traefik:
-    image: traefik:v2.9
+    image: traefik:v2.10
     container_name: traefik
     depends_on:
       - dhcpd
@@ -97,7 +97,7 @@ services:
 
   ## === AUTHELIA ===
   authelia:
-    image: authelia/authelia:4.37 {# Ideally, update src/utils/ansible_passwords.py with the same tag (version) #} 
+    image: authelia/authelia:4.37 {# Ideally, update src/install/installer/ansible_passwords.py with the same tag (version) #} 
     container_name: authelia
     depends_on:
       - traefik
