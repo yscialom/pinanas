@@ -9,7 +9,7 @@
 check () {
     if [ ! -f "/pinanas/dist/settings.yaml" ] ; then
         fatal "/pinanas/dist/settings.yaml no such file."
-        cont "Copy ${PINANAS_SRC}/settings.yaml.sample to ${PINANAS_DIST}/settings.yaml and fill in your personnal configuration."
+        cont "Copy ${PINANAS_SRC}/configure/settings.yaml.sample to ${PINANAS_DIST}/settings.yaml and fill in your personnal configuration."
         exit 1
     fi
 
@@ -36,9 +36,8 @@ prepare () {
 
     . /pinanas/venv/bin/activate
     python3 -m pip install --upgrade pip
-    pip3 install --requirement /pinanas/src/build/requirements.txt
-    pip3 install --requirement /pinanas/src/utils/requirements.txt
-    pip3 install --requirement /pinanas/src/utils/settings-validator/requirements.txt
+    pip3 install --requirement /pinanas/src/configure/settings-validator/requirements.txt
+    pip3 install --requirement /pinanas/src/install/installer/requirements.txt
 
     ## Apply private configuration
     # Create playbook directory
@@ -47,7 +46,7 @@ prepare () {
 
     # Install plugins
     plugin_files="\
-    :/pinanas/src/utils/ansible_passwords.py\
+    :/pinanas/src/install/installer/ansible_passwords.py\
     "
     plugins_dir="${playbook_dir}/filter_plugins"
     mkdir -p "${plugins_dir}"
@@ -67,11 +66,11 @@ prepare () {
 - hosts: localhost
   gather_facts: yes
   tasks:
-  - include_vars: /pinanas/src/default-settings.yaml
+  - include_vars: /pinanas/src/configure/settings.yaml.defaults
   - include_vars: /pinanas/dist/settings.yaml
   - name: combine default + custom
     set_fact:
-      pinanas: "{{ pinanas_default | combine(pinanas, recursive=True) }}"
+      pinanas: "{{ pinanas_defaults | combine(pinanas, recursive=True) }}"
   - name: ensure application directories exist
     file:
       path: "/pinanas/dist/{{ item[0] }}/{{ item[1] }}"
@@ -98,9 +97,9 @@ prepare () {
 EOH
 
     # Playbook tasks
-    find /pinanas/src/templates -type f -name "*.j2" | while read -r j2 ; do
-        [[ "${j2}" =~ /docker-compose\..+\.yaml\.j2$ ]] && continue # skip application-specific docker-compose templates
-        destdir="$(dirname "/pinanas/dist/${j2#/pinanas/src/templates/}")"
+    find /pinanas/src/install/modules -type f -name "*.j2" | while read -r j2 ; do
+        [[ "${j2}" =~ /docker-compose\..+\.yaml\.j2$ ]] && continue # skip module-specific docker-compose templates
+        destdir="$(dirname "/pinanas/dist/${j2#/pinanas/src/install/modules/}")"
         filename="$(basename "${j2%.j2}")"
         cat >> ${playbook} <<EOT
   - name: ensure ${destdir} exists
@@ -118,13 +117,13 @@ EOT
     done
 
     # Specific playbooks
-    find /pinanas/src/tasks -type f -name "main.y*ml" | while read -r taskfile ; do
+    find /pinanas/src/install/operations -type f -name "main.y*ml" | while read -r taskfile ; do
       echo "  - name: \"include task file '${taskfile}'\"" >> ${playbook}
       echo "    include_tasks: \"${taskfile}\"" >> ${playbook}
     done
 
     # Make Jinja find secrets.j2
-    ln -fs /pinanas/src/utils/secrets.j2 ${playbook_dir}/.
+    ln -fs /pinanas/src/install/installer/secrets.j2 ${playbook_dir}/.
 }
 
 
@@ -133,8 +132,8 @@ EOT
 #
 
 validate () {
-    /pinanas/src/utils/settings-validator/validate.py \
-        -s /pinanas/src/utils/settings-validator/schema.json \
+    /pinanas/src/configure/settings-validator/validate.py \
+        -s /pinanas/src/configure/settings-validator/schema.json \
         -y /pinanas/dist/settings.yaml
 }
 

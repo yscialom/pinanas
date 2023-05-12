@@ -8,7 +8,7 @@ web editor lets you define your settings through a web UI providing basic valida
 Starting the editor
 ------------------
 
-From this directory (`utils/settings-editor`):
+From this directory (`src/configure/settings-editor`):
 ```bash
 make run
 ```

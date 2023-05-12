@@ -7,8 +7,8 @@ Requirements
 ### Hardware
 
 PiNanas will need a linux-based host, with:
-- 10GB free disk space
-- 4GB RAM, 8GB suggested
+- 32 GB free disk space
+- 4 GB RAM, 8GB suggested
 - An access to Internet
 - Optionnally: a GPU suited to your needs (video transcoding & playing)
 
@@ -16,7 +16,6 @@ PiNanas will need a linux-based host, with:
 
 During installation or operation, PiNanas requires:
 - GNU utils
-- python3 and pip
 - docker and docker-compose
 - a wildcard (sub)domain name (e.g. `*.home.example.com`); read
 [How to get a domain name?](get-a-domain-name.md "docs/get-a-domain-name.md") for more information.
@@ -78,7 +77,7 @@ Settings
 --------
 
 ### Define your settings
-In the instalation directory, create a file `settings.yaml` from [`src/settings.yaml.sample`](/src/settings.yaml.sample)
+In the instalation directory, create a file `settings.yaml` from [`src/configure/settings.yaml.sample`](/src/configure/settings.yaml.sample)
 and fill in all mandatory values:
 ```bash
 cd /opt/pinanas
@@ -106,15 +105,15 @@ Ideally, `settings.yaml` is built upon deployment and secrets are kept by a dedi
 Install
 -------
 
-From your installation directory, run `src/configure.sh`:
+From your installation directory, run `src/installer/install.sh`:
 ```bash
 cd /opt/pinanas
-/path/to/pinanas/src/configure.sh
+/path/to/pinanas/src/installer/install.sh
 ```
 If you made important changes to `settings.yaml` and want to regenerate PiNanas, run with `--force`:
 ```bash
 cd /opt/pinanas
-/path/to/pinanas/src/configure.sh --force
+/path/to/pinanas/src/installer/install.sh --force
 ```
 
 Your installation is now complete.
