@@ -23,13 +23,13 @@ function parse_yaml {
         vname[indent] = $2;
         for (i in vname) {if (i > indent) {delete vname[i]}}
         if (length($3) > 0) {
-            vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("'$delimiter'")}
-            printf("%s%s%s=\"%s\"\n", "'$prefix'",vn, $2, $3);
+            vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("'${delimiter}'")}
+            printf("%s%s%s=\"%s\"\n", "'${prefix}'",vn, $2, $3);
         }
     }'
 }
 
 eval $(parse_yaml "${1}")
 
-[[ -v pinanas_ports_http ]] && [[ "${pinanas_ports_http}" != "80"  ]] && http_port=":${pinanas_ports_http}" || http_port=""
+[[ -v pinanas_ports_http ]]  && [[ "${pinanas_ports_http}"  != "80"  ]] && http_port=":${pinanas_ports_http}"   || http_port=""
 [[ -v pinanas_ports_https ]] && [[ "${pinanas_ports_https}" != "80"  ]] && https_port=":${pinanas_ports_https}" || https_port=""
