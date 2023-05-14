@@ -55,7 +55,7 @@ User
 You are free to run PiNanas with any user with:
 - rights on the docker daemon, and
 - read rights on the `/path/to/pinanas` directory.
-`root` is a possibility, although nor recommended.
+`root` is a possibility, although not recommended.
 
 For instance, create a `pinanas` user:
 ```bash
@@ -81,7 +81,7 @@ In the instalation directory, create a file `settings.yaml` from [`src/configure
 and fill in all mandatory values:
 ```bash
 cd /opt/pinanas
-cp /path/to/pinanas/src/settings.yaml.sample settings.yaml
+cp /path/to/pinanas/src/configure/settings.yaml.sample settings.yaml
 chmod 600 settings.yaml # contains passwords
 nano settings.yaml
 ```
