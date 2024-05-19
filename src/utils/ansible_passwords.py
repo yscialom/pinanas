@@ -24,7 +24,7 @@ class Authelia:
         return self.__transform(key, opt)
 
     def password(self, cleartext):
-        command = ['docker', 'run', '--rm', 'authelia/authelia:4', 'authelia', 'hash-password', '--', cleartext]
+        command = ['docker', 'run', '--rm', 'authelia/authelia:4.35', 'authelia', 'hash-password', '--', cleartext]
         stdout = self.__run(command)
         return self.__extract_ciphertext(command, stdout)
 
