@@ -6,22 +6,19 @@ immich-server:
     - dhcpd
     - redis
     - database
-  links:
-    - database
-    - immich
   networks:
     pinanas:
       aliases:
         - immich
         - portfolio
+    immich:
   environment:
     - TZ={{ pinanas.timezone }}
     - PUID={{ PUID }}
     - PGID={{ PGID }}
-    - "MYSQL_ROOT_PASSWORD={{ secrets.make_secret('pinanas.database.root_password') }}"
-    - MYSQL_USER=pinanas-immich
-    - "MYSQL_PASSWORD={{ secrets.make_secret('pinanas.immich.database_password') }}"
-    - MYSQL_DATABASE=pinanas-immich
+    - DB_USERNAME=pinanas-immich
+    - "DB_PASSWORD={{ secrets.make_secret('pinanas.immich.database_password') }}"
+    - DB_DATABASE_NAME=pinanas-immich
   labels:
     - "traefik.enable=true"
     - "traefik.http.middlewares.immich-https-redirect.redirectscheme.scheme=https"
@@ -58,7 +55,27 @@ immich-machine-learning:
   healthcheck:
     disable: false
 
-redis:
+immich-database:
+  image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
+  container_name: immich_database
+  networks:
+    immich:
+      aliases:
+        - database
+  environment:
+    - TZ={{ pinanas.timezone }}
+    - PUID={{ PUID }}
+    - PGID={{ PGID }}
+    - "POSTGRES_PASSWORD={{ secrets.make_secret('pinanas.immich.database_password') }}"
+    - POSTGRES_USER=pinanas-immich
+    - POSTGRES_DB=pinanas-immich
+    - "POSTGRES_INITDB_ARGS=--data-checksums"
+    - DB_STORAGE_TYPE=SSD
+  volumes:
+    - ./immich/data/pgsql:/var/lib/postgresql/data
+  restart: unless-stopped
+
+immich-redis:
   image: docker.io/valkey/valkey:8-alpine3.22
   container_name: immich_redis
   networks:
