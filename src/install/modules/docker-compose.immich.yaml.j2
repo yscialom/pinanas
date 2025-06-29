@@ -4,8 +4,8 @@ immich-server:
   container_name: immich_server
   depends_on:
     - dhcpd
-    - redis
-    - database
+    - immich-redis
+    - immich-database
   networks:
     pinanas:
       aliases:
