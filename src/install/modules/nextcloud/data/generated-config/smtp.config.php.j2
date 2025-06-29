@@ -1,0 +1,12 @@
+<?php
+$CONFIG = array (
+    'mail_smtpmode'     => 'smtp',
+    'mail_smtphost'     => '{{ pinanas.network.smtp.host }}',
+    'mail_smtpport'     => {{ pinanas.network.smtp.port }},
+    'mail_smtpsecure'   => 'tls',
+    'mail_smtpauth'     => 1,
+    'mail_smtpname'     => '{{ pinanas.network.smtp.username }}',
+    'mail_smtppassword' => '{{ pinanas.network.smtp.password }}',
+    'mail_from_address' => '{{ pinanas.network.smtp.sender.split("@")[0] }}',
+    'mail_domain'       => '{{ pinanas.network.smtp.sender.split("@")[1] }}'
+);
