@@ -58,7 +58,7 @@ jobs:
       - name: Start
         run: |
           cd dist
-          docker-compose up -d
+          docker compose up -d
           timeout 180 ../test/wait-for-containers.sh && sleep 120 # to be replaced by compose v2 --wait option
 
       - name: Test dhcpd configuration file
