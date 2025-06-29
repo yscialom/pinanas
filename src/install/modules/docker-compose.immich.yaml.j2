@@ -35,6 +35,7 @@ immich-server:
     - /etc/localtime:/etc/localtime:ro
     - ./immich/config:/config
     - ./media/photos:/mnt/photos:ro
+    - ./immich/data:/usr/src/app/upload
   restart: unless-stopped
   healthcheck:
     disable: false
