@@ -3,7 +3,7 @@
 ---
 networks:
   pinanas:
-  database:
+  nextcloud:
   immich:
 
 services:
@@ -97,7 +97,7 @@ services:
 
   ## === AUTHELIA ===
   authelia:
-    image: authelia/authelia:4.37 {# Ideally, update src/install/installer/ansible_passwords.py with the same tag (version) #} 
+    image: authelia/authelia:4.37 {# Ideally, update src/install/installer/ansible_passwords.py with the same tag (version) #}
     container_name: authelia
     depends_on:
       - traefik

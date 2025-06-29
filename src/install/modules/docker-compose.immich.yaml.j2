@@ -55,9 +55,9 @@ immich-machine-learning:
   healthcheck:
     disable: false
 
-database:
+immich-database:
   image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
-  container_name: immich_postgres
+  container_name: immich_database
   networks:
     immich:
       aliases:
@@ -75,7 +75,7 @@ database:
     - ./immich/data/pgsql:/var/lib/postgresql/data
   restart: unless-stopped
 
-redis:
+immich-redis:
   image: docker.io/valkey/valkey:8-alpine3.22
   container_name: immich_redis
   networks:
