@@ -55,6 +55,9 @@ access_control:
     # Nextcloud
     - domain: "cloud.{{ pinanas.domain }}"
       policy: bypass
+    # Immich
+    - domain: "portfolio.{{ pinanas.domain }}"
+      policy: bypass
 
     ## external services
     {% if pinanas.services is defined %}
