@@ -54,6 +54,7 @@ pinanas_defaults:
     - jellyfin
     - netdata
     - nextcloud
+    - immich
 
 internal:
   install:

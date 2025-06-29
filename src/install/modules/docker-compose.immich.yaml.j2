@@ -1,0 +1,70 @@
+## === IMMMICH ===
+immich-server:
+  image: ghcr.io/immich-app/immich-server:v1.135.3
+  container_name: immich_server
+  depends_on:
+    - dhcpd
+    - redis
+    - database
+  links:
+    - database
+    - immich
+  networks:
+    pinanas:
+      aliases:
+        - immich
+        - portfolio
+  environment:
+    - TZ={{ pinanas.timezone }}
+    - PUID={{ PUID }}
+    - PGID={{ PGID }}
+    - "MYSQL_ROOT_PASSWORD={{ secrets.make_secret('pinanas.database.root_password') }}"
+    - MYSQL_USER=pinanas-immich
+    - "MYSQL_PASSWORD={{ secrets.make_secret('pinanas.immich.database_password') }}"
+    - MYSQL_DATABASE=pinanas-immich
+  labels:
+    - "traefik.enable=true"
+    - "traefik.http.middlewares.immich-https-redirect.redirectscheme.scheme=https"
+    - "traefik.http.routers.immich-secure.entrypoints=https"
+    - "traefik.http.routers.immich-secure.middlewares=authelia@docker"
+    - "traefik.http.routers.immich-secure.rule=Host(`portfolio.{{ pinanas.domain }}`)"
+    - "traefik.http.routers.immich-secure.service=immich"
+    - "traefik.http.routers.immich-secure.tls=true"
+    - "traefik.http.routers.immich.entrypoints=http"
+    - "traefik.http.routers.immich.middlewares=immich-https-redirect"
+    - "traefik.http.routers.immich.rule=Host(`portfolio.{{ pinanas.domain }}`)"
+    - "traefik.http.services.immich.loadbalancer.server.port=2283"
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - ./immich/config:/config
+    - ./media/photos:/mnt/photos:ro
+  restart: unless-stopped
+  healthcheck:
+    disable: false
+
+immich-machine-learning:
+  image: ghcr.io/immich-app/immich-machine-learning:v1.135.3
+  container_name: immich_machine_learning
+  depends_on:
+    - dhcpd
+  networks:
+    immich:
+      aliases:
+        - ml
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - ./immich/data/model-cache:/cache
+  restart: unless-stopped
+  healthcheck:
+    disable: false
+
+redis:
+  image: docker.io/valkey/valkey:8-alpine3.22
+  container_name: immich_redis
+  networks:
+    immich:
+      aliases:
+        - redis
+  healthcheck:
+    test: redis-cli ping || exit 1
+  restart: unless-stopped
