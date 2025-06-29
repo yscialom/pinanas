@@ -1,0 +1,128 @@
+---
+##
+# This is PiNanas configuration file: settings.yaml.
+#
+# Once every mandatory value has been set, you can call PiNanas'
+# configure.sh script from the directory directly containing this
+# file. See README.md for more information.
+#
+# Some values are optional and have default values or auto-discovered.
+# Those values are commented in this file.
+#
+
+pinanas:
+  # Registered domain name. Type: string. Example: "home.example.com".
+  domain:
+
+  # Port numbers (optional)
+  #ports:
+    # HTTP port. Type: integer. Default: 80.
+    # Exemple: 8080
+    #http:
+
+    # HTTPS port. Type: integer. Default: 443.
+    # Exemple: 8443
+    #https:
+
+  # Master password to encrypt/derive all PiNanas secrets. Type: string.
+  # Example: "Randomly-generated-complex-string-with-mixed-case-digits-and-special-characters".
+  master_secret:
+
+  # Locale timezone. Type: string. Example: "Europe/Paris".
+  # Use a TZ database name, see <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>.
+  timezone:
+
+  # Users. Type: List of users. At least one required; at least one admin recommanded.
+  # User: { login: string, password: string, email: string, (opt)fullname: string, (opt)groups: list of strings }. Exemple:
+  # - login: johndoe
+  #   password: "s3cr3t"
+  #   email: john@doe.com
+  #   fullname: "John D. Doe"
+  #   groups: # "user" is always implied and must NOT be listed, "admin" is a special group giving full access to all of PiNanas.
+  #   - "admin"
+  users:
+
+  # List of services external to PiNanas to serve through it. Type: list of services.
+  # Service: { name: string, (opt)url: string, (opt)policy: enum, (opt)groups: list of enum }. Example:
+  # - name: "myservice" # Must only include [A-Za-z0-9_-]
+  #   url: "https://192.168.0.2:1234" # optional
+  #   policy: two_factor # optional, possible values are: two_factor (default), one_factor, bypass
+  #   groups: # optional, possible values are: admin (default), user; see users.groups
+  #     - admin
+  #services:
+
+  #acme:
+    # Use Let's Encrypt stagging servers. Type: boolean. Optional, default: false. Example: true.
+    #stagging:
+
+  #network:
+    # MAC address of PiNana's host network card. Type: string. Default: auto discovery. Example: "01:02:03:04:05:06".
+    #hmac:
+    # Desired IP address of PiNanas's host. Type: string. Default: auto discovery. Example "192.168.0.1".
+    #ip:
+
+    #dhcp:
+      # Base IP for the network. Type: string. Default: auto discovery. Example: "192.168.0.0".
+      #base:
+
+      # Network subnet mask. Type: string. Default: auto discovery. Example: "255.255.255.0".
+      #subnet:
+
+      # Network gateway. Type: string. Default: auto discovery. Example: "192.168.0.254".
+      #gateway:
+
+      # DHCP Range. Uncomment this settings only if you uncomment at least one of its children.
+      #range:
+        # First (included) IP of clients inside the network. Type: string. Default: auto discovery. Example: "192.168.0.16".
+        #start:
+
+        # Last (included) IP of clients inside the network. Type: string. Default: auto discovery. Example: "192.168.0.64".
+        #end:
+
+      # Fixed-address leases. Type: list of leases. Optional, default: [].
+      # Lease: { name: string, hmac: string, ip: string }. Example:
+      #  - name: "DeviceName"
+      #    hmac: "01:23:45:67:89:ab"
+      #    ip: "192.168.0.42"
+      #fixed_address_leases:
+
+    dns:
+      # Upstream DNS servers. Type: list of strings. Default: auto discovery. Example:
+      # - 1.1.1.1
+      # - 1.0.0.1
+      #upstreams:
+
+      # PiNanas DNS provider.
+      # See traefik documentation for your provider at <https://doc.traefik.io/traefik/https/acme/#providers>.
+      provider:
+        # Provider's name. Stype: string. Example: "ovh".
+        name:
+
+        # Email address used for registration. Type: string. Example: "johndoe@example.com".
+        email:
+
+        # API variables. Type: list of variables.
+        # Variable: { name: string, value: string }. Example:
+        # - name: MY_PROVIDER_API_KEY
+        #   value: "super_secret_api_secret"
+        # - name: MY_PROVIDER_ENDPOINT
+        #   value: my-provider-narnia
+        api:
+
+    # Send email; consult the documentation for your email provider.
+    # eg. for gmail: <https://support.google.com/accounts/answer/185833>.
+    smtp:
+      # Server hostname. Type: string. Example: "smtp.gmail.com".
+      host:
+
+      # Server port number. Type: integer. Example: 587.
+      port:
+
+      # Email address or username. Type: string. Example: "johndoe@gmail.com".
+      username:
+
+      # Password. Type: string. Example: "s3cr3t".
+      password:
+
+      # Send emails as. Type: string. Example: "contact@{{ pinanas.domain }}".
+      sender:

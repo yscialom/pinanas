@@ -1,0 +1,17 @@
+#!/bin/bash
+
+[[ -f /config/www/nextcloud/config/installed ]] && exit
+
+function occ () {
+    sudo -u  "#${PUID}" /config/www/nextcloud/occ "$@"
+}
+
+function configure_log_path () {
+  echo "*** Configure Nextcloud Log Path ***"
+  occ log:file --file=/log/nextcloud.log
+  occ log:manage --level=info
+
+  echo "*** Nextcloud Log Path Configured ***"
+}
+
+configure_log_path

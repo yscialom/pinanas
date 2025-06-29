@@ -1,0 +1,55 @@
+api:
+  dashboard: true
+  debug: true
+ping:
+  entryPoint: "ping"
+entryPoints:
+  ping:
+    address: ":{{ 8080 if pinanas.ports.http != 8080 else 8081 }}"
+  http:
+    address: ":{{ pinanas.ports.http }}"
+    http:
+      redirections:
+        entryPoint:
+          to: https
+          scheme: https
+  https:
+    address: ":{{ pinanas.ports.https }}"
+  dns-udp:
+    address: ":53/udp"
+  dns-tcp:
+    address: ":53/tcp"
+serversTransport:
+  insecureSkipVerify: true
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+  file:
+    filename: /config.yaml
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: "{{ pinanas.network.dns.provider.email }}"
+      storage: /acme.json
+      {% if (pinanas.acme.stagging | default(false)) == true -%}
+      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      {% endif -%}
+      dnsChallenge:
+        provider: {{ pinanas.network.dns.provider.name }}
+        delayBeforeCHeck: 0
+log:
+  filePath: "/log/traefik.log"
+  level: INFO
+accessLog:
+  filePath: "/log/access.log"
+  fields:
+    defaultMode: keep
+    names:
+      ClientUsername: drop
+    headers:
+      defaultMode: keep
+      names:
+          User-Agent: redact
+          Authorization: drop
+          Content-Type: keep

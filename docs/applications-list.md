@@ -24,6 +24,10 @@ Optionnal applications
 AdGuard Home is a network-wide software for blocking ads and tracking. After you set it up, it'll cover ALL your home
 devices, and you don't need any client-side software for that.
 
+### DUPLICATI
+Duplicati is an open source backup application, which encrypts data prior to uploading it. The user interface is
+web-based and allows you to control all the options offered by Duplicati, from a simple and intuitive interface.
+
 ### HEIMDALL
 Heimdall Application Dashboard is a dashboard for all your web applications.
 

@@ -1,0 +1,42 @@
+## === NETDATA ===
+netdata:
+  image: netdata/netdata:v1.39
+  container_name: netdata
+  hostname: "{{ pinanas.domain }}"
+  depends_on:
+    - dhcpd
+  cap_add:
+    - SYS_PTRACE
+  security_opt:
+    - apparmor:unconfined
+  networks:
+    pinanas:
+      aliases:
+        - netdata
+        - resources
+  environment:
+    - TZ={{ pinanas.timezone }}
+    - PUID={{ PUID }}
+    - PGID={{ PGID }}
+  labels:
+    - "traefik.enable=true"
+    - "traefik.http.middlewares.netdata-https-redirect.redirectscheme.scheme=https"
+    - "traefik.http.routers.netdata-secure.entrypoints=https"
+    - "traefik.http.routers.netdata-secure.middlewares=authelia@docker"
+    - "traefik.http.routers.netdata-secure.rule=Host(`resources.{{ pinanas.domain }}`)"
+    - "traefik.http.routers.netdata-secure.service=netdata"
+    - "traefik.http.routers.netdata-secure.tls=true"
+    - "traefik.http.routers.netdata.entrypoints=http"
+    - "traefik.http.routers.netdata.middlewares=netdata-https-redirect"
+    - "traefik.http.routers.netdata.rule=Host(`resources.{{ pinanas.domain }}`)"
+    - "traefik.http.services.netdata.loadbalancer.server.port=19999"
+  volumes:
+    - ./netdata/data:/etc/netdata
+    - /etc/passwd:/host/etc/passwd:ro
+    - /etc/group:/host/etc/group:ro
+    - /proc:/host/proc:ro
+    - /sys:/host/sys:ro
+    - /etc/os-release:/host/etc/os-release:ro
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+    - ./dhcpd/data:/var/lib/dhcp:ro
+  restart: unless-stopped

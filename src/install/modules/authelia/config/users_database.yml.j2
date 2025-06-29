@@ -1,0 +1,12 @@
+users:
+{% for user in pinanas.users %}
+  {{ user.login }}:
+    displayname: "{{ user.fullname | default(user.login) }}"
+    password: "{{ user.password | authelia_password }}"
+    email: "{{ user.email }}"
+    groups:
+    {% for group in user.groups | default([]) | reject("equalto", "user") %}
+    - {{ group }}
+    {% endfor %}
+    - user
+{% endfor %}

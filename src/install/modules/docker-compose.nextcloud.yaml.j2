@@ -1,0 +1,79 @@
+## === NEXTCLOUD ===
+database:
+  image: linuxserver/mariadb:10.5.17-alpine
+  container_name: database
+  depends_on:
+    - dhcpd
+  networks:
+    database:
+      aliases:
+        - mariadb
+        - mysql
+        - database
+        - sql
+  environment:
+    - TZ={{ pinanas.timezone }}
+    - PUID={{ PUID }}
+    - PGID={{ PGID }}
+    - "MYSQL_ROOT_PASSWORD={{ secrets.make_secret('pinanas.database.root_password') }}"
+    - MYSQL_USER=pinanas-nextcloud
+    - "MYSQL_PASSWORD={{ secrets.make_secret('pinanas.nextcloud.database_password') }}"
+    - MYSQL_DATABASE=pinanas-nextcloud
+  volumes:
+    - ./database/data/databases:/config/databases
+    - ./database/data/log:/config/log
+    - ./database/config:/config
+  healthcheck:
+    test: [ "CMD", "mysqladmin", "--user=pinanas-nextcloud", "--password={{ secrets.make_secret('pinanas.nextcloud.database_password') }}", "ping", "--silent" ]
+    interval: 1m
+    timeout: 5s
+    retries: 3
+  restart: unless-stopped
+
+nextcloud:
+  build:
+    context: nextcloud/build
+  container_name: nextcloud
+  depends_on:
+    - dhcpd
+    - database
+  links:
+    - database
+  networks:
+    pinanas:
+      aliases:
+        - nextcloud
+        - cloud
+    database:
+      aliases:
+        - nextcloud
+        - cloud
+  environment:
+    - TZ={{ pinanas.timezone }}
+    - PUID={{ PUID }}
+    - PGID={{ PGID }}
+  labels:
+    - "traefik.enable=true"
+    - "traefik.docker.network={{ internal.install.path | basename }}_pinanas"
+    - "traefik.http.routers.nextcloud-secure.entrypoints=https"
+    - "traefik.http.routers.nextcloud-secure.middlewares=authelia@docker"
+    - "traefik.http.routers.nextcloud-secure.rule=Host(`cloud.{{ pinanas.domain }}`)"
+    - "traefik.http.routers.nextcloud-secure.service=nextcloud-secure"
+    - "traefik.http.routers.nextcloud-secure.tls=true"
+    - "traefik.http.routers.nextcloud.entrypoints=http"
+    - "traefik.http.routers.nextcloud.rule=Host(`cloud.{{ pinanas.domain }}`)"
+    - "traefik.http.routers.nextcloud.middlewares=nextcloud-https-redirect"
+    - "traefik.http.middlewares.nextcloud-https-redirect.redirectscheme.scheme=https"
+    - "traefik.http.services.nextcloud-secure.loadbalancer.server.scheme=https"
+    - "traefik.http.services.nextcloud-secure.loadbalancer.server.port=443"
+    - "traefik.http.middlewares.hsts.headers.stsincludesubdomains=false"
+    - "traefik.http.middlewares.hsts.headers.stspreload=true"
+    - "traefik.http.middlewares.hsts.headers.stsseconds=31536000"
+    - "traefik.http.routers.nextcloud-secure.middlewares=hsts"
+  volumes:
+    - ./nextcloud/data/crontabs:/config/crontabs
+    - ./nextcloud/data/generated-config:/config/www/nextcloud/config
+    - ./nextcloud/data/files:/data
+    - ./logs/nextcloud:/log
+    - ./media:/data/media
+  restart: unless-stopped

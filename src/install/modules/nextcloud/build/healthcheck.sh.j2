@@ -1,0 +1,14 @@
+{%- import 'secrets.j2' as secrets with context -%}
+#!/bin/bash
+
+tmpfile=$(mktemp)
+trap "rm -f -- '${tmpfile}'" EXIT
+
+function occ () {
+    sudo -u  "#${PUID}" /config/www/nextcloud/occ "$@"
+}
+
+DOCKER_UNHEALTHY=1
+occ status >"${tmpfile}" || exit ${DOCKER_UNHEALTHY}
+grep -q 'installed: true'        <"${tmpfile}" || exit ${DOCKER_UNHEALTHY}
+grep -q 'maintenance: false'     <"${tmpfile}" || exit ${DOCKER_UNHEALTHY}

@@ -24,6 +24,8 @@ PiNanas includes:
     store, access and share your files, and more...
   - [Jellyfin](https://jellyfin.org  "Jellyfin homepage"):
     manage and stream your films and tv shows.
+  - [Duplicati](https://www.duplicati.com/ "Duplicati homepage"):
+    store encrypted backups online.
 - Network management:
   - [AdGuard Home](https://adguard.com/en/adguard-home/overview.html "AdGuard Home homepage"):
     protect your privacy and filter out advertising on all devices.
@@ -35,8 +37,8 @@ PiNanas includes:
   - [Netdata](https://www.netdata.cloud "Netdata homepage"):
     monitor your infrastructure resources.
 
-[![Continuous Integration](https://github.com/yscialom/pinanas/actions/workflows/continuous-integration.yml/badge.svg?branch=develop)](https://github.com/yscialom/pinanas/actions/workflows/continuous-integration.yml)
-[![Continuous Deplyment](https://github.com/yscialom/pinanas/actions/workflows/continuous-deployment.yml/badge.svg?branch=develop)](https://github.com/yscialom/pinanas/actions/workflows/continuous-deployment.yml)
+[![Continuous Integration](https://github.com/yscialom/pinanas/actions/workflows/continuous-integration.yaml/badge.svg?branch=develop)](https://github.com/yscialom/pinanas/actions/workflows/continuous-integration.yaml)
+[![Continuous Deplyment](https://github.com/yscialom/pinanas/actions/workflows/continuous-deployment.yaml/badge.svg?branch=develop)](https://github.com/yscialom/pinanas/actions/workflows/continuous-deployment.yaml)
 
 
 Installation
@@ -47,8 +49,8 @@ Installation
 #### Hardware
 
 PiNanas will need a linux-based host, with:
-- 10GB free disk space
-- 4GB RAM, 8GB suggested
+- 32 GB free disk space
+- 4 GB RAM, 8GB suggested
 - An access to Internet
 - Optionnally: a GPU suited to your needs (video transcoding & playing)
 
@@ -56,7 +58,6 @@ PiNanas will need a linux-based host, with:
 
 During installation or operation, PiNanas requires:
 - GNU utils
-- python3 and pip
 - docker and docker-compose
 - a wildcard (sub)domain name (e.g. `*.home.example.com`); read
 [How to get a domain name?](docs/get-a-domain-name.md "docs/get-a-domain-name.md") for more information.

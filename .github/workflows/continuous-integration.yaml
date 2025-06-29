@@ -1,0 +1,72 @@
+name: Continuous Integration
+
+on:
+  workflow_dispatch: ~
+  pull_request: ~
+  push:
+    branches:
+      - develop
+      - release/**
+    tags:
+      - v**
+
+
+#TODO: split in jobs and use encrypted artefacts
+# - artefacts: https://docs.github.com/en/actions/advanced-guides/storing-workflow-data-as-artifacts
+# - encrypt: https://www.tecmint.com/encrypt-decrypt-files-tar-openssl-linux/
+# - cache?
+jobs:
+  build:
+    name: "Build & Test"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Prepare test environment: Disable DNS cache server to free 53/udp up"
+        run: |
+          sudo mkdir -p /etc/systemd/resolved.conf.d
+          echo -e '[Resolve]\nDNSStubListener=no' | sudo tee -a /etc/systemd/resolved.conf.d/disable-for-pinanas.conf
+          sudo systemctl force-reload systemd-resolved
+          sudo rm /etc/resolv.conf
+          sudo ln -s ../run/systemd/resolve/resolv.conf /etc/resolv.conf
+
+      - name: "Prepare test environment: download Let's Encrypt's staging root certificate"
+        run: curl -o /tmp/letsencrypt-stg-root-x1.pem 'https://letsencrypt.org/certs/staging/letsencrypt-stg-root-x1.pem'
+
+      - name: Clone
+        uses: actions/checkout@v3
+
+      - name: Configure
+        env:
+          settings_pinanas_master_secret: "${{ secrets.settings_pinanas_master_secret }}"
+          settings_pinanas_network_dns_provider_api: "${{ secrets.settings_pinanas_network_dns_provider_api }}"
+          settings_pinanas_network_dns_provider_email: "${{ secrets.settings_pinanas_network_dns_provider_email }}"
+          settings_pinanas_network_dns_provider_name: "${{ secrets.settings_pinanas_network_dns_provider_name }}"
+          settings_pinanas_network_smtp_host: "${{ secrets.settings_pinanas_network_smtp_host }}"
+          settings_pinanas_network_smtp_password: "${{ secrets.settings_pinanas_network_smtp_password }}"
+          settings_pinanas_network_smtp_port: "${{ secrets.settings_pinanas_network_smtp_port }}"
+          settings_pinanas_network_smtp_sender: "${{ secrets.settings_pinanas_network_smtp_sender }}"
+          settings_pinanas_network_smtp_username: "${{ secrets.settings_pinanas_network_smtp_username }}"
+        run: |
+          mkdir dist
+          envsubst <test/settings.yaml.d/ci.yaml >dist/settings.yaml
+
+      - name: Install
+        run: cd dist && ../src/install/installer.sh
+
+      - name: Start
+        run: |
+          cd dist
+          docker-compose up -d
+          timeout 180 ../test/wait-for-containers.sh && sleep 120 # to be replaced by compose v2 --wait option
+
+      - name: Test dhcpd configuration file
+        run: test/test-dhcpd.sh dist
+
+      - name: Test Traefik dashboard
+        run: test/test-traefik-dashboard.sh dist
+
+      - name: Test Nextcloud
+        run: test/test-nextcloud-install.sh dist
+
+      - name: Test settings.yaml validator
+        run: test/test-settings-validator.sh dist

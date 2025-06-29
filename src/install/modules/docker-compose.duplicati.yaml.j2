@@ -1,0 +1,38 @@
+## === DUPLICATI ===
+duplicati:
+  image: lscr.io/linuxserver/duplicati:2.0.6
+  container_name: duplicati
+  depends_on:
+    - traefik
+  networks:
+    pinanas:
+      aliases:
+        - duplicati
+        - backup
+  hostname: pinanas-backup
+  environment:
+    - TZ={{ pinanas.timezone }}
+    - PUID={{ PUID }}
+    - PGID={{ PGID }}
+    - "CLI_ARGS=
+      --server-datafolder=/data
+      --webservice-allowed-hostnames=backup.{{ pinanas.domain }}
+      "
+  labels:
+    - "traefik.enable=true"
+    - "traefik.http.middlewares.duplicati-https-redirect.redirectscheme.scheme=https"
+    - "traefik.http.routers.duplicati-secure.entrypoints=https"
+    - "traefik.http.routers.duplicati-secure.middlewares=authelia@docker"
+    - "traefik.http.routers.duplicati-secure.rule=Host(`backup.{{ pinanas.domain }}`)"
+    - "traefik.http.routers.duplicati-secure.service=duplicati"
+    - "traefik.http.routers.duplicati-secure.tls=true"
+    - "traefik.http.routers.duplicati.entrypoints=http"
+    - "traefik.http.routers.duplicati.middlewares=duplicati-https-redirect"
+    - "traefik.http.routers.duplicati.rule=Host(`backup.{{ pinanas.domain }}`)"
+    - "traefik.http.services.duplicati.loadbalancer.server.port=8200"
+  volumes:
+    - ./duplicati/config:/config
+    - ./duplicati/data:/data
+    - ./media:/source/media
+    - ./nextcloud/data/files:/source/nextcloud-files
+  restart: unless-stopped

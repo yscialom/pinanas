@@ -1,3 +1,0 @@
-ansible==5.6
-bcrypt==3.2
-netaddr==0.8

@@ -7,8 +7,8 @@ Requirements
 ### Hardware
 
 PiNanas will need a linux-based host, with:
-- 10GB free disk space
-- 4GB RAM, 8GB suggested
+- 32 GB free disk space
+- 4 GB RAM, 8GB suggested
 - An access to Internet
 - Optionnally: a GPU suited to your needs (video transcoding & playing)
 
@@ -16,7 +16,6 @@ PiNanas will need a linux-based host, with:
 
 During installation or operation, PiNanas requires:
 - GNU utils
-- python3 and pip
 - docker and docker-compose
 - a wildcard (sub)domain name (e.g. `*.home.example.com`); read
 [How to get a domain name?](get-a-domain-name.md "docs/get-a-domain-name.md") for more information.
@@ -56,7 +55,7 @@ User
 You are free to run PiNanas with any user with:
 - rights on the docker daemon, and
 - read rights on the `/path/to/pinanas` directory.
-`root` is a possibility, although nor recommended.
+`root` is a possibility, although not recommended.
 
 For instance, create a `pinanas` user:
 ```bash
@@ -78,13 +77,13 @@ Settings
 --------
 
 ### Define your settings
-In the instalation directory, create a file `settings.yml` from [`src/settings.yml.sample`](/src/settings.yml.sample)
+In the instalation directory, create a file `settings.yaml` from [`src/configure/settings.yaml.sample`](/src/configure/settings.yaml.sample)
 and fill in all mandatory values:
 ```bash
 cd /opt/pinanas
-cp /path/to/pinanas/src/settings.yml.sample settings.yml
-chmod 600 settings.yml # contains passwords
-nano settings.yml
+cp /path/to/pinanas/src/configure/settings.yaml.sample settings.yaml
+chmod 600 settings.yaml # contains passwords
+nano settings.yaml
 ```
 
 Save and exit.
@@ -94,27 +93,27 @@ PiNanas needs delegation on your domain name. To this end, you must create and f
 PiNanas. Read [DNS Provider Variables](dns-provider-variables.md "docs/dns-provider-variables.md") for a complete
 guide.
 
-### Special care needed on `settings.yml`
+### Special care needed on `settings.yaml`
 This file is both _secret_ and _precious_. It contains passwords to both PiNanas administration and to
 external services. As such, it must be kept private, only readable to user having administration rights on the PiNanas
-host, and the `pinanas` user itself. If you run PiNanas on a disposable virtual machine, make a copy of `settings.yml`
+host, and the `pinanas` user itself. If you run PiNanas on a disposable virtual machine, make a copy of `settings.yaml`
 and store it properly on a second device.
 
-Ideally, `settings.yml` is built upon deployment and secrets are kept by a dedicated tool.
+Ideally, `settings.yaml` is built upon deployment and secrets are kept by a dedicated tool.
 
 
 Install
 -------
 
-From your installation directory, run `src/configure.sh`:
+From your installation directory, run `src/installer/install.sh`:
 ```bash
 cd /opt/pinanas
-/path/to/pinanas/src/configure.sh
+/path/to/pinanas/src/installer/install.sh
 ```
-If you made important changes to `settings.yml` and want to regenerate PiNanas, run with `--force`:
+If you made important changes to `settings.yaml` and want to regenerate PiNanas, run with `--force`:
 ```bash
 cd /opt/pinanas
-/path/to/pinanas/src/configure.sh --force
+/path/to/pinanas/src/installer/install.sh --force
 ```
 
 Your installation is now complete.

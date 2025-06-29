@@ -1,0 +1,30 @@
+## === HEIMDALL ===
+heimdall:
+  image: lscr.io/linuxserver/heimdall:2.5.6
+  container_name: heimdall
+  depends_on:
+    - dhcpd
+  networks:
+    pinanas:
+      aliases:
+        - heimdall
+        - apps
+  environment:
+    - TZ={{ pinanas.timezone }}
+    - PUID={{ PUID }}
+    - PGID={{ PGID }}
+  labels:
+    - "traefik.enable=true"
+    - "traefik.http.middlewares.heimdall-https-redirect.redirectscheme.scheme=https"
+    - "traefik.http.routers.heimdall-secure.entrypoints=https"
+    - "traefik.http.routers.heimdall-secure.middlewares=authelia@docker"
+    - "traefik.http.routers.heimdall-secure.rule=Host(`apps.{{ pinanas.domain }}`)"
+    - "traefik.http.routers.heimdall-secure.service=heimdall"
+    - "traefik.http.routers.heimdall-secure.tls=true"
+    - "traefik.http.routers.heimdall.entrypoints=http"
+    - "traefik.http.routers.heimdall.middlewares=heimdall-https-redirect"
+    - "traefik.http.routers.heimdall.rule=Host(`apps.{{ pinanas.domain }}`)"
+    - "traefik.http.services.heimdall.loadbalancer.server.port=80"
+  volumes:
+    - ./heimdall/data:/config/www
+  restart: unless-stopped

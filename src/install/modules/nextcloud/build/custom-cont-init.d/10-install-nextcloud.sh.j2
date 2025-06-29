@@ -1,0 +1,43 @@
+{%- import 'secrets.j2' as secrets with context -%}
+#!/bin/bash
+
+[[ -f /config/www/nextcloud/config/installed ]] && exit
+
+function occ () {
+    sudo -u  "#${PUID}" /config/www/nextcloud/occ "$@"
+}
+
+function install_nextcloud () {
+  echo "*** Installing Nextcloud using database ***"
+  occ maintenance:install \
+    --no-interaction \
+    --database=mysql \
+    --database-host=database \
+    --database-name=pinanas-nextcloud \
+    --database-user=pinanas-nextcloud \
+    "--database-pass={{ secrets.make_secret('pinanas.nextcloud.database_password') }}" \
+    "--admin-pass={{ secrets.make_secret('pinanas.nextcloud.admin_password') }}" \
+    --data-dir=/data \
+    --verbose \
+  && echo "*** Nextcloud base application ready ***"
+}
+
+function is_nextcloud_installed () {
+  php -r '
+    $configfile = "/config/www/nextcloud/config/config.php";
+    file_exists($configfile) or exit(1);
+    require($configfile);
+    exit(isset($CONFIG["installed"]) && $CONFIG["installed"] ? 0 : 1);
+  '
+}
+
+function wait_for_nextcloud_installed () {
+  while ! is_nextcloud_installed ; do
+    echo "*** Nextcloud not yet installed, deferring... ***"
+    sleep 15
+  done
+  echo "*** Nextcloud fully installed... ***"
+}
+
+install_nextcloud
+wait_for_nextcloud_installed
