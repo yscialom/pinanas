@@ -5,7 +5,7 @@ database:
   depends_on:
     - dhcpd
   networks:
-    database:
+    nextcloud:
       aliases:
         - mariadb
         - mysql
@@ -37,14 +37,12 @@ nextcloud:
   depends_on:
     - dhcpd
     - database
-  links:
-    - database
   networks:
     pinanas:
       aliases:
         - nextcloud
         - cloud
-    database:
+    nextcloud:
       aliases:
         - nextcloud
         - cloud
