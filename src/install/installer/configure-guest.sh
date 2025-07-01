@@ -66,6 +66,9 @@ prepare () {
 ---
 - hosts: localhost
   gather_facts: yes
+  gather_subset:
+  - "!all"
+  - all_ipv4_addresses
   tasks:
   - include_vars: /pinanas/src/configure/settings.yaml.defaults
   - include_vars: /pinanas/dist/settings.yaml
