@@ -35,6 +35,7 @@ prepare () {
     mkdir /pinanas-config/keys
 
     . /pinanas/venv/bin/activate
+    export PIP_CACHE_DIR=/pinanas/venv/.pip-cache
     python3 -m pip install --upgrade pip
     pip3 install --requirement /pinanas/src/configure/settings-validator/requirements.txt
     pip3 install --requirement /pinanas/src/install/installer/requirements.txt
