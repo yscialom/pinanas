@@ -153,14 +153,8 @@ install () {
     }"
 
     # use mitogen
-    mkdir -p /pinanas/venv/mitogen
-    curl -L "https://files.pythonhosted.org/packages/source/m/mitogen/mitogen-0.3.24.tar.gz" -o /pinanas/venv/mitogen/mitogen.tar.gz
-    tar -xaf /pinanas/venv/mitogen/mitogen.tar.gz --directory=/pinanas/venv/mitogen
-    export ANSIBLE_CONFIG=/pinanas/venv/ansible.cfg
-    echo "[defaults]"  >"${ANSIBLE_CONFIG}"
-    echo "strategy_plugins = /pinanas/venv/mitogen/mitogen-0.3.24/ansible_mitogen/plugins/strategy" >>"${ANSIBLE_CONFIG}"
-    echo "strategy = mitogen_linear" >>"${ANSIBLE_CONFIG}"
-
+    export ANSIBLE_STRATEGY_PLUGINS=$(python3 -c "import sys; print(sys.path[-1])")/ansible_mitogen/plugins/strategy
+    export ANSIBLE_STRATEGY=mitogen_linear
     export ANSIBLE_LOCALHOST_WARNING=false
     ansible-playbook \
         --inventory /dev/null \
