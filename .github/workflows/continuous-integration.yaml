@@ -52,8 +52,16 @@ jobs:
           mkdir dist
           envsubst <test/settings.yaml.d/ci.yaml >dist/settings.yaml
 
+      - name: Cache pip wheels
+        uses: actions/cache@v3
+        with:
+          path: dist/.venv/.pip-cache
+          key: pip-${{ hashFiles('**/requirements*.txt') }}
+
       - name: Install
-        run: cd dist && ../src/install/installer.sh
+        run: |
+          export DOCKER_BUILDKIT=1
+          cd dist && ../src/install/installer.sh
 
       - name: Start
         run: |

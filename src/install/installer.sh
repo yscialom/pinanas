@@ -22,6 +22,7 @@ configure () {
         -e PINANAS_SRC="${PINANAS_SRC}" \
         -e PINANAS_DIST="${PINANAS_DIST}" \
         -e PINANAS_VENV="${PINANAS_VENV}" \
+        -e PIP_CACHE_DIR="${PINANAS_VENV}"/.pip-cache \
         -v pinanas-config:/pinanas-config \
         -v "${PINANAS_SRC}":/pinanas/src:ro \
         -v "${PINANAS_DIST}":/pinanas/dist \
