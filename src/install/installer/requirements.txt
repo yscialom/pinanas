@@ -1,4 +1,4 @@
-ansible==7.0.0
+ansible==11.7.0
 mitogen==0.3.24
 netaddr==0.8
 bcrypt==4.0
