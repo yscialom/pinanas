@@ -35,6 +35,7 @@ prepare () {
     mkdir /pinanas-config/keys
 
     . /pinanas/venv/bin/activate
+    export PIP_CACHE_DIR=/pinanas/venv/.pip-cache
     python3 -m pip install --upgrade pip
     pip3 install --requirement /pinanas/src/configure/settings-validator/requirements.txt
     pip3 install --requirement /pinanas/src/install/installer/requirements.txt
@@ -65,6 +66,9 @@ prepare () {
 ---
 - hosts: localhost
   gather_facts: yes
+  gather_subset:
+  - "!all"
+  - all_ipv4_addresses
   tasks:
   - include_vars: /pinanas/src/configure/settings.yaml.defaults
   - include_vars: /pinanas/dist/settings.yaml
@@ -148,6 +152,9 @@ install () {
       PGID: $(id -g)
     }"
 
+    # use mitogen
+    export ANSIBLE_STRATEGY_PLUGINS=$(python3 -c "import sys; print(sys.path[-1])")/ansible_mitogen/plugins/strategy
+    export ANSIBLE_STRATEGY=mitogen_linear
     export ANSIBLE_LOCALHOST_WARNING=false
     ansible-playbook \
         --inventory /dev/null \
