@@ -1,7 +1,6 @@
 #jinja2: lstrip_blocks: True, keep_trailing_newline: True
 {%- import 'secrets.j2' as secrets with context -%}
 ---
-version: "3"
 networks:
   pinanas:
   database:
@@ -103,7 +102,8 @@ services:
 
   ## === AUTHELIA ===
   authelia:
-    image: authelia/authelia:4.37 {# Ideally, update src/install/installer/ansible_passwords.py with the same tag (version) #} 
+    # Ideally, update src/install/installer/ansible_passwords.py with the same tag (version)
+    image: authelia/authelia:4.37
     container_name: authelia
     depends_on:
       - traefik
