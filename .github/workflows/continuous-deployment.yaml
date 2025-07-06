@@ -113,7 +113,7 @@ jobs:
           known_hosts: unnecessary
 
       - name: Start
-        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && docker-compose up -d && ~/pinanas-src/test/wait-for-containers.sh ."
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && docker-compose up -d --wait"
 
       - name: Import Let's Encrypt stagging root CA
         run: |
