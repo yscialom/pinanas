@@ -48,11 +48,11 @@ services:
       - ./logs:/fail2ban/remotelogs:ro
       - /var/log:/fail2ban/pinanas_logs:ro
     healthcheck:
-      test: ["CMD", "fail2ban-server", "ping"]
+      test: ["CMD-SHELL", "fail2ban-server ping || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 10s
+      start_period: 30s
     restart: unless-stopped
 
   ## === TRAEFIK ===
