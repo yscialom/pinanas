@@ -35,4 +35,10 @@ duplicati:
     - ./duplicati/data:/data
     - ./media:/source/media
     - ./nextcloud/data/files:/source/nextcloud-files
+  healthcheck:
+    test: ["CMD", "curl", "-sL", "http://localhost:8200"]
+    interval: 10s
+    timeout: 5s
+    retries: 3
+    start_period: 30s
   restart: unless-stopped
