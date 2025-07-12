@@ -12,8 +12,9 @@ function install_external_storage () {
   occ app:enable files_external
 
   echo "*** Configuring Nextcloud External Storage application ***"
+  occ files_external:create -c datadir=/data/media/movies  'Movies'   local null::null
+  occ files_external:create -c datadir=/data/media/photos  'Photos'   local null::null
   occ files_external:create -c datadir=/data/media/tvshows 'TV Shows' local null::null
-  occ files_external:create -c datadir=/data/media/movies 'Movies' local null::null
 
   echo "*** Nextcloud External Storage application ready ***"
 }

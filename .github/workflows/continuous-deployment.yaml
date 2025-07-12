@@ -27,7 +27,7 @@ jobs:
         run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "rm -rf ~/pinanas-src"
 
       - name: Stop previous PiNanas
-        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "if [[ -f ~/pinanas/docker-compose.yaml ]] ; then cd ~/pinanas && docker-compose down ; fi"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "if [[ -f ~/pinanas/docker-compose.yaml ]] ; then cd ~/pinanas && docker compose down ; fi"
 
       - name: Remove docker containers, volumes, networks and images
         run: |
@@ -113,7 +113,7 @@ jobs:
           known_hosts: unnecessary
 
       - name: Start
-        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && docker-compose up -d --wait"
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && docker compose up -d --wait"
 
       - name: Import Let's Encrypt stagging root CA
         run: |
