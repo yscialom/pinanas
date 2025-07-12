@@ -16,6 +16,7 @@ immich-server:
     - TZ={{ pinanas.timezone }}
     - PUID={{ PUID }}
     - PGID={{ PGID }}
+    - IMMICH_HOST=0.0.0.0
     - DB_USERNAME=pinanas-immich
     - "DB_PASSWORD={{ secrets.make_secret('pinanas.immich.database_password') }}"
     - DB_DATABASE_NAME=pinanas-immich
