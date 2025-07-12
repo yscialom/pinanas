@@ -195,3 +195,26 @@ identity_providers:
           - query
           - fragment
         userinfo_signing_algorithm: none
+      - id: immich
+        description: Immich
+        secret: "{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[immich].secret')[:16] }}"
+        authorization_policy: one_factor
+        require_pkce: false
+        pkce_challenge_method: ''
+        audience: []
+        scopes:
+          - openid
+          - groups
+          - email
+          - profile
+        redirect_uris:
+          - "https://portfolio.{{ pinanas.domain }}{{ ":" ~ pinanas.ports.https if pinanas.ports.https != 443 else "" }}/auth/login"
+          - "https://portfolio.{{ pinanas.domain }}{{ ":" ~ pinanas.ports.https if pinanas.ports.https != 443 else "" }}/user-settings"
+          - "app.immich:///oauth-callback"
+        response_types:
+          - 'code'
+        grant_types:
+          - 'authorization_code'
+        access_token_signed_response_alg: 'none'
+        userinfo_signed_response_alg: 'none'
+        token_endpoint_auth_method: 'client_secret_post'
