@@ -117,16 +117,22 @@ jobs:
 
       - name: Import Let's Encrypt stagging root CA
         run: |
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "curl -o ~/pinanas/letsencrypt-stg-root-x1.pem https://letsencrypt.org/certs/staging/letsencrypt-stg-root-x1.pem"
           echo -n "Nexcloud... "
-          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "curl -o ~/pinanas/nextcloud/data/files/letsencrypt-stg-root-x1.crt https://letsencrypt.org/certs/staging/letsencrypt-stg-root-x1.pem"
-          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec nextcloud occ security:certificates:import /data/letsencrypt-stg-root-x1.crt"
-          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "rm -f ~/pinanas/nextcloud/data/files/letsencrypt-stg-root-x1.crt"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cp ~/pinanas/letsencrypt-stg-root-x1.pem ~/pinanas/nextcloud/data/files/."
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec nextcloud occ security:certificates:import /data/letsencrypt-stg-root-x1.pem"
           echo "OK"
           echo -n "Jellyfin... "
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec jellyfin mkdir -p /usr/share/ca-certificates/misc"
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec jellyfin curl -o /usr/share/ca-certificates/misc/letsencrypt-stg-root-x1.crt https://letsencrypt.org/certs/staging/letsencrypt-stg-root-x1.pem"
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec jellyfin bash -c 'echo misc/letsencrypt-stg-root-x1.crt >> /etc/ca-certificates.conf'"
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker exec jellyfin update-ca-certificates"
+          echo "OK"
+          echo -n "Immich... "
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cp ~/pinanas/letsencrypt-stg-root-x1.pem ~/pinanas/immich/config/."
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker compose stop immich-server"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker compose rm immich-server"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "docker compose run -d -e NODE_EXTRA_CA_CERTS=/config/letsencrypt-stg-root-x1.pem immich-server"
           echo "OK"
 
       - name: Distclean

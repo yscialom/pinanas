@@ -196,10 +196,10 @@ identity_providers:
       - id: immich
         description: Immich
         secret: "{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[immich].secret')[:16] }}"
+        public: false
         authorization_policy: one_factor
         require_pkce: false
         pkce_challenge_method: ''
-        audience: []
         scopes:
           - openid
           - groups
