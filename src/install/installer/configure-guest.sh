@@ -80,7 +80,7 @@ prepare () {
       path: "/pinanas/dist/{{ item[0] }}/{{ item[1] }}"
       state: directory
       mode: 0755
-    loop: "{{ ['adguardhome', 'authelia', 'database', 'dhcpd', 'duplicati', 'heimdall', 'jellyfin', 'netdata', 'nextcloud', 'traefik'] | product(['config', 'data']) | list }}"
+    loop: "{{ ['adguardhome', 'authelia', 'database', 'dhcpd', 'duplicati', 'heimdall', 'immich', 'jellyfin', 'netdata', 'nextcloud', 'traefik'] | product(['config', 'data']) | list }}"
   - name: ensure log directories exist
     file:
       path: "/pinanas/dist/logs/{{ item }}"
@@ -92,7 +92,7 @@ prepare () {
       path: "/pinanas/dist/media/{{ item }}"
       state: directory
       mode: 0770
-    loop: ['movies', 'tvshows']
+    loop: ['movies', 'photos', 'tvshows']
   - name: ensure traefik/acme.json exists
     file:
       path: "/pinanas/dist/traefik/data/acme.json"
