@@ -21,6 +21,7 @@ immich-server:
     - DB_USERNAME=pinanas-immich
     - "DB_PASSWORD={{ secrets.make_secret('pinanas.immich.database_password') }}"
     - DB_DATABASE_NAME=pinanas-immich
+    - IMMICH_CONFIG_FILE=/config.settings.json
   labels:
     - "traefik.enable=true"
     - "traefik.docker.network={{ internal.install.path | basename }}_pinanas"
