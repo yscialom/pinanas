@@ -44,7 +44,7 @@ export_version () {
 
 report () {
     info "Configuration successful."
-    cont "Start your services with 'docker-compose up -d'"
+    cont "Start your services with 'docker compose up -d'"
     cont "Optionnally, you can:"
     cont "  - clean work files with './distclean.sh'"
     cont "  - uninstall all with './uninstall.sh'"
