@@ -195,7 +195,7 @@ identity_providers:
       # Immich
       - client_id: immich
         client_name: Immich
-        client_secret: "{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[immich].secret')[:16] }}"
+        client_secret: "{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[immich].secret') | authelia_password }}"
         public: false
         authorization_policy: one_factor
         scopes:
@@ -211,8 +211,6 @@ identity_providers:
           - authorization_code
         response_types:
           - code
-        #userinfo_signed_response_alg: none
-        #access_token_signed_response_alg: none
         token_endpoint_auth_method: client_secret_post
         require_pkce: false
         pkce_challenge_method: ''

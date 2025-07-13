@@ -161,7 +161,7 @@
       "autoRegister": true,
       "buttonText": "Login with Authelia",
       "clientId": "immich",
-      "clientSecret": "{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[immich].secret')[:16] }}",
+      "clientSecret": "{{ secrets.make_secret('pinanas.authelia.identity_providers.oidc.clients[immich].secret') }}",
       "defaultStorageQuota": 100,
       "enabled": true,
       "issuerUrl": "https://auth.{{ pinanas.domain }}{{ ":" ~ pinanas.ports.https if pinanas.ports.https != 443 else "" }}",
