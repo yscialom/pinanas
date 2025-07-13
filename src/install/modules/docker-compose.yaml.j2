@@ -3,7 +3,7 @@
 ---
 networks:
   pinanas:
-  database:
+  nextcloud:
 
 services:
 
@@ -52,7 +52,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 30s
+      start_period: 60s
     restart: unless-stopped
 
   ## === TRAEFIK ===
@@ -98,12 +98,16 @@ services:
       - ./logs/traefik:/log
     healthcheck:
       test: traefik healthcheck --ping
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
     restart: unless-stopped
 
   ## === AUTHELIA ===
   authelia:
     # Ideally, update src/install/installer/ansible_passwords.py with the same tag (version)
-    image: authelia/authelia:4.37
+    image: authelia/authelia:4.39
     container_name: authelia
     depends_on:
       - traefik
@@ -129,6 +133,11 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./authelia/config:/config
       - ./logs/authelia:/log
+    healthcheck:
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
     restart: unless-stopped
 
   ## === LOGROTATE ===
