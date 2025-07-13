@@ -1,11 +1,11 @@
 ## === NEXTCLOUD ===
-database:
+nextcloud-database:
   image: linuxserver/mariadb:10.5.17-alpine
-  container_name: database
+  container_name: nextcloud_database
   depends_on:
     - dhcpd
   networks:
-    database:
+    nextcloud:
       aliases:
         - mariadb
         - mysql
@@ -36,15 +36,13 @@ nextcloud:
   container_name: nextcloud
   depends_on:
     - dhcpd
-    - database
-  links:
-    - database
+    - nextcloud-database
   networks:
     pinanas:
       aliases:
         - nextcloud
         - cloud
-    database:
+    nextcloud:
       aliases:
         - nextcloud
         - cloud

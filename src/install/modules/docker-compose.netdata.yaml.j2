@@ -39,4 +39,6 @@ netdata:
     - /etc/os-release:/host/etc/os-release:ro
     - /var/run/docker.sock:/var/run/docker.sock:ro
     - ./dhcpd/data:/var/lib/dhcp:ro
+  healthcheck:
+    start_period: 60s
   restart: unless-stopped

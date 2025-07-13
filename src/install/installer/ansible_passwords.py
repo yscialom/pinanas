@@ -11,11 +11,12 @@ from ansible.module_utils.common.text.converters import to_native
 from ansible.errors import AnsibleFilterError
 
 ENCODING='utf-8'
+AUTHELIA_IMAGE='authelia/authelia:4.39'
 
 class Authelia:
     def key(self, opt=''):
         try:
-            _ = self.__run(['docker', 'run', '--rm', '-u', '{}'.format(os.getuid()), '-v', 'pinanas-config:/pinanas-config', 'authelia/authelia:4.37', 'authelia',
+            _ = self.__run(['docker', 'run', '--rm', '-u', '{}'.format(os.getuid()), '-v', 'pinanas-config:/pinanas-config', AUTHELIA_IMAGE, 'authelia',
                 'crypto', 'pair', 'rsa', 'generate',
                 '--directory', '/pinanas-config/keys', '--file.private-key', 'key.pem'])
             with open('/pinanas-config/keys/key.pem') as keyfile:
@@ -25,7 +26,7 @@ class Authelia:
         return self.__transform(key, opt)
 
     def password(self, cleartext):
-        command = ['docker', 'run', '--rm', 'authelia/authelia:4.37', 'authelia', 'hash-password', '--', cleartext]
+        command = ['docker', 'run', '--rm', AUTHELIA_IMAGE, 'authelia', 'crypto', 'hash', 'generate', 'argon2', '--password', cleartext]
         stdout = self.__run(command)
         return self.__extract_ciphertext(command, stdout)
 
@@ -37,7 +38,7 @@ class Authelia:
         return process.stdout
 
     def __transform(self, key, opt):
-        indent_match = re.search(r'indent=(\d)+', opt)
+        indent_match = re.search(r'indent=(\d+)', opt)
         indent = int(indent_match.group(1)) if indent_match else 0
         key_lines = key.splitlines()
         return key_lines[0] + '\n' + re.sub(r'^', ' '*indent, '\n'.join(key_lines[1:]), flags=re.MULTILINE)
