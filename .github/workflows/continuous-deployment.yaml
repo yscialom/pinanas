@@ -131,8 +131,9 @@ jobs:
           echo -n "Immich... "
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cp ~/pinanas/letsencrypt-stg-root-x1.pem ~/pinanas/immich/config/."
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && docker compose rm --stop --force immich-server"
-          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && docker compose run -d -e NODE_EXTRA_CA_CERTS=/config/letsencrypt-stg-root-x1.pem immich-server"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && yq -iy '.services."immich-server".environment += [\"NODE_EXTRA_CA_CERTS=/config/letsencrypt-stg-root-x1.pem\"]' docker-compose.yaml"
           echo "OK"
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && docker compose up -d --wait"
 
       - name: Distclean
         run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && ./distclean.sh"
