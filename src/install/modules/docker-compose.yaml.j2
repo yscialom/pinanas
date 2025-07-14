@@ -20,7 +20,7 @@ services:
       - ./dhcpd/config/dhcpd.conf:/data/dhcpd.conf:ro
       - ./dhcpd/data:/data
       - ./dhcpd/cgroup:/sys/fs/cgroup
-   healthcheck:
+    healthcheck:
       test: ["CMD", "pgrep", "dhcpd"]
       interval: 10s
       timeout: 5s
