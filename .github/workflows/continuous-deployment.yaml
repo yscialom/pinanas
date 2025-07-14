@@ -152,6 +152,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           known_hosts: unnecessary
 
+      - name: Pull
+        run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && docker compose pull"
+
       - name: Start
         run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && docker compose up -d --wait"
 
