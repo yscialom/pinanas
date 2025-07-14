@@ -6,13 +6,45 @@ on:
     branches:
       - develop
       - release/**
+  issue_comment:
+    types: [created]
 
 
 jobs:
+  check-deploy-command:
+    name: Check /deploy Command
+    runs-on: ubuntu-latest
+    outputs:
+      proceed: ${{ steps.check.outputs.proceed }}
+    steps:
+      - id: check
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          if [[ "${{ github.event_name }}" == "issue_comment" ]]; then
+            COMMENT="${{ github.event.comment.body }}"
+            echo "Comment: $COMMENT"
+            if [[ "$COMMENT" == *"/deploy"* ]]; then
+              echo "Proceeding with deployment"
+              echo "::set-output name=proceed::true"
+              exit 0
+            else
+              echo "No /deploy command found, stopping workflow"
+              echo "::set-output name=proceed::false"
+              exit 1
+            fi
+          else
+            # For other events (push, workflow_dispatch), proceed normally
+            echo "Not an issue_comment event, proceeding"
+            echo "::set-output name=proceed::true"
+          fi
+
+
   undeploy:
     name: Undeploy
     runs-on: ubuntu-latest
     environment: uat
+    needs: check-deploy-command
+    if: needs.check-deploy-command.outputs.proceed == 'true'
     steps:
       - name: Adding Known Hosts
         run: mkdir -p ~/.ssh && ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
@@ -39,11 +71,13 @@ jobs:
       - name: Remove installation directory
         run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "sudo rm -rf -- ~/pinanas/"
 
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     environment: uat
     needs: undeploy
+    if: needs.check-deploy-command.outputs.proceed == 'true'
     steps:
       - name: Adding Known Hosts
         run: mkdir -p ~/.ssh && ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
@@ -63,11 +97,13 @@ jobs:
       - name: Deploy to PiNanas UAT
         run: scp -P ${{ secrets.SSH_PORT }} -r * ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/pinanas-src/.
 
+
   install:
     name: Install
     runs-on: ubuntu-latest
     environment: uat
     needs: deploy
+    if: needs.check-deploy-command.outputs.proceed == 'true'
     steps:
       - name: Adding Known Hosts
         run: mkdir -p ~/.ssh && ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
@@ -97,11 +133,13 @@ jobs:
       - name: Install
         run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "cd ~/pinanas && ~/pinanas-src/src/install/installer.sh && rm ~/.ssh/environment"
 
+
   start:
     name: Start
     runs-on: ubuntu-latest
     environment: uat
     needs: install
+    if: needs.check-deploy-command.outputs.proceed == 'true'
     steps:
       - name: Adding Known Hosts
         run: mkdir -p ~/.ssh && ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
