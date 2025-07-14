@@ -2,6 +2,7 @@
 immich-server:
   image: ghcr.io/immich-app/immich-server:v1.135.3
   container_name: immich_server
+  user: "{{ PUID }}:{{ PGID }}"
   depends_on:
     - dhcpd
     - immich-redis
@@ -44,10 +45,12 @@ immich-server:
   restart: unless-stopped
   healthcheck:
     disable: false
+    start_period: 60s
 
 immich-machine-learning:
   image: ghcr.io/immich-app/immich-machine-learning:v1.135.3
   container_name: immich_machine_learning
+  user: "{{ PUID }}:{{ PGID }}"
   depends_on:
     - dhcpd
   networks:
@@ -60,10 +63,12 @@ immich-machine-learning:
   restart: unless-stopped
   healthcheck:
     disable: false
+    start_period: 60s
 
 immich-database:
   image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
   container_name: immich_database
+  user: "{{ PUID }}:{{ PGID }}"
   networks:
     immich:
       aliases:
@@ -80,14 +85,18 @@ immich-database:
   volumes:
     - ./immich/data/pgsql:/var/lib/postgresql/data
   restart: unless-stopped
+  healthcheck:
+    start_period: 60s
 
 immich-redis:
   image: docker.io/valkey/valkey:8-alpine3.22
   container_name: immich_redis
+  user: "{{ PUID }}:{{ PGID }}"
   networks:
     immich:
       aliases:
         - redis
   healthcheck:
     test: redis-cli ping || exit 1
+    start_period: 60s
   restart: unless-stopped
