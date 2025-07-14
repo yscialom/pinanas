@@ -62,6 +62,7 @@ immich-machine-learning:
     - PUID={{ PUID }}
     - PGID={{ PGID }}
     - MPLCONFIGDIR=/tmp/matplotlib
+    - HOME=/tmp/home
   volumes:
     - /etc/localtime:/etc/localtime:ro
     - ./immich/data/model-cache:/cache
