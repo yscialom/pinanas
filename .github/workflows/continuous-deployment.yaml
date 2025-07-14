@@ -22,9 +22,9 @@ jobs:
           echo "Event name: ${{ github.event_name }}"
           if [[ "${{ github.event_name }}" == "issue_comment" ]]; then
             echo "Setting environment variables for comment and author"
-            echo "COMMENT=${{ github.event.comment.body }}"      >>$GITHUB_ENV
-            echo "AUTHOR=${{ github.event.comment.user.login }}" >>$GITHUB_ENV
-            echo "OWNER=${{ github.repository_owner }}"          >>$GITHUB_ENV
+            COMMENT='${{ github.event.comment.body }}'
+            AUTHOR='${{ github.event.comment.user.login }}'
+            OWNER='${{ github.repository_owner }}'
             if [[ "$COMMENT" == *"/deploy"* ]] && [[ "$AUTHOR" == "$OWNER" ]]; then
               echo "Authorized deploy command found from $AUTHOR"
               echo "::set-output name=proceed::true"
