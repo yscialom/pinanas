@@ -17,7 +17,7 @@ jobs:
     outputs:
       proceed: ${{ steps.check.outputs.proceed }}
     steps:
-      - id: check
+      - name: check
         run: |
           echo "Event name: ${{ github.event_name }}"
           if [[ "${{ github.event_name }}" == "issue_comment" ]]; then
