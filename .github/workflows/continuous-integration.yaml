@@ -56,7 +56,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: dist/.venv/.pip-cache
-          key: pip-${{ hashFiles('**/requirements*.txt') }}
+          key: pip-${{ hashFiles('src/configure/settings-validator/requirements.txt', 'src/install/installer/requirements.txt') }}
 
       - name: Install
         run: |

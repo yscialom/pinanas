@@ -4,6 +4,7 @@
 networks:
   pinanas:
   nextcloud:
+  immich:
 
 services:
 
@@ -19,6 +20,12 @@ services:
       - ./dhcpd/config/dhcpd.conf:/data/dhcpd.conf:ro
       - ./dhcpd/data:/data
       - ./dhcpd/cgroup:/sys/fs/cgroup
+    healthcheck:
+      test: ["CMD", "pgrep", "dhcpd"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
     restart: unless-stopped
 
   ## === FAIL2BAN ===

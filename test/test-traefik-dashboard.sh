@@ -28,9 +28,9 @@ web_expect "https://${traefik_https}" -c 302 -r "https://${traefik_https}/dashbo
 web_expect "https://${traefik_https}/dashboard/" -c 200
 
 # api
-api_expect "https://${traefik_https}/api/overview" -q '.http.services.total==17'
-api_expect "https://${traefik_https}/api/overview" -q '.http.middlewares.total==15'
-api_expect "https://${traefik_https}/api/overview" -q '.http.routers.total==22'
+api_expect "https://${traefik_https}/api/overview" -q '.http.services.total==18'
+api_expect "https://${traefik_https}/api/overview" -q '.http.middlewares.total==16'
+api_expect "https://${traefik_https}/api/overview" -q '.http.routers.total==24'
 api_expect "https://${traefik_https}/api/overview" -q '.udp.routers.total==1'
 api_expect "https://${traefik_https}/api/overview" -q '.udp.services.total==1'
 for entity in .{http,udp,tcp}.{services,middlewares,routers} ; do

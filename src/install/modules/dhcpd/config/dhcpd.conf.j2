@@ -4,7 +4,7 @@ authoritative;
 subnet {{ pinanas.network.dhcp.base }} netmask {{ pinanas.network.dhcp.subnet }} {
     option routers                  {{ pinanas.network.dhcp.gateway }};
     option subnet-mask              {{ pinanas.network.dhcp.subnet }};
-    option domain-name-servers      {{ pinanas.network.ip }},{{ pinanas.network.dns.upstreams | join(',') }};
+    option domain-name-servers      {{ pinanas.network.ip }}, {{ pinanas.network.dns.upstreams | join(', ') }};
     range                           {{ pinanas.network.dhcp.range.start }} {{ pinanas.network.dhcp.range.end }};
 }
 
