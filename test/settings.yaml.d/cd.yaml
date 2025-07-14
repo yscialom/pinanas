@@ -15,7 +15,7 @@ pinanas:
     http: 8080
     https: 8443
 
-  # Master password to encrypt/derive all PiNanas secrets. Type: string_
+  # Master password to encrypt/derive all PiNanas secrets. Type: string.
   # Example: "Randomly-generated-complex-string-with-mixed-case-digits-and-special-characters".
   master_secret: "${settings_pinanas_master_secret}"
 

@@ -51,10 +51,10 @@ pinanas_defaults:
     - adguardhome
     - duplicati
     - heimdall
+    - immich
     - jellyfin
     - netdata
     - nextcloud
-    - immich
 
 internal:
   install:

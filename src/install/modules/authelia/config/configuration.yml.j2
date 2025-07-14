@@ -51,13 +51,13 @@ access_control:
       - "group:user"
     # Jellyfin
     - domain: "media.{{ pinanas.domain }}"
-      policy: bypass
+      policy: one_factor
     # Nextcloud
     - domain: "cloud.{{ pinanas.domain }}"
-      policy: bypass
+      policy: one_factor
     # Immich
     - domain: "portfolio.{{ pinanas.domain }}"
-      policy: bypass
+      policy: one_factor
 
     ## external services
     {% if pinanas.services is defined %}

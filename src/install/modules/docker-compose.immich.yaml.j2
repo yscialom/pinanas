@@ -61,6 +61,7 @@ immich-machine-learning:
     - TZ={{ pinanas.timezone }}
     - PUID={{ PUID }}
     - PGID={{ PGID }}
+    - MPLCONFIGDIR=/tmp/matplotlib
   volumes:
     - /etc/localtime:/etc/localtime:ro
     - ./immich/data/model-cache:/cache
@@ -88,9 +89,9 @@ immich-database:
     - DB_STORAGE_TYPE=SSD
   volumes:
     - ./immich/data/pgsql:/var/lib/postgresql/data
-  restart: unless-stopped
   healthcheck:
     start_period: 60s
+  restart: unless-stopped
 
 immich-redis:
   image: docker.io/valkey/valkey:8-alpine3.22
@@ -104,6 +105,8 @@ immich-redis:
     - TZ={{ pinanas.timezone }}
     - PUID={{ PUID }}
     - PGID={{ PGID }}
+  volumes:
+    - ./immich/data/redis:/data
   healthcheck:
     test: redis-cli ping || exit 1
     start_period: 60s

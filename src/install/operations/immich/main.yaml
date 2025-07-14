@@ -5,6 +5,7 @@
       state: directory
       mode: 0750
     loop:
-    - "upload"
-    - "model-cache"
-    - "pgsql"
+    - upload
+    - model-cache
+    - pgsql
+    - redis
