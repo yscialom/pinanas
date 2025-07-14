@@ -41,7 +41,7 @@ immich-server:
     - ./immich/custom-cont-init.d:/custom-cont-init.d:ro
     - ./immich/config:/config
     - ./media/photos:/mnt/photos:ro
-    - ./immich/data:/usr/src/app/upload
+    - ./immich/data/upload:/usr/src/app/upload
   restart: unless-stopped
   healthcheck:
     disable: false
@@ -57,6 +57,10 @@ immich-machine-learning:
     immich:
       aliases:
         - ml
+  environment:
+    - TZ={{ pinanas.timezone }}
+    - PUID={{ PUID }}
+    - PGID={{ PGID }}
   volumes:
     - /etc/localtime:/etc/localtime:ro
     - ./immich/data/model-cache:/cache
@@ -96,6 +100,10 @@ immich-redis:
     immich:
       aliases:
         - redis
+  environment:
+    - TZ={{ pinanas.timezone }}
+    - PUID={{ PUID }}
+    - PGID={{ PGID }}
   healthcheck:
     test: redis-cli ping || exit 1
     start_period: 60s
