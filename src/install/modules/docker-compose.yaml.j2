@@ -21,7 +21,7 @@ services:
       - ./dhcpd/data:/data
       - ./dhcpd/cgroup:/sys/fs/cgroup
     healthcheck:
-      test: ["CMD", "pgrep", "dhcpd"]
+      test: pgrep dhcpd
       interval: 10s
       timeout: 5s
       retries: 3
@@ -55,7 +55,7 @@ services:
       - ./logs:/fail2ban/remotelogs:ro
       - /var/log:/fail2ban/pinanas_logs:ro
     healthcheck:
-      test: ["CMD-SHELL", "fail2ban-server ping || exit 1"]
+      test: "fail2ban-server ping || exit 1"
       interval: 10s
       timeout: 5s
       retries: 3
