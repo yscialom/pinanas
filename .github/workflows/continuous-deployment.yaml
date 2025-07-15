@@ -16,17 +16,16 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       proceed: ${{ steps.check.outputs.proceed }}
+      branch: ${{ steps.check.outputs.branch }}
     steps:
-      - name: Install GitHub CLI
-        uses: cli/cli-action@v2
-
-      - name: check
+      - name: Check dispatch reason
+        id: check
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Event name: ${{ github.event_name }}"
+          set -x
           if [[ "${{ github.event_name }}" == "issue_comment" ]]; then
-            echo "Setting environment variables for comment and author"
             COMMENT='${{ github.event.comment.body }}'
             AUTHOR='${{ github.event.comment.user.login }}'
             OWNER='${{ github.repository_owner }}'
@@ -34,21 +33,19 @@ jobs:
             PR_NUMBER=$(jq --raw-output .issue.number "$GITHUB_EVENT_PATH")
             if [[ "$COMMENT" == *"/deploy"* ]] && [[ "$AUTHOR" == "$OWNER" ]]; then
               echo "Authorized deploy command found from $AUTHOR"
-              echo "Fetching PR info from GitHub API..."
-              PR_DATA=$(gh pr view $PR_NUMBER --repo "$OWNER/$REPO" --json headRefName -q .headRefName)
-              echo "proceed=true"    >>$GITHUB_OUTPUT
-              echo "branch=$PR_DATA" >>$GITHUB_OUTPUT
+              BRANCH=$(gh pr view $PR_NUMBER --repo "$OWNER/$REPO" --json headRefName -q .headRefName)
+              echo "proceed=true"   >>"$GITHUB_OUTPUT"
+              echo "branch=$BRANCH" >>"$GITHUB_OUTPUT"
               exit
             else
               echo "Deploy command missing or unauthorized author"
-              echo "proceed=false" >>$GITHUB_OUTPUT
+              echo "proceed=false"  >>"$GITHUB_OUTPUT"
               exit
             fi
           else
-            # For other events (push, workflow_dispatch), proceed normally
             echo "Not an issue_comment event, proceeding"
-            echo "proceed=true"                     >>$GITHUB_OUTPUT
-            echo "branch=${GITHUB_REF#refs/heads/}" >>$GITHUB_OUTPUT
+            echo "proceed=true"                     >>"$GITHUB_OUTPUT"
+            echo "branch=${GITHUB_REF#refs/heads/}" >>"$GITHUB_OUTPUT"
           fi
 
 
@@ -89,7 +86,9 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     environment: uat
-    needs: undeploy
+    needs:
+      - check-deploy-command
+      - undeploy
     if: needs.check-deploy-command.outputs.proceed == 'true'
     steps:
       - name: Adding Known Hosts
@@ -117,7 +116,9 @@ jobs:
     name: Install
     runs-on: ubuntu-latest
     environment: uat
-    needs: deploy
+    needs:
+      - check-deploy-command
+      - deploy
     if: needs.check-deploy-command.outputs.proceed == 'true'
     steps:
       - name: Adding Known Hosts
@@ -153,7 +154,9 @@ jobs:
     name: Start
     runs-on: ubuntu-latest
     environment: uat
-    needs: install
+    needs:
+      - check-deploy-command
+      - install
     if: needs.check-deploy-command.outputs.proceed == 'true'
     steps:
       - name: Adding Known Hosts
