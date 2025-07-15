@@ -31,7 +31,7 @@ function test_field () {
 }
 
 function web_expect () {
-    info echo "$0 $*"
+    info "$0 $*"
     local url="${1}"
     shift
 
