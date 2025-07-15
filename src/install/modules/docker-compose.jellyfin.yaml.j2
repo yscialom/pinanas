@@ -34,4 +34,10 @@ jellyfin:
     - ./jellyfin/data/misc/cache:/data/cache
     - ./jellyfin/data/misc/databases:/config/data/data
     - ./media:/data/media
+  healthcheck:
+    test: ["CMD", "curl", "-sL", "http://localhost:8096"]
+    interval: 10s
+    timeout: 5s
+    retries: 3
+    start_period: 60s
   restart: unless-stopped

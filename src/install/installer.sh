@@ -22,6 +22,7 @@ configure () {
         -e PINANAS_SRC="${PINANAS_SRC}" \
         -e PINANAS_DIST="${PINANAS_DIST}" \
         -e PINANAS_VENV="${PINANAS_VENV}" \
+        -e PIP_CACHE_DIR="${PINANAS_VENV}"/.pip-cache \
         -v pinanas-config:/pinanas-config \
         -v "${PINANAS_SRC}":/pinanas/src:ro \
         -v "${PINANAS_DIST}":/pinanas/dist \
@@ -31,9 +32,19 @@ configure () {
         "$@"
 }
 
+export_version () {
+    if git rev-parse --is-inside-work-tree >/dev/null 2>&1 ; then
+        git describe >"${PINANAS_DIST}/VERSION"
+        echo "" >>"${PINANAS_DIST}/VERSION"
+        ( [ -z "$(git status --porcelain)" ] && echo "Clean working directory" || git status ) >>"${PINANAS_DIST}/VERSION"
+    else
+        echo "unknown" >"${PINANAS_DIST}/VERSION"
+    fi
+}
+
 report () {
     info "Configuration successful."
-    cont "Start your services with 'docker-compose up -d'"
+    cont "Start your services with 'docker compose up -d'"
     cont "Optionnally, you can:"
     cont "  - clean work files with './distclean.sh'"
     cont "  - uninstall all with './uninstall.sh'"
@@ -48,8 +59,10 @@ report () {
         cont "    sudo systemctl force-reload systemd-resolved"
         cont "    sudo rm /etc/resolv.conf"
         cont "    sudo ln -s ../run/systemd/resolve/resolv.conf /etc/resolv.conf"
+        cont "    sudo resolvectl dns $(route | grep ^default | awk '{print $8}') 8.8.8.8 8.8.4.4"
     fi
 }
 
 configure "$@" || exit $?
+export_version
 report

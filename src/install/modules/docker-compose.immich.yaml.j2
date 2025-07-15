@@ -1,0 +1,114 @@
+## === IMMMICH ===
+immich-server:
+  image: ghcr.io/immich-app/immich-server:v1.135.3
+  container_name: immich_server
+  user: "{{ PUID }}:{{ PGID }}"
+  depends_on:
+    - dhcpd
+    - immich-redis
+    - immich-database
+  networks:
+    pinanas:
+      aliases:
+        - immich
+        - portfolio
+    immich:
+  environment:
+    - TZ={{ pinanas.timezone }}
+    - PUID={{ PUID }}
+    - PGID={{ PGID }}
+    - IMMICH_TRUSTED_PROXIES=172.0.0.0/24
+    - IMMICH_HOST=0.0.0.0
+    - DB_USERNAME=pinanas-immich
+    - "DB_PASSWORD={{ secrets.make_secret('pinanas.immich.database_password') }}"
+    - DB_DATABASE_NAME=pinanas-immich
+    - IMMICH_CONFIG_FILE=/config/settings.json
+  labels:
+    - "traefik.enable=true"
+    - "traefik.docker.network={{ internal.install.path | basename }}_pinanas"
+    - "traefik.http.middlewares.immich-https-redirect.redirectscheme.scheme=https"
+    - "traefik.http.routers.immich-secure.entrypoints=https"
+    - "traefik.http.routers.immich-secure.middlewares=authelia@docker"
+    - "traefik.http.routers.immich-secure.rule=Host(`portfolio.{{ pinanas.domain }}`)"
+    - "traefik.http.routers.immich-secure.service=immich"
+    - "traefik.http.routers.immich-secure.tls=true"
+    - "traefik.http.routers.immich.entrypoints=http"
+    - "traefik.http.routers.immich.middlewares=immich-https-redirect"
+    - "traefik.http.routers.immich.rule=Host(`portfolio.{{ pinanas.domain }}`)"
+    - "traefik.http.services.immich.loadbalancer.server.port=2283"
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - ./immich/custom-cont-init.d:/custom-cont-init.d:ro
+    - ./immich/config:/config
+    - ./media/photos:/mnt/photos:ro
+    - ./immich/data/upload:/usr/src/app/upload
+  restart: unless-stopped
+  healthcheck:
+    disable: false
+    start_period: 60s
+
+immich-machine-learning:
+  image: ghcr.io/immich-app/immich-machine-learning:v1.135.3
+  container_name: immich_machine_learning
+  user: "{{ PUID }}:{{ PGID }}"
+  depends_on:
+    - dhcpd
+  networks:
+    immich:
+      aliases:
+        - ml
+  environment:
+    - TZ={{ pinanas.timezone }}
+    - PUID={{ PUID }}
+    - PGID={{ PGID }}
+    - MPLCONFIGDIR=/tmp/matplotlib
+    - HOME=/tmp/home
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - ./immich/data/model-cache:/cache
+  restart: unless-stopped
+  healthcheck:
+    disable: false
+    start_period: 60s
+
+immich-database:
+  image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
+  container_name: immich_database
+  user: "{{ PUID }}:{{ PGID }}"
+  networks:
+    immich:
+      aliases:
+        - database
+  environment:
+    - TZ={{ pinanas.timezone }}
+    - PUID={{ PUID }}
+    - PGID={{ PGID }}
+    - "POSTGRES_PASSWORD={{ secrets.make_secret('pinanas.immich.database_password') }}"
+    - POSTGRES_USER=pinanas-immich
+    - POSTGRES_DB=pinanas-immich
+    - "POSTGRES_INITDB_ARGS=--data-checksums"
+    - DB_STORAGE_TYPE=SSD
+  volumes:
+    - ./immich/data/pgsql:/var/lib/postgresql/data
+  healthcheck:
+    start_period: 60s
+  restart: unless-stopped
+
+immich-redis:
+  image: docker.io/valkey/valkey:8-alpine3.22
+  container_name: immich_redis
+  user: "{{ PUID }}:{{ PGID }}"
+  networks:
+    immich:
+      aliases:
+        - redis
+  environment:
+    - TZ={{ pinanas.timezone }}
+    - PUID={{ PUID }}
+    - PGID={{ PGID }}
+  volumes:
+    - ./immich/data/redis:/data
+  healthcheck:
+    test: redis-cli ping || exit 1
+    start_period: 60s
+  restart: unless-stopped

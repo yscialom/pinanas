@@ -1,0 +1,11 @@
+---
+  - name: ensure immich's directory exists
+    file:
+      path: "/pinanas/dist/immich/data/{{ item }}"
+      state: directory
+      mode: 0750
+    loop:
+    - upload
+    - model-cache
+    - pgsql
+    - redis

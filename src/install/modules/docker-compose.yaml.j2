@@ -1,10 +1,10 @@
 #jinja2: lstrip_blocks: True, keep_trailing_newline: True
 {%- import 'secrets.j2' as secrets with context -%}
 ---
-version: "3"
 networks:
   pinanas:
-  database:
+  nextcloud:
+  immich:
 
 services:
 
@@ -20,6 +20,12 @@ services:
       - ./dhcpd/config/dhcpd.conf:/data/dhcpd.conf:ro
       - ./dhcpd/data:/data
       - ./dhcpd/cgroup:/sys/fs/cgroup
+    healthcheck:
+      test: pgrep dhcpd
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
     restart: unless-stopped
 
   ## === FAIL2BAN ===
@@ -48,6 +54,12 @@ services:
       - ./logs/fail2ban:/fail2ban/fail2ban_log
       - ./logs:/fail2ban/remotelogs:ro
       - /var/log:/fail2ban/pinanas_logs:ro
+    healthcheck:
+      test: "fail2ban-server ping || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
     restart: unless-stopped
 
   ## === TRAEFIK ===
@@ -93,11 +105,16 @@ services:
       - ./logs/traefik:/log
     healthcheck:
       test: traefik healthcheck --ping
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
     restart: unless-stopped
 
   ## === AUTHELIA ===
   authelia:
-    image: authelia/authelia:4.37 {# Ideally, update src/install/installer/ansible_passwords.py with the same tag (version) #} 
+    # Ideally, update src/install/installer/ansible_passwords.py with the same tag (version)
+    image: authelia/authelia:4.39
     container_name: authelia
     depends_on:
       - traefik
@@ -123,6 +140,11 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./authelia/config:/config
       - ./logs/authelia:/log
+    healthcheck:
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
     restart: unless-stopped
 
   ## === LOGROTATE ===

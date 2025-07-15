@@ -22,6 +22,8 @@ PiNanas includes:
 - A private cloud platform:
   - [Nextcloud](https://nextcloud.com "Nextcloud homepage"):
     store, access and share your files, and more...
+  - [Immich](https://immich.app/ "Immich homepage"):
+    store and manage your photos and videos.
   - [Jellyfin](https://jellyfin.org  "Jellyfin homepage"):
     manage and stream your films and tv shows.
   - [Duplicati](https://www.duplicati.com/ "Duplicati homepage"):
@@ -36,9 +38,13 @@ PiNanas includes:
     rely on the Single Sign-On Multi-Factor portal for all PiNanas apps.
   - [Netdata](https://www.netdata.cloud "Netdata homepage"):
     monitor your infrastructure resources.
+  - Misc: [fail2ban](https://www.fail2ban.org) and
+    [logrotate](https://linux.die.net/man/8/logrotate "man logrotate").
 
 [![Continuous Integration](https://github.com/yscialom/pinanas/actions/workflows/continuous-integration.yaml/badge.svg?branch=develop)](https://github.com/yscialom/pinanas/actions/workflows/continuous-integration.yaml)
 [![Continuous Deplyment](https://github.com/yscialom/pinanas/actions/workflows/continuous-deployment.yaml/badge.svg?branch=develop)](https://github.com/yscialom/pinanas/actions/workflows/continuous-deployment.yaml)
+[![GitHub Release](https://img.shields.io/github/v/release/yscialom/pinanas?sort=semver&style=flat&labelColor=%23383838)](https://github.com/yscialom/pinanas/releases)
+
 
 
 Installation

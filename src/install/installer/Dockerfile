@@ -1,4 +1,4 @@
-FROM python:3.9-alpine
+FROM python:3.13-alpine
 
 ARG PUID
 ARG PGID
@@ -13,7 +13,8 @@ RUN apk add --no-cache \
     musl-dev \
     libffi-dev \
     docker-cli \
-    zip
+    zip \
+    curl
 
 RUN mkdir -m 777 /pinanas-config
 
