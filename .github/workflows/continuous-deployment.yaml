@@ -103,8 +103,8 @@ jobs:
 
       - name: Clone
         uses: actions/checkout@v3
-          with:
-            ref: ${{ needs.check-deploy-command.outputs.branch }}
+        with:
+          ref: ${{ needs.check-deploy-command.outputs.branch }}
 
       - name: Recreate directories
         run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "mkdir -p ~/pinanas-src ~/pinanas"
