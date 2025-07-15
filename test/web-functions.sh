@@ -31,6 +31,7 @@ function test_field () {
 }
 
 function web_expect () {
+    info "$0 $*"
     local url="${1}"
     shift
 
@@ -66,6 +67,7 @@ function web_expect () {
 }
 
 function api_expect () {
+    info "$0 $*"
     local url="${1}"
     shift
 
@@ -102,6 +104,7 @@ function api_expect () {
 }
 
 function html_expect () {
+    info "$0 $*"
     local url="${1}"
     shift
 
