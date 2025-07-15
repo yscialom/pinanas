@@ -17,7 +17,12 @@ jobs:
     outputs:
       proceed: ${{ steps.check.outputs.proceed }}
     steps:
+      - name: Install GitHub CLI
+        uses: cli/cli-action@v2
+
       - name: check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Event name: ${{ github.event_name }}"
           if [[ "${{ github.event_name }}" == "issue_comment" ]]; then
@@ -25,9 +30,14 @@ jobs:
             COMMENT='${{ github.event.comment.body }}'
             AUTHOR='${{ github.event.comment.user.login }}'
             OWNER='${{ github.repository_owner }}'
+            REPO='${{ github.event.repository.name }}'
+            PR_NUMBER=$(jq --raw-output .issue.number "$GITHUB_EVENT_PATH")
             if [[ "$COMMENT" == *"/deploy"* ]] && [[ "$AUTHOR" == "$OWNER" ]]; then
               echo "Authorized deploy command found from $AUTHOR"
+              echo "Fetching PR info from GitHub API..."
+              PR_DATA=$(gh pr view $PR_NUMBER --repo "$OWNER/$REPO" --json headRefName -q .headRefName)
               echo "::set-output name=proceed::true"
+              echo "::set-output name=branch::$PR_DATA"
               exit
             else
               echo "Deploy command missing or unauthorized author"
@@ -38,6 +48,7 @@ jobs:
             # For other events (push, workflow_dispatch), proceed normally
             echo "Not an issue_comment event, proceeding"
             echo "::set-output name=proceed::true"
+            echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
           fi
 
 
@@ -92,6 +103,8 @@ jobs:
 
       - name: Clone
         uses: actions/checkout@v3
+          with:
+            ref: ${{ needs.check-deploy-command.outputs.branch }}
 
       - name: Recreate directories
         run: ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -C "mkdir -p ~/pinanas-src ~/pinanas"
