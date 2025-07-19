@@ -33,10 +33,10 @@ configure () {
 }
 
 export_version () {
-    if git rev-parse --is-inside-work-tree >/dev/null 2>&1 ; then
-        git describe >"${PINANAS_DIST}/VERSION"
+    if git -C "${PINANAS_SRC}" rev-parse --is-inside-work-tree >/dev/null 2>&1 ; then
+        git -C "${PINANAS_SRC}" describe >"${PINANAS_DIST}/VERSION"
         echo "" >>"${PINANAS_DIST}/VERSION"
-        ( [ -z "$(git status --porcelain)" ] && echo "Clean working directory" || git status ) >>"${PINANAS_DIST}/VERSION"
+        ( [ -z "$(git -C "${PINANAS_SRC}" status --porcelain)" ] && echo "Clean working directory" || git -C "${PINANAS_SRC}" status ) >>"${PINANAS_DIST}/VERSION"
     else
         echo "unknown" >"${PINANAS_DIST}/VERSION"
     fi
