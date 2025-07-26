@@ -60,7 +60,7 @@
   {% for service in pinanas.services %}
     {% filter indent(width=2, first=True) %}
       ,{
-        "title": "{{ serviice.name }}",
+        "title": "{{ service.name }}",
         "colour": "#eee",
         "url": "https://{{ service.name }}.{{ pinanas.domain }}{{ ":" ~ pinanas.ports.https if pinanas.ports.https != 443 else "" }}",
         "description": null,
