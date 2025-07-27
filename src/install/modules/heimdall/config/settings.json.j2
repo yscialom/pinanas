@@ -58,7 +58,7 @@
   }
 
   {% for service in pinanas.services %}
-    {% filter indent(width=2, first=True) %}
+    {% filter indent(width=1, first=True) %}
       ,{
         "title": "{{ service.name }}",
         "colour": "#eee",
