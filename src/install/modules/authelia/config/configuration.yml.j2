@@ -51,7 +51,7 @@ access_control:
       - "group:user"
     # Jellyfin
     - domain: "media.{{ pinanas.domain }}"
-      policy: one_factor
+      policy: bypass
     # Nextcloud
     - domain: "cloud.{{ pinanas.domain }}"
       policy: one_factor
