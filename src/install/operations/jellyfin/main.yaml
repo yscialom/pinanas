@@ -18,24 +18,10 @@
       - metadata
       - cache
       - databases
-  - name: Wait for Traefik certificate to be issued
+  - name: Download Let's Encrypt Staging CA certificate for Jellyfin
     when: pinanas.acme.stagging | default(false) == true
-    shell: |
-      test -n "$(grep -A 7 '"main": "{{ pinanas.domain }}"' "/pinanas/dist/traefik/data/acme.json" \
-      | grep '"certificate": "' \
-      | sed 's/.*"certificate": "\(.*\)".*/\1/')"
-    args:
-      executable: /bin/sh
-    register: cert_check
-    until: cert_check.rc == 0
-    retries: 60
-    delay: 5
-  - name: Extract Traefik certificate chain for Jellyfin
-    when: pinanas.acme.stagging | default(false) == true
-    shell: |
-      grep -A 7 '"main": "{{ pinanas.domain }}"' "/pinanas/dist/traefik/data/acme.json" \
-        | grep '"certificate": "' \
-        | sed 's/.*"certificate": "\(.*\)".*/\1/' \
-        | base64 -d > "/pinanas/dist/jellyfin/config/ca-chain.pem"
-    args:
-      executable: /bin/sh
+    ansible.builtin.get_url:
+      url: https://letsencrypt.org/certs/fakeleintermediatex1.pem
+      dest: "/pinanas/dist/jellyfin/config/ca-chain.pem"
+      mode: '0644'
+      force: true
