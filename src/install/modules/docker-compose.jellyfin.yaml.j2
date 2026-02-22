@@ -34,6 +34,9 @@ jellyfin:
     - ./jellyfin/data/misc/metadata:/data/metadata
     - ./jellyfin/data/misc/cache:/data/cache
     - ./jellyfin/data/misc/databases:/config/data/data
+    {%- if pinanas.acme.stagging | default(false) == true %}
+    - ./jellyfin/config/ca-chain.pem:/usr/local/share/ca-certificates/traefik-chain.crt:ro
+    {% endif -%}
     - ./media:/data/media
   healthcheck:
     test: ["CMD", "curl", "-sL", "http://localhost:8096"]
@@ -41,4 +44,7 @@ jellyfin:
     timeout: 5s
     retries: 3
     start_period: 60s
+  {%- if pinanas.acme.stagging | default(false) == true %}
+  entrypoint: ["/bin/bash", "-c", "update-ca-certificates && /init"]
+  {% endif -%}
   restart: unless-stopped

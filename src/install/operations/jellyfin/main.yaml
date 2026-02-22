@@ -18,3 +18,9 @@
       - metadata
       - cache
       - databases
+  - name: Extract Traefik certificate chain for Jellyfin
+    when: pinanas.acme.stagging | default(false) == true
+    shell: |
+      jq -r '.le.Certificates[] | select(.domain.main=="media.{{ pinanas.domain }}") | .certificate' "/pinanas/dist/traefik/data/acme.json" | base64 -d > "/pinanas/dist/jellyfin/config/ca-chain.pem"
+    args:
+      executable: /bin/bash
