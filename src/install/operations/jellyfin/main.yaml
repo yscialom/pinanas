@@ -21,9 +21,9 @@
   - name: Extract Traefik certificate chain for Jellyfin
     when: pinanas.acme.stagging | default(false) == true
     shell: |
-      grep -A 5 "media.{{ pinanas.domain }}" "/pinanas/dist/traefik/data/acme.json" | \
-        grep "certificate" | \
-        sed -E 's/.*"certificate": "([^"]+)".*/\1/' | \
+      grep -A 7 '"main": "uat.home.scialom.org"' "/pinanas/dist/traefik/data/acme.json" | \
+        grep '"certificate": "' | \
+        sed 's/.*"certificate": "\(.*\)".*/\1/' | \
         base64 -d > "/pinanas/dist/jellyfin/config/ca-chain.pem"
     args:
       executable: /bin/sh

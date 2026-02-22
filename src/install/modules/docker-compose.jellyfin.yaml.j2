@@ -45,6 +45,6 @@ jellyfin:
     retries: 3
     start_period: 60s
   {% if pinanas.acme.stagging | default(false) == true %}
-  entrypoint: ["sh", "-c", "update-ca-certificates && /init"]
+  entrypoint: ["sh", "-c", "update-ca-certificates && exec /init"]
   {% endif %}
   restart: unless-stopped
