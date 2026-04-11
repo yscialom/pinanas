@@ -4,6 +4,8 @@
 tmpfile=$(mktemp)
 trap "rm -f -- '${tmpfile}'" EXIT
 
+function occ () { sudo -u abc php /app/www/public/occ "$@" ; }
+
 DOCKER_UNHEALTHY=1
 occ status >"${tmpfile}" || exit ${DOCKER_UNHEALTHY}
 grep -q 'installed: true'        <"${tmpfile}" || exit ${DOCKER_UNHEALTHY}

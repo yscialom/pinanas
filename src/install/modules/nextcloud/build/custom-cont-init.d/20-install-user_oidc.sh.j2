@@ -3,6 +3,8 @@
 
 [[ -f /config/www/nextcloud/config/installed ]] && exit
 
+function occ () { sudo -u abc php /app/www/public/occ "$@" ; }
+
 function install_user_oidc () {
   echo "*** Installing Nextcloud user_oidc application ***"
   occ app:install user_oidc
