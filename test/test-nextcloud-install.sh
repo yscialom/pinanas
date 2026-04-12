@@ -15,7 +15,7 @@ function cmd () {
 }
 
 function occ () {
-    cmd $(id -u) /config/www/nextcloud/occ "$@"
+    cmd $(id -u) /app/www/public/occ "$@"
 }
 
 function test_install () {
@@ -35,7 +35,7 @@ function test_install () {
 function test_nextcloud_api () {
     # Generate application password for admin acount
     local admin_username=admin # set in src/templates/nextcloud/build/config/custom-cont-init.d/10-install-nextcloud.sh.j2
-    local credentials="${admin_username}:$(docker exec -u $(id -u) -e NC_PASS=ignored nextcloud /config/www/nextcloud/occ user:add-app-password --password-from-env ${admin_username} | tail -1)"
+    local credentials="${admin_username}:$(docker exec -u $(id -u) -e NC_PASS=ignored nextcloud /app/www/public/occ user:add-app-password --password-from-env ${admin_username} | tail -1)"
 
     # Check Nextcloud status
     local url="https://${nextcloud}/ocs/v2.php/cloud/users/${admin_username}"
