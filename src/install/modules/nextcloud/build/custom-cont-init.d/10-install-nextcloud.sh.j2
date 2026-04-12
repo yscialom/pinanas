@@ -3,9 +3,7 @@
 
 [[ -f /config/www/nextcloud/config/installed ]] && exit
 
-function occ () {
-    sudo -u  "#${PUID}" /config/www/nextcloud/occ "$@"
-}
+function occ () { sudo -u abc php /app/www/public/occ "$@" ; }
 
 function install_nextcloud () {
   echo "*** Installing Nextcloud using database ***"
