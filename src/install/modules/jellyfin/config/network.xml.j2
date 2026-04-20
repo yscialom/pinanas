@@ -2,11 +2,11 @@
 <NetworkConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <RequireHttps>false</RequireHttps>
   <BaseUrl />
-  <PublicHttpsPort>443</PublicHttpsPort>
+  <PublicHttpsPort>{{ pinanas.ports.https }}</PublicHttpsPort>
   <HttpServerPortNumber>8096</HttpServerPortNumber>
   <HttpsPortNumber>8920</HttpsPortNumber>
   <EnableHttps>false</EnableHttps>
-  <PublicPort>8096</PublicPort>
+  <PublicPort>{{ pinanas.ports.https }}</PublicPort>
   <UPnPCreateHttpPortMap>false</UPnPCreateHttpPortMap>
   <UDPPortRange />
   <EnableIPV6>false</EnableIPV6>
@@ -29,6 +29,8 @@
   <EnableRemoteAccess>true</EnableRemoteAccess> <!-- Default: false; allows access from Internet -->
   <LocalNetworkSubnets />
   <LocalNetworkAddresses />
-  <KnownProxies />
+  <KnownProxies>
+    <string>traefik</string>
+  </KnownProxies>
   <EnablePublishedServerUriByRequest>false</EnablePublishedServerUriByRequest>
 </NetworkConfiguration>
